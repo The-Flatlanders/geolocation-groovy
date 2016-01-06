@@ -13,25 +13,24 @@ class SimpleGroovyServlet extends HttpServlet {
 	long lastPrintCount = 0;
 
 
-
+	HashSet<String> keysUsed = new HashSet<String>();
 	void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+req.getParameterMap().get("uuid")+"\" }"
 			resp.setContentType("application/json");
 			def writer = resp.getWriter();
+			int size = keysUsed.size();
+			System.out.println(size);
+			keysUsed.add(req.getQueryString());
+			System.out.println(keysUsed.size());
+			if(size == keysUsed.size()){
+				writer.print("Used before");
+			}
 			writer.print(responseString);
 			writer.flush();
 			println "\t\t  "+responseString;
-
-			//
-			//
-			//
-			//TODO: send the update to the new track logic here?
-			//
-			//
-			//
-
+			
 		}
 	}
 

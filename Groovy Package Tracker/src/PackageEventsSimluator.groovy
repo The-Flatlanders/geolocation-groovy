@@ -1,4 +1,3 @@
-
 @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7' )
 import groovyx.net.http.*
 import groovy.time.*
@@ -16,7 +15,6 @@ class Track {
 	def orderedUpdates;
 }
 
-//new commit
 START = 1;
 UPDATE = 2;
 DELIVERY = 3;
