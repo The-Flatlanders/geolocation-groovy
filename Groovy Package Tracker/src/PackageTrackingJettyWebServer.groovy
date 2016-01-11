@@ -9,72 +9,76 @@ import javax.servlet.*
 
 class SimpleGroovyServlet extends HttpServlet {
 
-	long updateCount = 0;
-	long lastPrintCount = 0;
+    long updateCount = 0;
+    long lastPrintCount = 0;
+	double lat;
 
 
-	HashSet<String> keysUsed = new HashSet<String>();
-	void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
-		if(req.getPathInfo().equals("/tracknewpackage")) {
-			def responseString = "{ \"ackUUID\":\""+req.getParameterMap().get("uuid")+"\" }"
-			resp.setContentType("application/json");
-			def writer = resp.getWriter();
-			int size = keysUsed.size();
-			System.out.println(size);
-			keysUsed.add(req.getQueryString());
-			System.out.println(keysUsed.size());
-			if(size == keysUsed.size()){
-				writer.print("Used before");
-			}
-			writer.print(responseString);
-			writer.flush();
-			println "\t\t  "+responseString;
-			
-		}
-	}
+    void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
+
+        if(req.getPathInfo().equals("/tracknewpackage")) {
+
+            def responseString = "{ \"ackUUID\":\""+req.getParameterMap().get("uuid")+"\" }"
+            resp.setContentType("application/json");
+            def writer = resp.getWriter();
+            writer.print(responseString);
+			writer.print(lat);
+            writer.flush();
+            println "\t\t  "+responseString;
+
+            //
+            //
+            //
+            //TODO: send the update to the new track logic here?
+            //
+            //
+            //
+
+        }
+    }
 
 
-	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        println "POST: "+req.getRequestURL();
+    void doPost(HttpServletRequest req, HttpServletResponse resp) {
+//        println "POST: "+req.getRequestURL();
 
-		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
-
-
-			try {
-				BufferedReader reader = req.getReader();
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-
-					if(line.contains("delivered")) {
-						println req.getPathInfo()+" -> "+line;
-					}
-					else {
-						//comment out if you only want to print the delivered
-						//events
-						println req.getPathInfo()+" -> "+line;
-					}
-				}
-
-				updateCount++;
-				if((updateCount - lastPrintCount) >= 1000) {
-					println "packagetrackupdate count: "+updateCount;
-					lastPrintCount = updateCount;
-				}
+        if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
 
 
-				//
-				//
-				//
-				//TODO: send the package track update to the update received
-				//logic here?
-				//
-				//
-				//
+            try {
+                BufferedReader reader = req.getReader();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+					lat=Double.parseDouble(line.substring(line.indexOf("lat")+6,line.indexOf("lon")-3));
+                    if(line.contains("delivered")) {
+                        println req.getPathInfo()+" -> "+line;
+                    }
+                    else {
+                        //comment out if you only want to print the delivered
+                        //events
+                        println req.getPathInfo()+" -> "+line;
+                    }
+                }
 
-			} catch (Exception e) { e.printStackTrace(); /*report an error*/ }
-		}
-	}
+                updateCount++;
+                if((updateCount - lastPrintCount) >= 1000) {
+                    println "packagetrackupdate count: "+updateCount;
+                    lastPrintCount = updateCount;
+                }
+
+
+                //
+                //
+                //
+                //TODO: send the package track update to the update received
+                //logic here?
+                //
+                //
+                //
+
+            } catch (Exception e) { e.printStackTrace(); /*report an error*/ }
+        }
+    }
 
 }
 
