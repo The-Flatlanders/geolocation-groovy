@@ -3,6 +3,7 @@
 
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.servlet.*
+import groovy.json.JsonSlurper
 import javax.servlet.http.*
 import javax.servlet.*
  
@@ -49,7 +50,10 @@ class SimpleGroovyServlet extends HttpServlet {
                 BufferedReader reader = req.getReader();
                 String line = null;
                 while ((line = reader.readLine()) != null) {
-					lat=Double.parseDouble(line.substring(line.indexOf("lat")+6,line.indexOf("lon")-3));
+					def slurper=new JsonSlurper()
+					def inf=slurper.parseText(line);
+					println(inf.lat)
+					//lat=Double.parseDouble(line.substring(line.indexOf("lat")+6,line.indexOf("lon")-3));
                     if(line.contains("delivered")) {
                         println req.getPathInfo()+" -> "+line;
                     }
