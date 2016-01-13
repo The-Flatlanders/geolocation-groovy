@@ -14,7 +14,8 @@ class SimpleGroovyServlet extends HttpServlet {
     long lastPrintCount = 0;
 	double lat;
 
-
+	//Test push
+	
     void doGet(HttpServletRequest req, HttpServletResponse resp) {
         println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 
