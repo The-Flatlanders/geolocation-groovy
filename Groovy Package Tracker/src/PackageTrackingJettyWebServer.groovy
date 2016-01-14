@@ -12,18 +12,31 @@ class SimpleGroovyServlet extends HttpServlet {
     long lastPrintCount = 0;
     void doGet(HttpServletRequest req, HttpServletResponse resp) {
         println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
-
+        def uuids = req.getParameterMap().get("uuid")
         if(req.getPathInfo().equals("/tracknewpackage")) {			
-            def responseString = "{ \"ackUUID\":\""+req.getParameterMap().get("uuid")+"\" }"
+            def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
-			trackedIDs.putAt(req.getParameterMap().get("uuid")[0],new TrackablePackage(req.getParameterMap().get("uuid")[0], new Coordinate(lat,lon)));
+			trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)));
             resp.setContentType("application/json");
             def writer = resp.getWriter();
             writer.print(responseString);
             writer.flush();
             println "\t\t  "+responseString;
         }
+		def packageInfos=new ArrayList()
+		if(req.getPathInfo().equals("/trackPackages")){
+			for(String id:uuids){
+				if(trackedIDs.containsKey(id)){
+					packageInfos.add((trackedIDs.get(id,null)))
+				}
+			}
+			def writer = resp.getWriter();
+			for(int x=0;x<packageInfos.size();x++){
+				writer.print(packageInfos.get(x))
+			}
+			writer.flush();
+		}
 
     }
 
