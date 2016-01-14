@@ -11,7 +11,8 @@ class SimpleGroovyServlet extends HttpServlet {
     long updateCount = 0;
     long lastPrintCount = 0;
     void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
+        println test
+		println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
         def uuids = req.getParameterMap().get("uuid")
         if(req.getPathInfo().equals("/tracknewpackage")) {			
             def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
