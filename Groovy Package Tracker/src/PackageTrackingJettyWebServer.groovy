@@ -72,16 +72,6 @@ class SimpleGroovyServlet extends HttpServlet {
                     lastPrintCount = updateCount;
                 }
 
-
-                //
-                //
-                //
-                //TODO: send the package track update to the update received
-                //logic here?
-                //
-                //
-                //
-
             } catch (Exception e) { e.printStackTrace(); /*report an error*/ }
         }
     }
