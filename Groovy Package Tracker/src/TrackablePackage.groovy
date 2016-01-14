@@ -6,9 +6,11 @@ class TrackablePackage {
 	int elevation;
 	String time;
 	String uuid;
+	boolean delivered;
 	public TrackablePackage(String uuid, Coordinate destination){
 		this.uuid=uuid;
 		this.destination=destination;
+		delivered = false;
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -34,10 +36,17 @@ class TrackablePackage {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+	public boolean getDelivered() {
+		return time;
+	}
+	public void setDelivered(boolean delivered) {
+		this.delivered = delivered;
+	}
 	public Coordinate getDestination() {
 		return destination;
 	}
 	public String toString(){
-		return ("Package "+uuid+" Destination: "+destination+" Current Location: "+location);
+		String delivered = delivered? "Package is delivered" : "Package is not delivered";
+		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered);
 	}
 }
