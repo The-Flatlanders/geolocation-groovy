@@ -10,8 +10,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	HashMap trackedIDs=new HashMap();
     long updateCount = 0;
     long lastPrintCount = 0;
-	
-
     void doGet(HttpServletRequest req, HttpServletResponse resp) {
         println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 
