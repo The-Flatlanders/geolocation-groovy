@@ -35,14 +35,11 @@ class SimpleGroovyServlet extends HttpServlet {
 			for(int x=0;x<packageInfos.size();x++){
 				writer.print(packageInfos.get(x))
 			}
+			Scanner scanner = new Scanner( new File("HTML/TrackNewPackageForm.html") );
+			String text = scanner.useDelimiter("\\A").next();
+			scanner.close()
 			resp.setContentType("text/html");
-			writer.print("<! DOCTYPE html><html><form action=\"http://localhost:8080/trackPackages\" method=\"get\">Package UUID:<br><input type=\"text\" name=\"uuid\" value=\"enter uuid\"><br><input type=\"submit\" value=\"Submit\"></form></html>");
-			writer.flush();
-		}
-		else{
-			resp.setContentType("text/html");
-			def writer = resp.getWriter();
-			writer.print("<! DOCTYPE html><html><form action=\"http://localhost:8080/trackPackages\" method=\"get\">Package UUID:<br><input type=\"text\" name=\"uuid\" value=\"enter uuid\"><br><input type=\"submit\" value=\"Submit\"></form></html>");
+			writer.print(text);
 			writer.flush();
 		}
 
