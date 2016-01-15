@@ -24,8 +24,8 @@ class SimpleGroovyServlet extends HttpServlet {
             writer.flush();
             println "\t\t  "+responseString;
         }
-		def packageInfos=new ArrayList()
-		if(req.getPathInfo().equals("/trackPackages")){
+		else if(req.getPathInfo().equals("/trackPackages")){
+			def packageInfos=new ArrayList()
 			for(String id:uuids){
 				if(trackedIDs.containsKey(id)){
 					packageInfos.add((trackedIDs.get(id,null)))
@@ -35,6 +35,14 @@ class SimpleGroovyServlet extends HttpServlet {
 			for(int x=0;x<packageInfos.size();x++){
 				writer.print(packageInfos.get(x))
 			}
+			resp.setContentType("text/html");
+			writer.print("<! DOCTYPE html><html><form action=\"http://localhost:8080/trackPackages\" method=\"get\">Package UUID:<br><input type=\"text\" name=\"uuid\" value=\"enter uuid\"><br><input type=\"submit\" value=\"Submit\"></form></html>");
+			writer.flush();
+		}
+		else{
+			resp.setContentType("text/html");
+			def writer = resp.getWriter();
+			writer.print("<! DOCTYPE html><html><form action=\"http://localhost:8080/trackPackages\" method=\"get\">Package UUID:<br><input type=\"text\" name=\"uuid\" value=\"enter uuid\"><br><input type=\"submit\" value=\"Submit\"></form></html>");
 			writer.flush();
 		}
 
