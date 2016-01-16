@@ -2,27 +2,34 @@
 public class Coordinate {
 	public double lon;
 	public double lat;
-	public Coordinate(double lat, double lon){
+	public double ele;
+	public Coordinate(double lat, double lon, double ele){
 		this.lat=lat;
 		this.lon=lon;
+		this.ele=ele;
+	}
+	public Coordinate(double lat,double lon){
+		this(lat,lon,0.0);
 	}
 	public String toString(){
-		return "{"+lat+","+lon+"}";
+		return "{"+lat+","+lon+","+ele+"}";
 	}
 	public static double getDistance(Coordinate Coord1,Coordinate Coord2){
-		int R = 6371000; // radius of the earth (in meters)
-		double l1 = Math.toRadians(Coord1.lat);
-		double l2 = Math.toRadians(Coord2.lat);
-		double dlat = Math.toRadians(Coord2.lat-Coord1.lat);
-		double dlon = Math.toRadians(Coord2.lon-Coord1.lon);
-		
-		double a = Math.sin(dlat/2) * Math.sin(dlon/2) +
-				Math.cos(l1) * Math.cos(l2) *
-				Math.sin(dlon/2) * Math.sin(dlon/2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		
-		double d = R * c;
-		return d;
+		final int R = 6371; // Radius of the earth
+		double lat1=Coord1.lat;
+		double lat2=Coord2.lat;
+		double lon1=Coord1.lon;
+		double lon2=Coord2.lon;
+		double ele1=Coord1.ele;
+		double ele2=Coord2.ele;
+		double latDistance = Math.toRadians(lat2 - lat1);
+		double lonDistance = Math.toRadians(lon2 - lon1);
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))* Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+		Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double distance = R * c * 1000; // convert to meters
+		double height = ele1 - ele2;
+		distance = Math.pow(distance, 2) + Math.pow(height, 2);
+		return Math.sqrt(distance);
 	}
 }
 

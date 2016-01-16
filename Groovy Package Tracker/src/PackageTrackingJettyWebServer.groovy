@@ -12,7 +12,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	long updateCount = 0;
 	long lastPrintCount = 0;
 	void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		// println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
+			//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 		def uuids = req.getParameterMap().get("uuid")
 		
 		if(req.getPathInfo().equals("/tracknewpackage")) {
@@ -61,11 +61,10 @@ class SimpleGroovyServlet extends HttpServlet {
 				BufferedReader reader = req.getReader();
 				String line = null;
 				while ((line = reader.readLine()) != null) {
-				
 					def slurper=new JsonSlurper()
 					def inf=slurper.parseText(line);
 					def uuid = req.getPathInfo().replace("/packagetrackupdate/","");
-					def currentPackage = trackedIDs.get(uuid);
+					TrackablePackage currentPackage = trackedIDs.get(uuid);
 					if(line.contains("delivered")) {
 						//This code registers delivery events
 						println uuid +" -> "+ line;
@@ -73,7 +72,9 @@ class SimpleGroovyServlet extends HttpServlet {
 					}
 					else{
 						//This code tracks all non delivery events
-						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon)),inf.time);
+						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time);
+						println "eta: "+currentPackage.getETAInSeconds()+" seconds";
+						println currentPackage.getSpeed()+" meters per second";
 						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
 					}
 				}
