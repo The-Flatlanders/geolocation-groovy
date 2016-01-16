@@ -21,6 +21,7 @@ commiting tells git to save your place as a checkpoint. This checkpoint can be r
 #How to use servlets
 * http://courses.coreservlets.com/Course-Materials/csajsp2.html
 * http://stackoverflow.com/questions/16574482/decoding-json-string-in-java
+* *http://stackoverflow.com/questions/3028490/calling-a-java-servlet-from-javascript
 
 #How to run the event simulator
 * Ensure the web server is already running
