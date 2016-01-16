@@ -72,8 +72,8 @@ class SimpleGroovyServlet extends HttpServlet {
 					else{
 						//This code tracks all non delivery events
 						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time);
-						//println "eta: "+currentPackage.getETA()+" hours";
-						//println currentPackage.getSpeed()+" meters per second";
+						println "eta: "+currentPackage.getETA()+" hours";
+						println currentPackage.getSpeed()+" meters per second";
 						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
 					}
 				}
