@@ -7,6 +7,7 @@ import javax.servlet.*
 
 
 class SimpleGroovyServlet extends HttpServlet {
+	final String KEY="AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A"
 	HashMap trackedIDs=new HashMap();
 	long updateCount = 0;
 	long lastPrintCount = 0;
@@ -33,12 +34,20 @@ class SimpleGroovyServlet extends HttpServlet {
 				}
 			}
 			def writer = resp.getWriter();
+			resp.setContentType("text/html")
+			Scanner scanner;
 			for(int x=0;x<packageInfos.size();x++){
-				writer.print(packageInfos.get(x))
-				writer.print("\n\n");
+				//scanner = new Scanner( new File("HTML/GoogleMapsFront.HTML") );
+				//String front = scanner.useDelimiter("\\A").next();
+				//scanner = new Scanner( new File("HTML/GoogleMapsRear.HTML") );
+				//String rear = scanner.useDelimiter("\\A").next();
+				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/place?q=";
+				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
+				Coordinate c=packageInfos.get(x).getLocation()
+				println c.lat
+				writer.print(front+c.lat+"%20"+c.lon+rear);
 			}
-			resp.setContentType("txt/html")
-			Scanner scanner = new Scanner( new File("HTML/TrackNewPackageForm.HTML") );
+			scanner = new Scanner( new File("HTML/TrackNewPackageForm.HTML") );
 			String text = scanner.useDelimiter("\\A").next();
 			scanner.close()
 			writer.print(text);
@@ -69,7 +78,7 @@ class SimpleGroovyServlet extends HttpServlet {
 					else{
 						//This code tracks all non delivery events
 						currentPackage.setLocation(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon)))
-						println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
+						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
 					}
 				}
 
@@ -85,7 +94,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 }
 
-def server = new Server(8080);
+def server = new Server(8000);
 ServletHandler handler = new ServletHandler();
 server.setHandler(handler);
 handler.addServletWithMapping(SimpleGroovyServlet.class, "/*");

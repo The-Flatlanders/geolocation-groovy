@@ -302,7 +302,7 @@ tracks.each { track ->
 
 
 println "Starting REST Client... ";
-client = new RESTClient( 'http://127.0.0.1:8080' );
+client = new RESTClient( 'http://127.0.0.1:8000' );
 
 println "Sending package events... ";
 def event = eventHeap.poll();
