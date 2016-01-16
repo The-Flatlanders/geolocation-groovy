@@ -5,7 +5,6 @@ import groovy.json.JsonSlurper
 import javax.servlet.http.*
 import javax.servlet.*
 
-
 class SimpleGroovyServlet extends HttpServlet {
 	final String KEY="AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A"
 	HashMap trackedIDs=new HashMap();
@@ -73,8 +72,8 @@ class SimpleGroovyServlet extends HttpServlet {
 					else{
 						//This code tracks all non delivery events
 						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time);
-						println "eta: "+currentPackage.getETAInSeconds()+" seconds";
-						println currentPackage.getSpeed()+" meters per second";
+						//println "eta: "+currentPackage.getETA()+" hours";
+						//println currentPackage.getSpeed()+" meters per second";
 						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
 					}
 				}

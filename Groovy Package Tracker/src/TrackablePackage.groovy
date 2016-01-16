@@ -46,23 +46,19 @@ class TrackablePackage {
 		return Coordinate.getDistance(location, destination)
 	}
 	public int getETAInSeconds(){
-		println "distance from destination: "+getDistanceFromDestination();
+		//println "distance from destination: "+getDistanceFromDestination();
 		return speed*getDistanceFromDestination()
 	}
 	public String getETA(){
 		int ns= getETAInSeconds()
-		String s=""+ns
-		SimpleDateFormat format=new SimpleDateFormat("ss")
-		SimpleDateFormat format2=new SimpleDateFormat("HH:mm:ss")
-		Date date=format.parse(s);
-		//TODO borked
+		return ns/3600;
 	}
 	public void update(Coordinate updateLocation, String updateTime){
-
+		if(!delivered){
 		updateTime=updateTime.replace("-06:00","")
 		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 		Date date=format.parse(updateTime);
-		int newTime=date.getTime()/1000;
+		int newTime=date.getTime();
 		if(startingLocation==null){
 			startingLocation=updateLocation
 			startTime=newTime;
@@ -71,12 +67,13 @@ class TrackablePackage {
 		time=newTime;
 		location=updateLocation
 		}
+		}
 	}
 	public double calculateInstantaneousSpeed(double t1,double t2,double distance){
 		double currentSpeed;
 		double dt=t2-t1
 		if(dt>0){
-		currentSpeed= distance/dt
+		currentSpeed= (1000*distance)/dt
 		}else{
 		currentSpeed= 0
 		}
@@ -85,11 +82,11 @@ class TrackablePackage {
 	public double calculateAverageSpeed(double time,double distance){
 		double averageSpeed;
 		if(time>0){
-			averageSpeed=distance/time
+			averageSpeed=(1000)*distance/time
 		}else{
 			averageSpeed=0;
 		}
-		println "moved "+distance+" meters in "+time+" seconds. Speed="+averageSpeed
+		//println "moved "+distance+" meters in "+time+" milliseconds. Speed="+averageSpeed+"m/s"
 		return averageSpeed;
 
 	}
