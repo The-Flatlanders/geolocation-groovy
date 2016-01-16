@@ -11,10 +11,10 @@ public class Coordinate {
 	}
 	public static double getDistance(Coordinate Coord1,Coordinate Coord2){
 		int R = 6371000; // radius of the earth (in meters)
-		double l1 = Coord1.lat.toRadians();
-		double l2 = Coord2.lat.toRadians();
-		double dlat = (Coord2.lat-Coord1.lat).toRadians();
-		double dlon = (Coord2.lon-Coord1.lon).toRadians();
+		double l1 = Math.toRadians(Coord1.lat);
+		double l2 = Math.toRadians(Coord2.lat);
+		double dlat = Math.toRadians(Coord2.lat-Coord1.lat);
+		double dlon = Math.toRadians(Coord2.lon-Coord1.lon);
 		
 		double a = Math.sin(dlat/2) * Math.sin(dlon/2) +
 				Math.cos(l1) * Math.cos(l2) *

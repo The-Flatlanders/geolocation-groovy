@@ -37,10 +37,11 @@ class SimpleGroovyServlet extends HttpServlet {
 			resp.setContentType("text/html")
 			Scanner scanner;
 			for(int x=0;x<packageInfos.size();x++){
-				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/place?q=";
+				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/directions?";
 				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
 				Coordinate c=packageInfos.get(x).getLocation()
-				writer.print(front+c.lat+"%20"+c.lon+rear);
+				Coordinate d=packageInfos.get(x).getDestination()
+				writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
 			}
 			scanner = new Scanner( new File("HTML/TrackNewPackageForm.HTML") );
 			String text = scanner.useDelimiter("\\A").next();

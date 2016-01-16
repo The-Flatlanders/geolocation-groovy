@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 
 class TrackablePackage {
 
@@ -11,6 +13,7 @@ class TrackablePackage {
 	public TrackablePackage(String uuid, Coordinate destination){
 		this.uuid=uuid;
 		this.destination=destination;
+		location=new Coordinate(1,1);
 		delivered = false;
 	}
 	public Coordinate getLocation() {
@@ -62,10 +65,14 @@ class TrackablePackage {
 					+":"+((int)s < 10 ? "0"+String.valueOf((int)s) : String.valueOf((int)s))
 					+":"+((int)mil > 100 ? String.valueOf((int)mil) : (int)mil > 9 ? "0"+String.valueOf((int)mil) : "00"+String.valueOf((int)mil));
 	}
-	public void update(Coordinate updateLocation, int updateTime){
-		def distanceTravelled=Coordinate.getDistance(location, updateLocation)
-		def timeElapsed=updateTime-currentTime
-		speed=distanceTraveled/timeElapsed
+	public void update(Coordinate updateLocation, String updateTime){
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS-XXXX")
+		Date date=format.parse(updateTime);
+		println date.seconds()
+		//def distanceTravelled=Coordinate.getDistance(location, updateLocation)
+		//def timeElapsed=updateTime-time
+		//speed=distanceTravelled/timeElapsed
+		location=updateLocation
 	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
