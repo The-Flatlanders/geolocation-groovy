@@ -37,14 +37,9 @@ class SimpleGroovyServlet extends HttpServlet {
 			resp.setContentType("text/html")
 			Scanner scanner;
 			for(int x=0;x<packageInfos.size();x++){
-				//scanner = new Scanner( new File("HTML/GoogleMapsFront.HTML") );
-				//String front = scanner.useDelimiter("\\A").next();
-				//scanner = new Scanner( new File("HTML/GoogleMapsRear.HTML") );
-				//String rear = scanner.useDelimiter("\\A").next();
 				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/place?q=";
 				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
 				Coordinate c=packageInfos.get(x).getLocation()
-				println c.lat
 				writer.print(front+c.lat+"%20"+c.lon+rear);
 			}
 			scanner = new Scanner( new File("HTML/TrackNewPackageForm.HTML") );
@@ -77,7 +72,7 @@ class SimpleGroovyServlet extends HttpServlet {
 					}
 					else{
 						//This code tracks all non delivery events
-						currentPackage.setLocation(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon)))
+						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon)),inf.time);
 						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
 					}
 				}
