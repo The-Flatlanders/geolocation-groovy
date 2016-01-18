@@ -81,6 +81,8 @@ class SimpleGroovyServlet extends HttpServlet {
 				Coordinate c=packageInfos.get(x).getLocation()
 				Coordinate d=packageInfos.get(x).getDestination()
 				writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
+				writer.print("<h4>"+(int)(packageInfos.get(x).getDistanceFromDestination()/1000)+" km from destination</h4>")
+				writer.print("<h4>"+(int)packageInfos.get(x).getETA()+" hours</h4>")
 			}
 			writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
 			writer.flush();

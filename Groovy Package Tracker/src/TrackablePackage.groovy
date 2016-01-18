@@ -49,7 +49,7 @@ class TrackablePackage {
 		//println "distance from destination: "+getDistanceFromDestination();
 		return getDistanceFromDestination()/averageSpeed
 	}
-	public String getETA(){
+	public double getETA(){
 		int ns= getETAInSeconds()
 		return ns/3600;
 	}
