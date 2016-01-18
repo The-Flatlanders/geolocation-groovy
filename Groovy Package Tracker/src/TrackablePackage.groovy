@@ -10,7 +10,7 @@ class TrackablePackage {
 	int time;
 	String uuid;
 	boolean delivered;
-	
+
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
 		this.uuid=uuid;
@@ -55,27 +55,27 @@ class TrackablePackage {
 	}
 	public void update(Coordinate updateLocation, String updateTime){
 		if(!delivered){
-		updateTime=updateTime.replace("-06:00","")
-		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-		Date date=format.parse(updateTime);
-		int newTime=date.getTime();
-		if(startingLocation==null){
-			startingLocation=updateLocation
-			startTime=newTime;
-		}else{
-		averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
-		time=newTime;
-		location=updateLocation
-		}
+			updateTime=updateTime.replace("-06:00","")
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+			Date date=format.parse(updateTime);
+			int newTime=date.getTime();
+			if(startingLocation==null){
+				startingLocation=updateLocation
+				startTime=newTime;
+			}else{
+				averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
+				time=newTime;
+				location=updateLocation
+			}
 		}
 	}
 	public double calculateInstantaneousSpeed(double t1,double t2,double distance){
 		double currentSpeed;
 		double dt=t2-t1
 		if(dt>0){
-		currentSpeed= (1000*distance)/dt
+			currentSpeed= (1000*distance)/dt
 		}else{
-		currentSpeed= 0
+			currentSpeed= 0
 		}
 		println "moved "+distance+" meters in "+dt+" seconds. Speed="+currentSpeed;
 	}

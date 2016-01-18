@@ -9,11 +9,11 @@ class SimpleGroovyServlet extends HttpServlet {
 	final String KEY="AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A"
 	HashMap trackedIDs=new HashMap();
 	long updateCount = 0;
-	long lastPrintCount = 0;
+	long lastPrintCount = 0; //Is this stuff thread safe?
 	void doGet(HttpServletRequest req, HttpServletResponse resp) {
-			//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
+		//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 		def uuids = req.getParameterMap().get("uuid")
-		
+
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
@@ -24,17 +24,57 @@ class SimpleGroovyServlet extends HttpServlet {
 			writer.print(responseString);
 			writer.flush();
 			println "\t\t  "+responseString;
-		}		
+		}
+		if(req.getPathInfo().equals("/")){
+			resp.setContentType("text/html")
+			def writer = resp.getWriter()
+			writer.print(returnText("HTML/login.HTML"))
+			writer.flush()
+		}
+		
+	}
+	
+	private String returnText(String path){
+		def scanner = new Scanner( new File(path));
+		String text = scanner.useDelimiter("\\A").next();
+		scanner.close()
+		return text
+	}
+
+
+	void doPost(HttpServletRequest req, HttpServletResponse resp) {
+		
+		//Prints out package information to the webpage and prompts the user to enter more packages
 		if(req.getPathInfo().equals("/trackPackages")){
+			
+			//Gets the username and password from the current session or the last page if it was login
+			//Uses cookies to score and get pwd and username
+			String username = req.getParameter("username")
+			String password = req.getParameter("password")
+			if(username != null && password != null){
+				Cookie user = new Cookie("username", username)
+				Cookie pwd = new Cookie("password", password)
+				resp.addCookie(user);
+				resp.addCookie(pwd);
+			}
+			else{
+				def info = req.getCookies()
+				username = info[0].getValue()
+				password = info[1].getValue()
+			}
+			
+			
+			
+			def uuids = req.getParameterMap().get("uuid")
 			def packageInfos=new ArrayList()
 			for(String id:uuids){
 				if(trackedIDs.containsKey(id)){
 					packageInfos.add((trackedIDs.get(id,null)))
 				}
 			}
+			
 			def writer = resp.getWriter();
 			resp.setContentType("text/html")
-			Scanner scanner;
 			for(int x=0;x<packageInfos.size();x++){
 				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/directions?";
 				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
@@ -42,18 +82,11 @@ class SimpleGroovyServlet extends HttpServlet {
 				Coordinate d=packageInfos.get(x).getDestination()
 				writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
 			}
-			scanner = new Scanner( new File("HTML/TrackNewPackageForm.HTML") );
-			String text = scanner.useDelimiter("\\A").next();
-			scanner.close()
-			writer.print(text);
+			writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
 			writer.flush();
 		}
 
-	}
-
-
-	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-		//        println "POST: "+req.getRequestURL();
+				
 		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
 
 			try {
