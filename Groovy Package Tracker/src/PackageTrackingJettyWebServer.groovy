@@ -20,6 +20,11 @@ class SimpleGroovyServlet extends HttpServlet {
 				doPost(req, resp);
 			}
 		}
+		if(req.getPathInfo().equals("/test")){
+			def writer=resp.getWriter();
+			resp.setContentType("text/plain")
+			writer.print("hello")
+		}
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
