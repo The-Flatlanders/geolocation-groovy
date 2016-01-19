@@ -10,6 +10,7 @@
 			xmlhttp.onreadystatechange=
 			function()
 			{
+<<<<<<< HEAD
 			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
@@ -20,6 +21,16 @@
 			}
 			xmlhttp.open("GET", "http://localhost:8000/test",true);
 			xmlhttp.setRequestHeader("Access-Control-Allow-Origin",null);
+=======
+				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
+				{
+					document.getElementById('scores').innerHTML = xmlhttp.responseText;
+				}else{
+					document.getElementById('scores').innerHTML = "<strong>Waiting for Resp</strong>";
+				}
+			}
+			xmlhttp.open("GET", "http://localhost:8000/test",true);
+>>>>>>> branch 'master' of https://github.com/The-Flatlanders/geolocation-groovy
 			xmlhttp.send();
 		}
 	</script>
