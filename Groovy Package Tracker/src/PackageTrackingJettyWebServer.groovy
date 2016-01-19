@@ -14,6 +14,12 @@ class SimpleGroovyServlet extends HttpServlet {
 		//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 		def uuids = req.getParameterMap().get("uuid")
 
+		//If url is navigated to directly, only shows page if already logged in
+		if(req.getPathInfo().equals("/trackPackages")){
+			if(req.getCookies().size() != 0){
+				doPost(req, resp);
+			}
+		}
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
@@ -25,15 +31,29 @@ class SimpleGroovyServlet extends HttpServlet {
 			writer.flush();
 			println "\t\t  "+responseString;
 		}
+		if(req.getPathInfo().equals("/logout")){
+
+			//Removes all cookies
+			for(Cookie c : req.getCookies()){
+				c.setValue(null);
+				c.setMaxAge(0);
+				resp.addCookie(c);
+			}
+			//Redirects to the login screen
+			resp.sendRedirect("http://localhost:8000/login");
+		}
 		if(req.getPathInfo().equals("/")){
+			resp.sendRedirect("http://localhost:8000/login");
+		}
+		if(req.getPathInfo().equals("/login")){
 			resp.setContentType("text/html")
 			def writer = resp.getWriter()
 			writer.print(returnText("HTML/login.HTML"))
 			writer.flush()
 		}
-		
+
 	}
-	
+
 	private String returnText(String path){
 		def scanner = new Scanner( new File(path));
 		String text = scanner.useDelimiter("\\A").next();
@@ -43,10 +63,10 @@ class SimpleGroovyServlet extends HttpServlet {
 
 
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-		
+
 		//Prints out package information to the webpage and prompts the user to enter more packages
 		if(req.getPathInfo().equals("/trackPackages")){
-			
+
 			//Gets the username and password from the current session or the last page if it was login
 			//Uses cookies to score and get pwd and username
 			String username = req.getParameter("username")
@@ -62,33 +82,46 @@ class SimpleGroovyServlet extends HttpServlet {
 				username = info[0].getValue()
 				password = info[1].getValue()
 			}
-			
-			
-			
+
+
+			//Creates list of packages either entered by the user previously or now
+			HashSet<TrackablePackage> packageInfos=new HashSet()
+			for(Cookie c : req.getCookies()){
+				if(c.getName() == "UUID"){
+					String id = c.getValue();
+					if(trackedIDs.containsKey(id)){
+						packageInfos.add((trackedIDs.get(id,null)))
+						println("old")
+					}
+				}
+			}
 			def uuids = req.getParameterMap().get("uuid")
-			def packageInfos=new ArrayList()
 			for(String id:uuids){
 				if(trackedIDs.containsKey(id)){
 					packageInfos.add((trackedIDs.get(id,null)))
+					resp.addCookie(new Cookie("UUID", id));
+					println("new");
 				}
 			}
-			
+
+			//Prints out packages to window
 			def writer = resp.getWriter();
 			resp.setContentType("text/html")
-			for(int x=0;x<packageInfos.size();x++){
+			for(TrackablePackage p : packageInfos){
 				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/directions?";
 				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
-				Coordinate c=packageInfos.get(x).getLocation()
-				Coordinate d=packageInfos.get(x).getDestination()
+				Coordinate c=p.getLocation()
+				Coordinate d=p.getDestination()
 				writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
-				writer.print("<h4>"+(int)(packageInfos.get(x).getDistanceFromDestination()/1000)+" km from destination</h4>")
-				writer.print("<h4>"+(int)packageInfos.get(x).getETA()+" hours</h4>")
+				writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
+				writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
 			}
 			writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
+			writer.print(returnText("HTML/Logout.HTML"))
 			writer.flush();
 		}
 
-				
+
 		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
 
 			try {
