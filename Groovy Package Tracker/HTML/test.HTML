@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Simple Ajax Example</title>
+	<script language="javascript">
+		xmlhttp=new XMLHttpRequest();	
+		function exec()
+		{
+			xmlhttp.onreadystatechange=
+			function()
+			{
+				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
+				{
+					document.getElementById('scores').innerHTML = xmlhttp.responseText;
+				}else{
+					document.getElementById('scores').innerHTML = "<strong>Waiting for Resp</strong>";
+				}
+			}
+			xmlhttp.open("GET", "http://localhost:8000/test",true);
+			xmlhttp.send();
+		}
+	</script>
+</head>
+<body>
+	<div id="scores">
+	</div>
+	Package UUID:<br/><input type="text" name="uuid"><br/>
+  	<input type="button" value="Submit" onclick="exec()">
+</body>
+</html>

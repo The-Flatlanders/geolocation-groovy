@@ -13,7 +13,12 @@ class SimpleGroovyServlet extends HttpServlet {
 	void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
 		def uuids = req.getParameterMap().get("uuid")
-
+		
+		if(req.getPathInfo().equals("/test")){
+			def writer=resp.getWriter();
+			writer.print("hello");
+		}
+		
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
