@@ -131,7 +131,17 @@ class SimpleGroovyServlet extends HttpServlet {
 				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
-				writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
+				//writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
+				Coordinate e=Coordinate.midPoint(c, d)
+				String html=returnText("HTML/map.HTML")
+				html=html.replaceAll("locationLat", ""+c.lat)
+				html=html.replaceAll("locationLon", ""+c.lon)
+				html=html.replaceAll("destinationLat", ""+d.lat)
+				html=html.replaceAll("destinationLon", ""+d.lon)
+				html=html.replaceAll("centerLat", ""+e.lat)
+				html=html.replaceAll("centerLon", ""+e.lon)
+				println(html)
+				writer.print(html)
 				writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
 				writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
 			}
@@ -176,7 +186,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	}
 
 }
-
 def server = new Server(8000);
 ServletHandler handler = new ServletHandler();
 server.setHandler(handler);

@@ -31,5 +31,22 @@ public class Coordinate {
 		distance = Math.pow(distance, 2) + Math.pow(height, 2);
 		return Math.sqrt(distance);
 	}
+	public static Coordinate midPoint(Coordinate Coord1,Coordinate Coord2){
+		double lat1=Coord1.lat;
+		double lat2=Coord2.lat;
+		double lon1=Coord1.lon;
+		double lon2=Coord2.lon;
+		double dLon = Math.toRadians(lon2 - lon1);
+
+    lat1 = Math.toRadians(lat1);
+    lat2 = Math.toRadians(lat2);
+    lon1 = Math.toRadians(lon1);
+
+    double Bx = Math.cos(lat2) * Math.cos(dLon);
+    double By = Math.cos(lat2) * Math.sin(dLon);
+    double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+    double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+	return new Coordinate(Math.toDegrees(lat3),Math.toDegrees(lon3))
+	}
 }
 
