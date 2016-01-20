@@ -68,12 +68,12 @@ class SimpleGroovyServlet extends HttpServlet {
 	}
 
 	HashMap<String, String> authorization = new HashMap<String, String>(); //For checking username to password
+	HashMap<String, String> adminAuthorization=new HashMap<String,String>();
 	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>(); //For 
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
 		//Prints out package information to the webpage and prompts the user to enter more packages
 		if(req.getPathInfo().equals("/trackPackages")){
-
 			//Gets the username and password from the current session or the last page if it was login
 			//Uses cookies to score and get pwd and username
 			String username = req.getParameter("username")
@@ -85,7 +85,7 @@ class SimpleGroovyServlet extends HttpServlet {
 					return;
 				}
 				else{
-					authorization.put(username, password);
+					//authorization.put(username, password);
 				}
 				Cookie user = new Cookie("username", username)
 				Cookie pwd = new Cookie("password", password)
@@ -101,12 +101,16 @@ class SimpleGroovyServlet extends HttpServlet {
 
 			//Creates list of packages either entered by the user previously or now
 			HashSet<TrackablePackage> packageInfos
+
 			if(userOpenedPackages.containsKey(username)){
 				packageInfos = userOpenedPackages.get(username)
 			}
 			else{
 				packageInfos = new HashSet<TrackablePackage>()
 				userOpenedPackages.put(username, packageInfos)
+			}
+			if(username.equals("admin")){
+				packageInfos=trackedIDs.values()
 			}
 			for(Cookie c : req.getCookies()){
 				if(c.getName() == "UUID"){
