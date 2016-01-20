@@ -127,20 +127,16 @@ class SimpleGroovyServlet extends HttpServlet {
 			def writer = resp.getWriter();
 			resp.setContentType("text/html")
 			for(TrackablePackage p : packageInfos){
-				String front="<iframe width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" src=\"https://www.google.com/maps/embed/v1/directions?";
-				String rear="&amp;key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A\" allowfullscreen=\"\"></iframe>"
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
-				//writer.print(front+"&origin="+c.lat+"%20"+c.lon+"&destination="+d.lat+"%20"+d.lon+rear);
 				Coordinate e=Coordinate.midPoint(c, d)
 				String html=returnText("HTML/map.HTML")
 				html=html.replaceAll("locationLat", ""+c.lat)
-				html=html.replaceAll("locationLon", ""+c.lon)
-				html=html.replaceAll("destinationLat", ""+d.lat)
-				html=html.replaceAll("destinationLon", ""+d.lon)
-				html=html.replaceAll("centerLat", ""+e.lat)
-				html=html.replaceAll("centerLon", ""+e.lon)
-				println(html)
+					.replaceAll("locationLon", ""+c.lon)
+					.replaceAll("destinationLat", ""+d.lat)
+					.replaceAll("destinationLon", ""+d.lon)
+					.replaceAll("centerLat", ""+e.lat)
+					.replaceAll("centerLon", ""+e.lon)
 				writer.print(html)
 				writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
 				writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
@@ -169,9 +165,8 @@ class SimpleGroovyServlet extends HttpServlet {
 					else{
 						//This code tracks all non delivery events
 						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time);
-						println "eta: "+currentPackage.getETA()+" hours";
-						println currentPackage.getSpeed()+" meters per second";
-						//println req.getPathInfo()+" -> "+line; //Comment out if you only want to print the delivered updates
+						//println "eta: "+currentPackage.getETA()+" hours";
+						//println currentPackage.getSpeed()+" meters per second";
 					}
 				}
 
