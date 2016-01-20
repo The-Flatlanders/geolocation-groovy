@@ -1,28 +1,26 @@
-      <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 25%; width:25%}
-    </style>
-    <div id="map"></div>
-    <script type="text/javascript">
 
+<div class="map" id="map"></div>
+<script type="text/javascript">
 var map;
 function initMap() {
   var ctrLatLng = {lat: centerLat, lng: centerLon};
   var myLatLng= {lat: locationLat, lng: locationLon};
   var destLatLng= {lat: destinationLat, lng: destinationLon};
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
+    zoom: 5,
     center: ctrLatLng
   });
 
-  var marker = new google.maps.Marker({
+  var currentLocationMarker = new google.maps.Marker({
     position: myLatLng,
+    label: 'Location',
     map: map,
-    title: 'Current Location'
+
   });
-  var marker = new google.maps.Marker({
+  var destinationMarker = new google.maps.Marker({
     position: destLatLng,
     map: map,
+    label: 'Destination',
     title: 'Destination'
   });
 }

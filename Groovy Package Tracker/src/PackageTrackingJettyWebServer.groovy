@@ -66,7 +66,6 @@ class SimpleGroovyServlet extends HttpServlet {
 		scanner.close()
 		return text
 	}
-
 	HashMap<String, String> authorization = new HashMap<String, String>(); //For checking username to password
 	HashMap<String, String> adminAuthorization=new HashMap<String,String>();
 	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>(); //For 
@@ -135,7 +134,9 @@ class SimpleGroovyServlet extends HttpServlet {
 				Coordinate d=p.getDestination()
 				Coordinate e=Coordinate.midPoint(c, d)
 				String html=returnText("HTML/map.HTML")
-				html=html.replaceAll("locationLat", ""+c.lat)
+				html=html
+					.replaceAll("#id",p.getUuid().replaceAll("-", ""))
+					.replaceAll("locationLat", ""+c.lat)
 					.replaceAll("locationLon", ""+c.lon)
 					.replaceAll("destinationLat", ""+d.lat)
 					.replaceAll("destinationLon", ""+d.lon)
