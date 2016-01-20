@@ -1,9 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
+	<script type="text/javascript">var lat=0.0</script>
 	<title>Simple Ajax Example</title>
-	<script language="javascript">
+	    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+
+</head>
+<body>
+   <div id="map"></div>
+    <script type="text/javascript">
+var map;
+function initMap() {
+	var myLatlng = new google.maps.LatLng(lat, 150.2);
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: myLatlng,
+    zoom: 8
+  });
+}
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
+    </script>
+    	<script language="javascript">
 		xmlhttp=new XMLHttpRequest();	
 		function exec()
 		{
@@ -13,20 +34,21 @@
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
 					document.getElementById('scores').innerHTML = xmlhttp.responseText;
+					lat=parseFloat(xmlhttp.responseText);
+					initMap();
 				}else{
 					document.getElementById('scores').innerHTML = "<strong>Waiting for Resp</strong>";
 				}
 			}
-			xmlhttp.open("GET", "http://localhost:8000/test",true);
+			var uuid=document.getElementById('idin').value;
+			xmlhttp.open("GET", "http://localhost:8000/test?uuid="+uuid,true);
 			xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
 			xmlhttp.send();
 		}
 	</script>
-</head>
-<body>
 	<div id="scores">
 	</div>
-	Package UUID:<br/><input type="text" name="uuid"><br/>
+	Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
   	<input type="button" value="Submit" onclick="exec()">
 </body>
 </html>

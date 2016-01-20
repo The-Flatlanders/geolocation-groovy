@@ -23,12 +23,13 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(req.getPathInfo().equals("/test")){
 			def writer=resp.getWriter();
 			resp.setContentType("text/plain")
-			writer.print("hello")
+			writer.print("50.1")
+			println req.getParameterMap().get("uuid");
 		}
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
-			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
+			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[00])
 			trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)));
 			resp.setContentType("application/json");
 			def writer = resp.getWriter();
