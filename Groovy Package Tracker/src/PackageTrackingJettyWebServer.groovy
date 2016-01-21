@@ -1,6 +1,7 @@
 @Grab(group='org.eclipse.jetty.aggregate', module='jetty-all', version='7.6.15.v20140411')
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.servlet.*
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import javax.servlet.http.*
 import javax.servlet.*
@@ -93,8 +94,9 @@ class SimpleGroovyServlet extends HttpServlet {
 			}
 			else{
 				def info = req.getCookies()
-				username = info[0].getValue()
-				password = info[1].getValue()
+				//resp.sendRedirect("http://localhost:8000/logout");
+				//username = info[0].getValue()
+				//password = info[1].getValue()
 			}
 
 
@@ -128,26 +130,19 @@ class SimpleGroovyServlet extends HttpServlet {
 
 			//Prints out packages to window
 			def writer = resp.getWriter();
-			resp.setContentType("text/html")
+			resp.setContentType("text/plain")
 			for(TrackablePackage p : packageInfos){
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
 				Coordinate e=Coordinate.midPoint(c, d)
-				String html=returnText("HTML/map.HTML")
-				html=html
-					.replaceAll("#id",p.getUuid().replaceAll("-", ""))
-					.replaceAll("locationLat", ""+c.lat)
-					.replaceAll("locationLon", ""+c.lon)
-					.replaceAll("destinationLat", ""+d.lat)
-					.replaceAll("destinationLon", ""+d.lon)
-					.replaceAll("centerLat", ""+e.lat)
-					.replaceAll("centerLon", ""+e.lon)
-				writer.print(html)
-				writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
-				writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
+				writer.print("{\"locationLat\":\"31.1\",\"locationLon\":\"150.2\",\"destinationLat\":\"31.1\",\"destinationLon\":\"150.2\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
+				//writer.print(html)
+				//writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
+				//writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
 			}
-			writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
-			writer.print(returnText("HTML/Logout.HTML"))
+		//	resp.setContentType("text/html")
+		//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
+		//	writer.print(returnText("HTML/Logout.HTML"))
 			writer.flush();
 		}
 

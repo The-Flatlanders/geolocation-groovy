@@ -13,8 +13,8 @@
    <div id="map"></div>
     <script type="text/javascript">
 var map;
-function initMap() {
-	var myLatlng = new google.maps.LatLng(lat, 150.2);
+function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
+	var myLatlng = new google.maps.LatLng(lat3,lon3);
   map = new google.maps.Map(document.getElementById('map'), {
     center: myLatlng,
     zoom: 8
@@ -28,22 +28,27 @@ function initMap() {
 		xmlhttp=new XMLHttpRequest();	
 		function exec()
 		{
+			var package;
 			xmlhttp.onreadystatechange=
 			function()
 			{			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
-					document.getElementById('scores').innerHTML = xmlhttp.responseText;
-					lat=parseFloat(xmlhttp.responseText);
-					initMap();
+					console.log(xmlhttp.responseText);
+					package=JSON.parse(xmlhttp.responseText);
+					initMap(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon,package.midpointLat,package.midpointLon);
 				}else{
 					document.getElementById('scores').innerHTML = "<strong>Waiting for Resp</strong>";
 				}
 			}
 			var uuid=document.getElementById('idin').value;
-			xmlhttp.open("GET", "http://localhost:8000/test?uuid="+uuid,true);
+			var params="uuid="+uuid;
+			xmlhttp.open("POST", "http://localhost:8000/trackPackages",true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xmlhttp.setRequestHeader("Content-length", params.length);
+			xmlhttp.setRequestHeader("Connection", "close");
 			xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-			xmlhttp.send();
+			xmlhttp.send(params);
 		}
 	</script>
 	<div id="scores">
