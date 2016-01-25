@@ -1,30 +1,46 @@
-<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<script type="text/javascript">var lat=0.0</script>
-	<title>Simple Ajax Example</title>
-	    <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
+	<title>Package Tracker</title>
+	<style type="text/css">
+	   div {
+		}
+      #map {
+			height: 100%; 
+			width:100%
+			float:left;
+      	}
+      #controlPanel{
+      		float:left;
+			height:100%;
+	  }
     </style>
-
 </head>
 <body>
-   <div id="map"></div>
-    <script type="text/javascript">
-var map;
-function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
-	var myLatlng = new google.maps.LatLng(lat3,lon3);
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: myLatlng,
-    zoom: 8
-  });
-}
+	<div id="controlPanel">
+	<div id="form">
+		Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
+  		<input type="button" value="Submit" onclick="exec()">
+	</div>
+	<ul>
+		<li>123-01-203-120-3-</li>
+	</ul>
+	</div>
+	<div id="map"></div>
+	<script type="text/javascript">
+		var map;
+		function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
+			console.log(lat3);
+			console.log(true);
+			var myLatlng = new google.maps.LatLng(lat3,lon3);
+  			map = new google.maps.Map(document.getElementById('map'), {
+   				center: myLatlng,
+    			zoom: 8
+  			});
+		}
     </script>
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
     </script>
-    	<script language="javascript">
+	<script language="javascript">
 		xmlhttp=new XMLHttpRequest();	
 		function exec()
 		{
@@ -38,7 +54,6 @@ function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
 					package=JSON.parse(xmlhttp.responseText);
 					initMap(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon,package.midpointLat,package.midpointLon);
 				}else{
-					document.getElementById('scores').innerHTML = "<strong>Waiting for Resp</strong>";
 				}
 			}
 			var uuid=document.getElementById('idin').value;
@@ -51,9 +66,5 @@ function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
 			xmlhttp.send(params);
 		}
 	</script>
-	<div id="scores">
-	</div>
-	Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
-  	<input type="button" value="Submit" onclick="exec()">
 </body>
 </html>
