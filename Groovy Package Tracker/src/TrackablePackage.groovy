@@ -9,10 +9,10 @@ class TrackablePackage {
 	Coordinate destination;
 	double averageSpeed;
 	double eta;
-	public Coordinate startingLocation;
-	public int time;
-	public int startTime;
-	public boolean delivered;
+	Coordinate startingLocation;
+	int time;
+	int startTime;
+	boolean delivered;
 
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
@@ -100,14 +100,5 @@ class TrackablePackage {
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
 		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA());
-	}
-	public static void main(String[] args){
-		def properties = this.properties;
-		properties.remove('class')
-		properties.remove('declaringClass')
-		properties.remove('metaClass')
-		properties.remove('methods')
-		properties.remove('declaredMethods')
-		println(JsonOutput.toJson(properties));
 	}
 }

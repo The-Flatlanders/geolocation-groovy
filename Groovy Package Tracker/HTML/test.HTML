@@ -60,15 +60,21 @@
 		xmlhttp=new XMLHttpRequest();	
 		function exec()
 		{
-			var package;
+			var List;
 			xmlhttp.onreadystatechange=
 			function()
 			{			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
-					package=JSON.parse(xmlhttp.responseText);
-					initMap(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon,package.midpointLat,package.midpointLon);
-					addPackage(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon);
+					console.log(xmlhttp.responseText);
+					list=JSON.parse(xmlhttp.responseText);
+					var packageLocations=[];
+					packagList.forEach(
+						function(currentPackage) { 
+						    packageLocations.push(currentPackage.location);
+						});
+					//call midpoint function here with params packageLocations
+					initMap(0,0);//TODO change these values to the results of the midpoint program
 				}else{
 				}
 			}

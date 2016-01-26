@@ -31,12 +31,11 @@ class SimpleGroovyServlet extends HttpServlet {
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
 			trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)));
-			println(JsonOutput.toJson(trackedIDs));			
 			resp.setContentType("application/json");
 			def writer = resp.getWriter();
 			writer.print(responseString);
 			writer.flush();
-			println "\t\t  "+responseString;
+			println uuids;
 		}
 		if(req.getPathInfo().equals("/logout")){
 
@@ -130,16 +129,14 @@ class SimpleGroovyServlet extends HttpServlet {
 
 			//Prints out packages to window
 			def writer = resp.getWriter();
-			resp.setContentType("text/plain")
+			resp.setContentType("application/json")
 			for(TrackablePackage p : packageInfos){
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
 				Coordinate e=Coordinate.midPoint(c, d)
-				writer.print("{\"locationLat\":\""+c.lat+"\",\"locationLon\":\""+c.lon+"\",\"destinationLat\":\""+d.lat+"\",\"destinationLon\":\""+d.lon+"\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
-				//writer.print(html)
-				//writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
-				//writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
 			}
+			def toJson = JsonOutput.toJson(trackedIDs.values())
+			writer.print(toJson);
 			//	resp.setContentType("text/html")
 			//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
 			//	writer.print(returnText("HTML/Logout.HTML"))
