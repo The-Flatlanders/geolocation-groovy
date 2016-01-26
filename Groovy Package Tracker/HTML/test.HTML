@@ -21,36 +21,30 @@
 		Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
   		<input type="button" value="Submit" onclick="exec()">
 	</div>
-	<ul>
-		<li>123-01-203-120-3-</li>
-	</ul>
+	<div id="details">
+	</div>
 	</div>
 	<div id="map"></div>
 	<script type="text/javascript">
 		var map;
-		function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
-			var myLatlng = new google.maps.LatLng(lat3,lon3);
+		function initMap(center) {
   			map = new google.maps.Map(document.getElementById('map'), {
-   				center: myLatlng,
+   				center: center,
     			zoom: 8
   			});
 		}
-		function addPackage(lat1,lon1,lat2,lon2){
-		var x=lat1;
-		var y=lon1;
-		var w=lat2;
-		var z=lon2;
-		  var flightPlanCoordinates = [];
-		  flightPlanCoordinates.push(new google.maps.LatLng(x,y));
-		  flightPlanCoordinates.push(new google.maps.LatLng(w,z));
-			var flightPath = new google.maps.Polyline({
-				path: flightPlanCoordinates,
-				geodesic: true,
-				strokeColor: '#FF0000',
-				strokeOpacity: 1.0,
-				strokeWeight: 2
-			});
-			flightPath.setMap(map);
+		function showPackage(myPackage){
+		  	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
+			  var marker = new google.maps.Marker({
+				    position: myLatLng,
+				    map: map,
+				    title: 'Hello World!'
+				    
+				  });
+			  marker.addListener('click', function(){
+				  console.log(myPackage);
+				  document.getElementById('details').innerHTML="ETA: "+myPackage.eta+" hours";
+			  });
 		}
 		
     </script>
@@ -60,21 +54,24 @@
 		xmlhttp=new XMLHttpRequest();	
 		function exec()
 		{
-			var List;
+			var packageList;
 			xmlhttp.onreadystatechange=
 			function()
 			{			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
-					console.log(xmlhttp.responseText);
-					list=JSON.parse(xmlhttp.responseText);
+					packageList=JSON.parse(xmlhttp.responseText);
 					var packageLocations=[];
-					packagList.forEach(
+					packageList.forEach(
 						function(currentPackage) { 
 						    packageLocations.push(currentPackage.location);
 						});
 					//call midpoint function here with params packageLocations
-					initMap(0,0);//TODO change these values to the results of the midpoint program
+					initMap(findMidpoint(packageLocations));
+					packageList.forEach(
+						function(currentPackage) { 
+							showPackage(currentPackage);
+						});
 				}else{
 				}
 			}
@@ -96,8 +93,8 @@
 		var bottomEdge = 90; //lat
        		
   		for(var i = 0; i < positions.length; i++){
-    		var lat = positions[i].latitude;
-        	var lon = positions[i].longitude;
+    		var lat = positions[i].lat;
+        	var lon = positions[i].lon;
         	if(lat < bottomEdge){
         		bottomEdge = lat;
         	}
@@ -111,7 +108,9 @@
         		rightEdge = lon;
         	}
   		}
-  		return (((topEdge + bottomEdge) / 2) + " " + ((rightEdge + leftEdge) / 2));
+  		var midLat=(topEdge + bottomEdge) / 2;
+  		var midLon=(rightEdge + leftEdge) / 2;
+  		return {lat:midLat,lng:midLon};
 	}
 	</script>
 </body>

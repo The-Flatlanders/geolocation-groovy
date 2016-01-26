@@ -125,7 +125,6 @@ class SimpleGroovyServlet extends HttpServlet {
 					packageInfos.add((trackedIDs.get(id,null)))
 				}
 			}
-			println("here")
 			//Prints out packages to window
 			def writer = resp.getWriter()
 			resp.setContentType("application/json")
