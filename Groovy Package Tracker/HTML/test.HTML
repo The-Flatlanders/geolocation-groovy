@@ -88,5 +88,31 @@
 			xmlhttp.send(params);
 		}
 	</script>
+	<script language="javascript">
+	function findMidpoint(positions){
+		var leftEdge = 180; //lon
+    	var rightEdge = -180; //lon
+		var topEdge = -90; //lat
+		var bottomEdge = 90; //lat
+       		
+  		for(var i = 0; i < positions.length; i++){
+    		var lat = positions[i].latitude;
+        	var lon = positions[i].longitude;
+        	if(lat < bottomEdge){
+        		bottomEdge = lat;
+        	}
+        	if(lat > topEdge){
+        		topEdge = lat;
+        	}
+        	if(lon < leftEdge){
+        		leftEdge = lon;
+       		}
+        	if(lon > rightEdge){
+        		rightEdge = lon;
+        	}
+  		}
+  		return (((topEdge + bottomEdge) / 2) + " " + ((rightEdge + leftEdge) / 2));
+	}
+	</script>
 </body>
 </html>
