@@ -1,15 +1,18 @@
 import java.text.SimpleDateFormat
+import groovy.json.*;
 
 
 class TrackablePackage {
-	int startTime;
-	Coordinate startingLocation;
+	// to hide a field from the JSON ouptut, make its visibility public instead of the default.
+	String uuid;
 	Coordinate location;
 	Coordinate destination;
 	double averageSpeed;
-	int time;
-	String uuid;
-	boolean delivered;
+	double eta;
+	public Coordinate startingLocation;
+	public int time;
+	public int startTime;
+	public boolean delivered;
 
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
@@ -34,7 +37,7 @@ class TrackablePackage {
 		return uuid;
 	}
 	public boolean getDelivered() {
-		return time;
+		return delivered;
 	}
 	public void setDelivered(boolean delivered) {
 		this.delivered = delivered;
@@ -66,6 +69,7 @@ class TrackablePackage {
 				averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
 				time=newTime;
 				location=updateLocation
+				eta=getETA();
 			}
 		}
 	}
@@ -95,6 +99,15 @@ class TrackablePackage {
 	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
-		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA);
+		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA());
+	}
+	public static void main(String[] args){
+		def properties = this.properties;
+		properties.remove('class')
+		properties.remove('declaringClass')
+		properties.remove('metaClass')
+		properties.remove('methods')
+		properties.remove('declaredMethods')
+		println(JsonOutput.toJson(properties));
 	}
 }

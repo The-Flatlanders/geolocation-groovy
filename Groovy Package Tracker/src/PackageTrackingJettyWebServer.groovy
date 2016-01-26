@@ -1,8 +1,7 @@
 @Grab(group='org.eclipse.jetty.aggregate', module='jetty-all', version='7.6.15.v20140411')
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.servlet.*
-import groovy.json.JsonBuilder
-import groovy.json.JsonSlurper
+import groovy.json.*;
 import javax.servlet.http.*
 import javax.servlet.*
 
@@ -30,8 +29,9 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
-			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[00])
+			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
 			trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)));
+			println(JsonOutput.toJson(trackedIDs));			
 			resp.setContentType("application/json");
 			def writer = resp.getWriter();
 			writer.print(responseString);
@@ -69,7 +69,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	}
 	HashMap<String, String> authorization = new HashMap<String, String>(); //For checking username to password
 	HashMap<String, String> adminAuthorization=new HashMap<String,String>();
-	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>(); //For 
+	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>(); //For
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
 		//Prints out package information to the webpage and prompts the user to enter more packages
@@ -135,14 +135,14 @@ class SimpleGroovyServlet extends HttpServlet {
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
 				Coordinate e=Coordinate.midPoint(c, d)
-				writer.print("{\"locationLat\":\"31.1\",\"locationLon\":\"150.2\",\"destinationLat\":\"31.1\",\"destinationLon\":\"150.2\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
+				writer.print("{\"locationLat\":\""+c.lat+"\",\"locationLon\":\""+c.lon+"\",\"destinationLat\":\""+d.lat+"\",\"destinationLon\":\""+d.lon+"\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
 				//writer.print(html)
 				//writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
 				//writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
 			}
-		//	resp.setContentType("text/html")
-		//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
-		//	writer.print(returnText("HTML/Logout.HTML"))
+			//	resp.setContentType("text/html")
+			//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
+			//	writer.print(returnText("HTML/Logout.HTML"))
 			writer.flush();
 		}
 

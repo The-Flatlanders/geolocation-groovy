@@ -29,14 +29,30 @@
 	<script type="text/javascript">
 		var map;
 		function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
-			console.log(lat3);
-			console.log(true);
 			var myLatlng = new google.maps.LatLng(lat3,lon3);
   			map = new google.maps.Map(document.getElementById('map'), {
    				center: myLatlng,
     			zoom: 8
   			});
 		}
+		function addPackage(lat1,lon1,lat2,lon2){
+		var x=lat1;
+		var y=lon1;
+		var w=lat2;
+		var z=lon2;
+		  var flightPlanCoordinates = [];
+		  flightPlanCoordinates.push(new google.maps.LatLng(x,y));
+		  flightPlanCoordinates.push(new google.maps.LatLng(w,z));
+			var flightPath = new google.maps.Polyline({
+				path: flightPlanCoordinates,
+				geodesic: true,
+				strokeColor: '#FF0000',
+				strokeOpacity: 1.0,
+				strokeWeight: 2
+			});
+			flightPath.setMap(map);
+		}
+		
     </script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
     </script>
@@ -50,9 +66,9 @@
 			{			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
-					console.log(xmlhttp.responseText);
 					package=JSON.parse(xmlhttp.responseText);
 					initMap(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon,package.midpointLat,package.midpointLon);
+					addPackage(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon);
 				}else{
 				}
 			}
