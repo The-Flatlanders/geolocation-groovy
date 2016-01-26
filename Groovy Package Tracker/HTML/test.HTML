@@ -28,8 +28,9 @@
 	<div id="map"></div>
 	<script type="text/javascript">
 		var map;
-		function initMap( lat1, lon1, lat2, lon2, lat3, lon3) {
-			var myLatlng = new google.maps.LatLng(lat3,lon3);
+		function initMap(packages, midpointLat, midpointLon) {
+			console.log(midpointLat + " " + midpointLon);
+			var myLatlng = new google.maps.LatLng(midpointLat,midpointLon);
   			map = new google.maps.Map(document.getElementById('map'), {
    				center: myLatlng,
     			zoom: 8
@@ -66,10 +67,81 @@
 			{			
 				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
 				{
+				
+					//Stores package information
+					function packageInstance() {
+   						this.lat = 0;
+   						this.lon = 0;
+   						this.dLat = 0;
+   						this.dLon = 0;
+					}
+					
+					function midpoint(){
+						//midpoint stuff, all in lat and lon, minimizes/maximizes them initially
+						this.leftEdge = 180; //lon
+						this.rightEdge = -180; //lon
+						this.topEdge = -90; //lat
+						this.bottomEdge = 90; //lat
+						this.checkBoundryLat = function(lat) {
+        					if(lat < this.bottomEdge){
+        						this.bottomEdge = lat;
+        					}
+        					if(lat > this.topEdge){
+        						this.topEdge = lat;
+        					}
+  					 	};
+  					 	this.checkBoundryLon = function(lon){
+        					if(lon < this.leftEdge){
+        						this.leftEdge = lon;
+        					}
+        					if(lon > this.rightEdge){
+        						this.rightEdge = lon;
+        					}
+  					 	};
+  					 	this.getMidpointLon = function(){
+  					 		return ((leftEdge + rightEdge) / 2)
+  					 	}
+  					 	this.getMidpointLat = function(){
+  					 		return ((topEdge + bottomEdge) / 2)
+  					 	}
+					}
+					
+					
 					package=JSON.parse(xmlhttp.responseText);
-					initMap(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon,package.midpointLat,package.midpointLon);
-					addPackage(package.locationLat,package.locationLon,package.destinationLat,package.destinationLon);
-				}else{
+					var packages = [];
+					var currentPackage = new packageInstance();
+					var packageMidpoint = new midpoint();
+					
+					for(var key in package){
+						//old package is done, start a new one
+						var val = parseInt(package.key);
+						if(key.startsWith("locationLat")){
+							currentPackage = new package();
+							currentPackage.lat = val;
+							packages.add(currentPackage);
+							packageMidpoint.checkBoundryLat(val);
+						}
+						else if(key.startsWith("locationLon")){
+							currentPackage.lon = val;
+							packageMidpoint.checkBoundryLon(val);
+						}
+						else if(key.startsWith("desinationLat")){
+							currentPackage.dLat = val;
+							packageMidpoint.checkBoundryLat(val);
+						}
+						else if(key.startsWith("desinationLon")){
+							currentPackage.dLon = val;
+							packageMidpoint.checkBoundryLon(val);
+						}
+					}
+					
+				
+					initMap(packages, packageMidpoint.getMidpointLat, packageMidpoint.getMidpointLon);
+					for(var pack in packages){
+						addPackage(package.lat,package.lon,package.dLat,package.dLon);
+					}
+				}
+				else{
 				}
 			}
 			var uuid=document.getElementById('idin').value;

@@ -71,7 +71,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	HashMap<String, String> adminAuthorization=new HashMap<String,String>();
 	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>(); //For
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-
 		//Prints out package information to the webpage and prompts the user to enter more packages
 		if(req.getPathInfo().equals("/trackPackages")){
 			//Gets the username and password from the current session or the last page if it was login
@@ -127,7 +126,7 @@ class SimpleGroovyServlet extends HttpServlet {
 					packageInfos.add((trackedIDs.get(id,null)))
 				}
 			}
-
+			println("here");
 			//Prints out packages to window
 			def writer = resp.getWriter();
 			resp.setContentType("text/plain")
@@ -135,7 +134,9 @@ class SimpleGroovyServlet extends HttpServlet {
 				Coordinate c=p.getLocation()
 				Coordinate d=p.getDestination()
 				Coordinate e=Coordinate.midPoint(c, d)
-				writer.print("{\"locationLat\":\""+c.lat+"\",\"locationLon\":\""+c.lon+"\",\"destinationLat\":\""+d.lat+"\",\"destinationLon\":\""+d.lon+"\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
+				//writer.print("{\"locationLat\":\""+c.lat+"\",\"locationLon\":\""+c.lon+"\",\"destinationLat\":\""+d.lat+"\",\"destinationLon\":\""+d.lon+"\",\"midpointLat\":\""+e.lat+"\",\"midpointLon\":\""+e.lon+"\"}")
+				println("here");
+				writer.print("{\"locationLat\":\""+c.lat+"\",\"locationLon\":\""+c.lon+"\",\"destinationLat\":\""+d.lat+"\",\"destinationLon\":\""+d.lon+"\"}")
 				//writer.print(html)
 				//writer.print("<h4>"+(int)(p.getDistanceFromDestination()/1000)+" km from destination</h4>")
 				//writer.print("<h4>"+(int)p.getETA()+" hours</h4>")
