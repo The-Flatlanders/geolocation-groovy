@@ -182,4 +182,4 @@ server.setHandler(handler)
 handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
 println "Starting Jetty, press Ctrl+C to stop."
 server.start()
-server.join()
+server.join();
