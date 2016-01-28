@@ -10,7 +10,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	HashMap trackedIDs=new HashMap()
 	long updateCount = 0
 	long lastPrintCount = 0 //Is this stuff thread safe?
-	
+
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		def uuids = req.getParameterMap().get("uuid")
 
@@ -76,25 +76,25 @@ class SimpleGroovyServlet extends HttpServlet {
 			//Uses cookies to score and get pwd and username
 			String username = req.getParameter("username")
 			String password = req.getParameter("password")
+			println(username);
+			
+			//User just came from the login page
 			if(username != null && password != null){
 				if(authorization.containsKey(username) && authorization.get(username) != password){
 					//Mismatch
-					resp.sendRedirect("http://localhost:8000/logout")
+					//resp.sendRedirect("http://localhost:8000/logout")
 					return
 				}
 				else{
-					//authorization.put(username, password)
+					authorization.put(username, password)
+					Cookie user = new Cookie("username", username)
+					resp.addCookie(user)
 				}
-				Cookie user = new Cookie("username", username)
-				Cookie pwd = new Cookie("password", password)
-				resp.addCookie(user)
-				resp.addCookie(pwd)
+
 			}
 			else{
 				def info = req.getCookies()
-				//resp.sendRedirect("http://localhost:8000/logout")
-				//username = info[0].getValue()
-				//password = info[1].getValue()
+				username = info[0].getValue()
 			}
 
 
@@ -109,38 +109,33 @@ class SimpleGroovyServlet extends HttpServlet {
 				userOpenedPackages.put(username, packageInfos)
 			}
 			if(username.equals("admin")){
-				packageInfos=trackedIDs.values()
+				packageInfos = trackedIDs.values()
 			}
-			for(Cookie c : req.getCookies()){
-				if(c.getName() == "UUID"){
-					String id = c.getValue()
-					if(trackedIDs.containsKey(id)){
-						packageInfos.add((trackedIDs.get(id,null)))
-					}
-				}
-			}
+
+			//Returns packages to test.html
+			def writer = resp.getWriter()
+			resp.setContentType("application/json")
+			def toJson = JsonOutput.toJson(packageInfos)
+			writer.print(toJson)
+			writer.flush()
+		}
+
+
+		//Currently unimplemented
+		if(req.getPathInfo().startsWith("/addPackage/")) {
+			def info = req.getCookies()
+			def username = info[0].getValue()
+			def packageInfos = userOpenedPackages.get(username);
+
 			def uuids = req.getParameterMap().get("uuid")
 			for(String id:uuids){
 				if(trackedIDs.containsKey(id)){
 					packageInfos.add((trackedIDs.get(id,null)))
 				}
 			}
-			//Prints out packages to window
-			def writer = resp.getWriter()
-			resp.setContentType("application/json")
-			for(TrackablePackage p : packageInfos){
-				Coordinate c=p.getLocation()
-				Coordinate d=p.getDestination()
-				Coordinate e=Coordinate.midPoint(c, d)
-			}
-			def toJson = JsonOutput.toJson(trackedIDs.values())
-			writer.print(toJson)
-			//	resp.setContentType("text/html")
-			//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"))
-			//	writer.print(returnText("HTML/Logout.HTML"))
-			writer.flush()
-		}
+			//Now you have to recall a dopost perhaps?
 
+		}
 
 		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
 
@@ -173,6 +168,8 @@ class SimpleGroovyServlet extends HttpServlet {
 
 			} catch (Exception e) { e.printStackTrace() /*report an error*/ }
 		}
+
+
 	}
 
 }

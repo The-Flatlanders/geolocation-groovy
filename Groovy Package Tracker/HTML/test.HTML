@@ -20,7 +20,8 @@
 <body>
 	<div id="controlPanel">
 	<div id="form">
-		Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
+		Username:<br/><input id="username" type="text" name="username"><br/>
+		Password:<br/><input id="password" type="text" name="password"><br/>
   		<input type="button" value="Submit" onclick="exec()">
 	</div>
 	<div id="details">
@@ -81,8 +82,11 @@
 				}else{
 				}
 			}
-			var uuid=document.getElementById('idin').value;
-			var params="uuid="+uuid;
+			var username=document.getElementById('username').value;
+			var password=document.getElementById('password').value;
+			
+			var params = "username=" + username +"&password=" + password;
+
 			xmlhttp.open("POST", "http://localhost:8000/trackPackages",true);
 			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xmlhttp.setRequestHeader("Content-length", params.length);
