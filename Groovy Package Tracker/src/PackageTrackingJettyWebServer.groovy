@@ -10,8 +10,8 @@ class SimpleGroovyServlet extends HttpServlet {
 	HashMap trackedIDs=new HashMap()
 	long updateCount = 0
 	long lastPrintCount = 0 //Is this stuff thread safe?
-	void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		//println "GET  "+req.getRequestURL()+"   query string:"+req.getQueryString();
+	
+	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		def uuids = req.getParameterMap().get("uuid")
 
 		//If url is navigated to directly, only shows page if already logged in
@@ -83,7 +83,7 @@ class SimpleGroovyServlet extends HttpServlet {
 					return
 				}
 				else{
-					//authorization.put(username, password);
+					//authorization.put(username, password)
 				}
 				Cookie user = new Cookie("username", username)
 				Cookie pwd = new Cookie("password", password)
@@ -92,7 +92,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			}
 			else{
 				def info = req.getCookies()
-				//resp.sendRedirect("http://localhost:8000/logout");
+				//resp.sendRedirect("http://localhost:8000/logout")
 				//username = info[0].getValue()
 				//password = info[1].getValue()
 			}
@@ -136,7 +136,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			def toJson = JsonOutput.toJson(trackedIDs.values())
 			writer.print(toJson)
 			//	resp.setContentType("text/html")
-			//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"));
+			//	writer.print(returnText("HTML/TrackNewPackageForm.HTML"))
 			//	writer.print(returnText("HTML/Logout.HTML"))
 			writer.flush()
 		}
@@ -160,8 +160,8 @@ class SimpleGroovyServlet extends HttpServlet {
 					else{
 						//This code tracks all non delivery events
 						currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)
-						//println "eta: "+currentPackage.getETA()+" hours";
-						//println currentPackage.getSpeed()+" meters per second";
+						//println "eta: "+currentPackage.getETA()+" hours"
+						//println currentPackage.getSpeed()+" meters per second"
 					}
 				}
 
