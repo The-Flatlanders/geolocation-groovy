@@ -2,8 +2,9 @@
 <head>
 	<title>Package Tracker</title>
 	<style type="text/css">
-	   div {
-		}
+	  #details {
+		  font-family:sans-serif;
+	  }
       #map {
 			height: 100%; 
 			width:100%
@@ -12,6 +13,7 @@
       #controlPanel{
       		float:left;
 			height:100%;
+      		width:20%;
 	  }
     </style>
 </head>
@@ -43,7 +45,11 @@
 				  });
 			  marker.addListener('click', function(){
 				  console.log(myPackage);
-				  document.getElementById('details').innerHTML="ETA: "+myPackage.eta+" hours";
+				  document.getElementById('details').innerHTML=
+					  "ETA: "+myPackage.eta+" hours\n"+
+					  "Distance: "+myPackage.distanceFromDestination+" meters\n";
+					  
+
 			  });
 		}
 		
