@@ -12,35 +12,21 @@
 	<input type = "button" onclick="exec()">
 	</center>
 </div>
+<script language="javascript" src=serverPostRequest.js></script>
 <script language="javascript">
-		console.log("hello?");
-		xmlhttp=new XMLHttpRequest();	
-		function exec()
-		{			
-		xmlhttp.onreadystatechange=
-			function()
-			{			
-				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
-				{
-					if(xmlhttp.responseText==("mismatch")){
-						window.alert("incorrect username or password");
-					}else{
-						window.location="test.html";
-					}
-				}else{
-				}
-			}
-			var username=document.getElementById('username').value;
-			var password=document.getElementById('password').value;
-			var params = "username=" + username +"&password=" + password;
-			xmlhttp.open("POST", "http://localhost:8000/login",true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.setRequestHeader("Content-length", params.length);
-			xmlhttp.setRequestHeader("Connection", "close");
-			xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-			xmlhttp.send(params);
+function exec(){
+	var username=document.getElementById('username').value;
+	var password=document.getElementById('password').value;
+	var params = "username=" + username +"&password=" + password;
+	execHttpRequest("http://localhost:8000/login",params,function(responseString){
+		if(responseString==("mismatch")){
+			window.alert("incorrect username or password");
+		}else{
+			window.location="test.html";
 		}
-	</script>
+	});
+	}
+</script>
 </html>
 </body>
 
