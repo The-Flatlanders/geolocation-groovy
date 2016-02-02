@@ -19,8 +19,9 @@
 </head>
 <body>
 <script language=javascript>
+console.log(document.login.cookie);
 if(getCookie("username")==""){
-	window.location="login.html";
+	//window.location="login.html";
 }
 function getCookie(cname) {
     var name = cname + "=";
