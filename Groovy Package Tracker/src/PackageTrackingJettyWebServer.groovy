@@ -83,12 +83,14 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Uses cookies to score and get pwd and username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
-
+		println req.getParameterMap();
 		//User just came from the login page
 		if(username != null && password != null){
 			if(authorization.containsKey(username) && authorization.get(username) != password){
 				//Mismatch
-				//resp.sendRedirect("http://localhost:8000/logout")
+				def writer=resp.getWriter();
+				resp.setContentType("text/plain");
+				writer.print("mismatch");
 				return
 			}
 			else{
@@ -100,6 +102,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		else{
 		}
+		
 	}
 
 	void addPackage(HttpServletRequest req, HttpServletResponse resp){

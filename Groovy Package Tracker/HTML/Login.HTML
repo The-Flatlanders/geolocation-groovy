@@ -1,17 +1,46 @@
 <!DOCTYPE html>
 <html>
 <body>
-<form action="http://localhost:8000/trackPackages" method="POST">
+<div>
 	<center>
 	Username:
-	<input type = "TEXT" name = "username">
+	<input type = "text" id = "username">
 	<br>
 	Password:
-	<input type = "TEXT" name = "password">
+	<input type = "password" id = "password">
 	<br>
-	<input type = "submit">
+	<input type = "button" onclick="exec()">
 	</center>
-</form>
+</div>
+<script language="javascript">
+		console.log("hello?");
+		xmlhttp=new XMLHttpRequest();	
+		function exec()
+		{			
+		xmlhttp.onreadystatechange=
+			function()
+			{			
+				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
+				{
+					if(xmlhttp.responseText==("mismatch")){
+						window.alert("incorrect username or password");
+					}else{
+						window.location="test.html";
+					}
+				}else{
+				}
+			}
+			var username=document.getElementById('username').value;
+			var password=document.getElementById('password').value;
+			var params = "username=" + username +"&password=" + password;
+			xmlhttp.open("POST", "http://localhost:8000/login",true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xmlhttp.setRequestHeader("Content-length", params.length);
+			xmlhttp.setRequestHeader("Connection", "close");
+			xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+			xmlhttp.send(params);
+		}
+	</script>
 </html>
 </body>
 
