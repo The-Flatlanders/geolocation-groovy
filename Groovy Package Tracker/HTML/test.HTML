@@ -10,11 +10,57 @@
 			width:100%
 			float:left;
        		}
-       		#controlPanel{
-       			float:left;
+       	#controlPanel{
+       		float:left;
 			height:100%;
-      			width:20%;
-       		}
+      		width:20%;
+       	}
+		div.tabs {
+			min-height: 7em;
+			position: relative;
+			line-height: 1;
+			z-index: 0
+		}
+		div.tabs > div {
+			display: inline
+		}
+		div.tabs > div > a {
+			color: black;
+			background: #CCC;
+			text-decoration: none;
+			padding: 0.2em;
+			border: 0.1em outset #BBB;
+			border-bottom: 0.1em solid #CCC;
+		}
+		div.tabs > div:not(:target) > a {
+			border-bottom: none;
+			background: #999
+		}
+		div.tabs > div:target > a,	/* Apply to the targeted item or... */
+		:target #default2 > a {		/* ... to the default item */
+			border-bottom: 0.1em solid #CCC;
+			background: #CCC
+		}
+		div.tabs > div > div {
+			background: #CCC;		/* Light gray */
+			z-index: -2;			/* Behind, because the borders overlap */
+			left: 0; top: 1.3em;		/* The top needs some calculation... */
+			bottom: 0; right: 0;		/* Other sides flush with containing block */
+			overflow: auto;		/* Scroll bar if needed */
+			padding: 0.3em;		/* Looks better */
+			border: 0.1em outset #BBB
+		}
+		div.tabs > div:not(:target) > div { /* Protect CSS1 & CSS2 browsers */
+			position: absolute
+		}		/* All these DIVs overlap */
+		div.tabs > div:target > div, :target #default2 > div {
+			position: absolute;		/* All these DIVs overlap */
+			z-index: -1
+		}			/* Raise it above the others */
+
+		div.tabs :target {
+			outline: none
+		}
     </style>
 </head>
 <body onload="addPackage()">
@@ -35,13 +81,24 @@
 		}
 	</script>
 	<div id="controlPanel">
-		<div id="form">
-			Package UUID:<br/><input id="uuid" type="text" name="uuid"><br/>
-  			<input type="button" value="Submit uuid" onclick="addPackage()">
-		</div>
-			<br>
-			<input type="button" value="Logout" onclick="logout()">
-		<div id="details">
+		<div class = "tabs">
+			<div id="tab1"> <a href="#tab1">UUID</a>
+				<div id="form">
+					Package UUID:<br/><input id="uuid" type="text" name="uuid"><br/>
+					<input type="button" value="Submit uuid" onclick="addPackage()">
+				</div>
+			</div>
+
+			<div id="tab2"> <a href="#tab2">Account</a>
+				<div>
+					<input type="button" value="Logout" onclick="logout()">
+				</div>
+			</div>
+
+			<div id="tab3"> <a href="#tab3">Tab&nbsp;3</a>
+				<div id ="details"><p>details would pop up here. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words.</p></div>
+			</div>
+
 		</div>
 	</div>
 	<div id="map">
@@ -67,7 +124,6 @@
 					  "ETA: "+myPackage.eta+" hours\n"+
 					  "Distance: "+myPackage.distanceFromDestination+" meters\n";
 					  
-
 			});
 		}
 		
@@ -112,7 +168,6 @@
 				}
 			}		
 			var params = "uuid="+document.getElementById('uuid').value;
-
 			xmlhttp.open("POST", "http://localhost:8000/addPackage",true);
 			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xmlhttp.setRequestHeader("Content-length", params.length);
