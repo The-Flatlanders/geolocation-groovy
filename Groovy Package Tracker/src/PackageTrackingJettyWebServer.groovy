@@ -5,14 +5,27 @@ import groovy.json.*
 import javax.servlet.http.*
 import javax.servlet.*
 
+/**
+ * Creates a server that manages packages<br>
+ * Current functionality:<br>
+ *  Add new packages to the database (doGet)<br>
+ *	Update package information (doPost)<br>
+ *	User login (doPost)<br>
+ *	Return user's associated packages (doPost)<br>
+ *	Associate package with user (doPost)<br>
+ */
 class SimpleGroovyServlet extends HttpServlet {
 	HashMap trackedIDs=new HashMap()
 	HashMap<String, String> authorization = new HashMap<String, String>() //For checking username to password
-	HashMap<String, String> adminAuthorization=new HashMap<String,String>()
-	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For
+	HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
+	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
 	long updateCount = 0
-	long lastPrintCount = 0 //Is this stuff thread safe?
-
+	long lastPrintCount = 0 //TODO: Is this stuff thread safe?
+	
+	/**
+	 * Handles server doGet requests<br>
+	 * Accepts path info types: /tracknewpackage 
+	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
@@ -26,7 +39,12 @@ class SimpleGroovyServlet extends HttpServlet {
 			println uuids
 		}
 	}
-	
+
+	/**
+	 * Returns all of the text from a given file 
+	 * @param The path of the file to return text from
+	 * @return The text from a given file
+	 */
 	private String returnText(String path){
 		def scanner = new Scanner( new File(path))
 		String text = scanner.useDelimiter("\\A").next()
@@ -34,24 +52,65 @@ class SimpleGroovyServlet extends HttpServlet {
 		return text
 	}
 
+	/**
+	 * Handles server doPost request<br>
+	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*
+	 */
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-		//Prints out package information to the webpage and prompts the user to enter more packages
 		if(req.getPathInfo().equals("/login")){
-			userLogin(req,resp);
+			userLogin(req,resp)
 		}
 		if(req.getPathInfo().equals("/packages")){
 			getPackages(req,resp)
 		}
 
 		if(req.getPathInfo().startsWith("/addPackage/")) {
-			addPackage(req,resp);
+			addPackage(req,resp)
 		}
 
 		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
-			packageTrackUpdate(req,resp);
+			packageTrackUpdate(req,resp)
 		}
 	}
 	
+	
+	/**
+	 * Authorizes the user, and, if confirmed, adds a cookie of the user's username
+	 * @param req The server request, contains username and password
+	 * @param resp The server response, contains new cookie
+	 */
+	void userLogin(HttpServletRequest req, HttpServletResponse resp){
+		//Gets the username and password from the request
+		//Uses cookies to score username
+		String username = req.getParameter("username")
+		String password = req.getParameter("password")
+		
+		if(username != null && password != null){
+			if(authorization.containsKey(username) && authorization.get(username) != password){
+				//Mismatch
+				def writer=resp.getWriter()
+				resp.setContentType("text/plain")
+				writer.print("mismatch")
+				return
+			}
+			else{
+				authorization.put(username, password)
+				Cookie user = new Cookie("username", username)
+				resp.addCookie(user)
+			}
+
+		}
+		else{
+		}
+		
+	}
+	
+	
+	/**
+	 * Sends back the user's associated packages in the response
+	 * @param req The server request, contains user cookie
+	 * @param resp The server response, contains JSON of the packages
+	 */
 	void getPackages(HttpServletRequest req, HttpServletResponse resp){
 		def info = req.getCookies()
 		def username = info[0].getValue()
@@ -78,37 +137,16 @@ class SimpleGroovyServlet extends HttpServlet {
 		writer.flush()
 	}
 	
-	void userLogin(HttpServletRequest req, HttpServletResponse resp){
-		//Gets the username and password from the current session or the last page if it was login
-		//Uses cookies to score and get pwd and username
-		String username = req.getParameter("username")
-		String password = req.getParameter("password")
-		println req.getParameterMap();
-		//User just came from the login page
-		if(username != null && password != null){
-			if(authorization.containsKey(username) && authorization.get(username) != password){
-				//Mismatch
-				def writer=resp.getWriter();
-				resp.setContentType("text/plain");
-				writer.print("mismatch");
-				return
-			}
-			else{
-				authorization.put(username, password)
-				Cookie user = new Cookie("username", username)
-				resp.addCookie(user)
-			}
-
-		}
-		else{
-		}
-		
-	}
-
+	
+	/**
+	 * Associates packages with a user to be displayed later
+	 * @param req The server request, contains new package UUIDs to add and user cookie
+	 * @param resp The server response
+	 */
 	void addPackage(HttpServletRequest req, HttpServletResponse resp){
 		def info = req.getCookies()
 		def username = info[0].getValue()
-		def packageInfos = userOpenedPackages.get(username);
+		def packageInfos = userOpenedPackages.get(username)
 
 		def uuids = req.getParameterMap().get("uuid")
 		for(String id:uuids){
@@ -119,6 +157,12 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Now you have to recall a dopost perhaps?
 	}
 
+	
+	/**
+	 * Updates a specific package's location and delivery status. 
+	 * @param req The server request, contains package update information
+	 * @param resp The server response
+	 */
 	void packageTrackUpdate(HttpServletRequest req, HttpServletResponse resp){
 		try {
 			BufferedReader reader = req.getReader()
@@ -142,17 +186,20 @@ class SimpleGroovyServlet extends HttpServlet {
 			}
 			updateCount++
 			if((updateCount - lastPrintCount) >= 1000) {
-				println "packagetrackupdate count: "+updateCount
+				//println "packagetrackupdate count: "+updateCount
 				lastPrintCount = updateCount
 			}
 		} catch (Exception e) { e.printStackTrace() /*report an error*/ }
 	}
 
-}
+
+	}
+
+//Starts the server on port 800
 def server = new Server(8000)
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
-handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
+handler.addServletWithMapping(SimpleGroovyServlet.class, "/*") //TODO: Figure out what this line does
 println "Starting Jetty, press Ctrl+C to stop."
 server.start()
-server.join();
+server.join()
