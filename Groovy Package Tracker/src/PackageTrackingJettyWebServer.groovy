@@ -21,13 +21,17 @@ class SimpleGroovyServlet extends HttpServlet {
 	HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
 	long updateCount = 0
 	long lastPrintCount = 0 //TODO: Is this stuff thread safe?
-	
+
+
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage 
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
+		//TODO: Split this up like doPost
+		println("er")
 		if(req.getPathInfo().equals("/tracknewpackage")) {
+			def uuids = req.getParameterMap().get("uuid")
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
@@ -36,9 +40,16 @@ class SimpleGroovyServlet extends HttpServlet {
 			def writer = resp.getWriter()
 			writer.print(responseString)
 			writer.flush()
-			println uuids
+		}
+		if(req.getPathInfo().equals("/logout")){
+			def info = req.getCookies()
+			def cookie = info[0]
+			cookie.setValue(null);
+			cookie.setMaxAge(0);
+			resp.addCookie(cookie);
 		}
 	}
+
 
 	/**
 	 * Returns all of the text from a given file 
@@ -52,11 +63,13 @@ class SimpleGroovyServlet extends HttpServlet {
 		return text
 	}
 
+
 	/**
 	 * Handles server doPost request<br>
 	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*
 	 */
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
+		//println(req.getPathInfo());
 		if(req.getPathInfo().equals("/login")){
 			userLogin(req,resp)
 		}
@@ -64,7 +77,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			getPackages(req,resp)
 		}
 
-		if(req.getPathInfo().startsWith("/addPackage/")) {
+		if(req.getPathInfo().startsWith("/addPackage")) {
 			addPackage(req,resp)
 		}
 
@@ -72,40 +85,42 @@ class SimpleGroovyServlet extends HttpServlet {
 			packageTrackUpdate(req,resp)
 		}
 	}
-	
-	
+
+
 	/**
 	 * Authorizes the user, and, if confirmed, adds a cookie of the user's username
+	 * <br>Prints out to resp an error message in different cases:
+	 * <br>"mismatch" without the quotation marks if the password is wrong
+	 * <br>"blankfield" without the quotation marks if username or password is an empty string
 	 * @param req The server request, contains username and password
-	 * @param resp The server response, contains new cookie
+	 * @param resp The server response, contains new cookie or response detailed above
 	 */
 	void userLogin(HttpServletRequest req, HttpServletResponse resp){
 		//Gets the username and password from the request
 		//Uses cookies to score username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
+		def writer = resp.getWriter()
+		resp.setContentType("text/plain")
 		
-		if(username != null && password != null){
-			if(authorization.containsKey(username) && authorization.get(username) != password){
-				//Mismatch
-				def writer=resp.getWriter()
-				resp.setContentType("text/plain")
-				writer.print("mismatch")
-				return
-			}
-			else{
-				authorization.put(username, password)
-				Cookie user = new Cookie("username", username)
-				resp.addCookie(user)
-			}
-
+		//Checks for a mismatch
+		if((authorization.containsKey(username) && authorization.get(username) != password)){
+			writer.print("mismatch")
+			return
+		}
+		//Checks for a null field
+		else if(username == "" || password == ""){
+			writer.print("blankfield")
 		}
 		else{
+			authorization.put(username, password)
+			Cookie user = new Cookie("username", username)
+			resp.addCookie(user)
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Sends back the user's associated packages in the response
 	 * @param req The server request, contains user cookie
@@ -129,35 +144,34 @@ class SimpleGroovyServlet extends HttpServlet {
 			packageInfos = trackedIDs.values()
 		}
 
-		//Returns packages to test.html
+		//Returns packages
 		def writer = resp.getWriter()
 		resp.setContentType("application/json")
 		def toJson = JsonOutput.toJson(packageInfos)
 		writer.print(toJson)
 		writer.flush()
 	}
-	
-	
+
+
 	/**
 	 * Associates packages with a user to be displayed later
 	 * @param req The server request, contains new package UUIDs to add and user cookie
-	 * @param resp The server response
+	 * @param resp The server response, contains all packages asociated with user cookie, including new one
 	 */
 	void addPackage(HttpServletRequest req, HttpServletResponse resp){
 		def info = req.getCookies()
 		def username = info[0].getValue()
 		def packageInfos = userOpenedPackages.get(username)
 
-		def uuids = req.getParameterMap().get("uuid")
-		for(String id:uuids){
-			if(trackedIDs.containsKey(id)){
-				packageInfos.add((trackedIDs.get(id,null)))
-			}
+		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
+		if(trackedIDs.containsKey(uuid)){
+			packageInfos.add((trackedIDs.get(uuid)))
 		}
-		//Now you have to recall a dopost perhaps?
+
+		getPackages(req, resp) //Return all user packages
 	}
 
-	
+
 	/**
 	 * Updates a specific package's location and delivery status. 
 	 * @param req The server request, contains package update information
@@ -193,7 +207,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	}
 
 
-	}
+}
 
 //Starts the server on port 800
 def server = new Server(8000)

@@ -17,7 +17,7 @@
        		}
     </style>
 </head>
-<body>
+<body onload="addPackage()">
 	<script language=javascript>
 		console.log(document.login.cookie);
 		if(getCookie("username")==""){
@@ -36,9 +36,11 @@
 	</script>
 	<div id="controlPanel">
 		<div id="form">
-			Package UUID:<br/><input id="idin" type="text" name="uuid"><br/>
-  			<input type="button" value="Submit" onclick="addPackage()">
+			Package UUID:<br/><input id="uuid" type="text" name="uuid"><br/>
+  			<input type="button" value="Submit uuid" onclick="addPackage()">
 		</div>
+			<br>
+			<input type="button" value="Logout" onclick="logout()">
 		<div id="details">
 		</div>
 	</div>
@@ -72,9 +74,21 @@
         </script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
 	</script>
+	<script language="javascript">
+		//TODO: Fix this shoddiness
+		function logout(){
+			var xmlHttp = new XMLHttpRequest();
+    		xmlHttp.open( "GET", "http://localhost:8000/logout/", false ); // false for synchronous request
+        	xmlHttp.send( null );
+			window.location = "Login.html";
+		}
+	</script>
 	<script language="javascript">//unnessessary language identifier?
+		
+		//TODO: Can we call the utility function here?
+			
 		xmlhttp=new XMLHttpRequest();	
-		function exec()
+		function addPackage()
 		{
 			var packageList;
 			xmlhttp.onreadystatechange=
@@ -97,7 +111,7 @@
 				}else{
 				}
 			}		
-			var params = "uuid="+document.getElementById('');
+			var params = "uuid="+document.getElementById('uuid').value;
 
 			xmlhttp.open("POST", "http://localhost:8000/addPackage",true);
 			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

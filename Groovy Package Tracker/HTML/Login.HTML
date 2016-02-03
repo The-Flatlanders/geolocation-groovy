@@ -9,7 +9,7 @@
 	Password:
 	<input type = "password" id = "password">
 	<br>
-	<input type = "button" onclick="exec()">
+	<input type = "button" onclick="exec()" value = "Submit">
 	</center>
 </div>
 <script language="javascript" src=serverPostRequest.js></script>
@@ -20,8 +20,12 @@ function exec(){
 	var params = "username=" + username +"&password=" + password;
 	execHttpRequest("http://localhost:8000/login",params,function(responseString){
 		if(responseString==("mismatch")){
-			window.alert("incorrect username or password");
-		}else{
+			window.alert("Incorrect username or password");
+		}
+		else if(responseString == ("blankfield")){
+			window.alert("Please fill in all fields");
+		}
+		else{
 			window.location="test.html";
 		}
 	});
