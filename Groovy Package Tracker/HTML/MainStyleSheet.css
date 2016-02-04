@@ -1,68 +1,66 @@
 #details {
-			font-family:sans-serif;
-		}
-		#map {
-			height: 100%; 
-			width:100%
-			float:left;
-       	}
-       	#controlPanel{
-       		float:left;
-			height:100%;
-      		width:20%;
-			padding-right:17px;
-       	}
-		body {
-			background-color:#999966;
-		}
-		div.tabs {
-			min-height: 100%;
-			position: relative;
-			line-height: 1;
-			z-index: 0;
-		}
-		div.tabs > div {
-			display: inline
-		}
-		div.tabs > div > a {
-			color: black;
-			background: #6699ff;
-			text-decoration: none;
-			padding: 0.2em;
-			border: 0.1em outset #003bb3;
-			border-bottom: 0.1em solid #6699ff;
-			
-		}
-		div.tabs > div > a:hover {
-			color: white;
-		}
-		/* unselected tab header */
-		div.tabs > div:not(:target) > a {
-			border-bottom: none;
-			background: #0040ff;
-		}
-		div.tabs > div:target > a,
-		:target #default2 > a {
-			border-bottom: 0.1em solid #6699ff;
-			background: #6699ff
-		}
-		div.tabs > div > div {
-			background: #6699ff;
-			z-index: -2;
-			left: 0; top: 1.3em;
-			bottom: 0; right: 0;
-			overflow: auto;
-			padding: 0.3em;
-			border: 0.1em outset #003bb3
-		}
-		div.tabs > div:not(:target) > div {
-			position: absolute
-		}
-		div.tabs > div:target > div, :target #default2 > div {
-			position: absolute;
-			z-index: -1
-		}
-
-		div.tabs :target {
-			outline: none
-		}
+	font-family:sans-serif;
+}
+#map {
+	height: 100%; 
+	width:100%
+	float:left;
+}
+#controlPanel{
+	float:left;
+	height:100%;
+	width:20%;
+	padding-right:17px;
+}
+body {
+	background-color:#999966;
+}
+div.tabs {
+	min-height: 100%;
+	position: relative;
+	line-height: 1;
+	z-index: 0;
+}
+div.tabs > div {
+	display: inline
+}
+div.tabs > div > a {
+	color: black;
+	background: #6699ff;
+	text-decoration: none;
+	padding: 0.2em;
+	border: 0.1em outset #003bb3;
+	border-bottom: 0.1em solid #6699ff;
+}
+div.tabs > div > a:hover {
+	color: white;
+}
+/* unselected tab header */
+div.tabs > div:not(:target) > a {
+	border-bottom: none;
+	background: #0040ff;
+}
+div.tabs > div:target > a,
+:target #default2 > a {
+	border-bottom: 0.1em solid #6699ff;
+	background: #6699ff
+}
+div.tabs > div > div {
+	background: #6699ff;
+	z-index: -2;
+	left: 0; top: 1.3em;
+	bottom: 0; right: 0;
+	overflow: auto;
+	padding: 0.3em;
+	border: 0.1em outset #003bb3
+}
+div.tabs > div:not(:target) > div {
+	position: absolute
+}
+div.tabs > div:target > div, :target #default2 > div {
+	position: absolute;
+	z-index: -1
+}
+div.tabs :target {
+	outline: none
+}
