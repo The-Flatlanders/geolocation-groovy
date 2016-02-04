@@ -4,21 +4,21 @@
 <div>
 	<center>
 	Username:
-	<input type = "text" id = "username">
+	<input type = "text" id = "username"/>
 	<br>
 	Password:
-	<input type = "password" id = "password">
+	<input type = "password" id = "password"/>
 	<br>
-	<input type = "button" onclick="exec()" value = "Submit">
+	<input type = "button" onclick="exec()" value = "Submit"/>
 	</center>
 </div>
-<script language="javascript" src=serverPostRequest.js></script>
-<script language="javascript">
+<script src=serverPostRequest.js></script>
+<script>
 function exec(){
 	var username=document.getElementById('username').value;
 	var password=document.getElementById('password').value;
 	var params = "username=" + username +"&password=" + password;
-	execHttpRequest("http://localhost:8000/login",params,function(responseString){
+	execHttpRequest("POST","http://localhost:8000/login",true,params,function(responseString){
 		if(responseString==("mismatch")){
 			window.alert("Incorrect username or password");
 		}

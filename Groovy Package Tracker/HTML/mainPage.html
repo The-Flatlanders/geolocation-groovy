@@ -1,16 +1,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title>Package Tracker</title>
-	<script type="text/javascript">
+<title>Package Tracker</title>
+<script>
 		//makes UUIDs the default tab
 		if (document.location.hash == "" || document.location.hash == "#")
 			document.location.hash = "#UUIDtab";
 	</script>
-	<link rel="stylesheet" type="text/css" href="MainStyleSheet.css">
+<script src=serverPostRequest.js></script>
+<link rel="stylesheet" type="text/css" href="MainStyleSheet.css" />
 </head>
-<body onload="addPackage()">
-	<script language=javascript>
-		console.log(document.login.cookie);
+<body onload="showMyPackages()">
+	<script>
+		console.log(document.cookie);
 		if(getCookie("username")==""){
 			//window.location="login.html";
 		}
@@ -26,26 +27,28 @@
 		}
 	</script>
 	<div id="controlPanel">
-		<div class = "tabs">
-			<div id="UUIDtab"> <a href="#UUIDtab">UUID</a>
+		<div class="tabs">
+			<div id="UUIDtab">
+				<a href="#UUIDtab">UUID</a>
 				<div id="form">
-					Package UUID:<br/><input id="uuid" type="text" name="uuid"><br/>
-					<input type="button" value="Submit uuid" onclick="addPackage()">
+					Package UUID:<br />
+					<input id="uuid" type="text" name="uuid" /><br /> <input
+						type="button" value="Submit uuid" onclick="addPackage()" />
 				</div>
 			</div>
-			<div id="AccountTab"> <a href="#AccountTab">Account</a>
+			<div id="AccountTab">
+				<a href="#AccountTab">Account</a>
 				<div>
 					<input type="button" value="Logout" onclick="logout()">
 				</div>
 			</div>
-			<div id="DetailTab"> <a href="#DetailTab">Details</a>
-				<div id ="details">
-				</div>
+			<div id="DetailTab">
+				<a href="#DetailTab">Details</a>
+				<div id="details"></div>
 			</div>
 		</div>
 	</div>
-	<div id="map">
-	</div>
+	<div id="map"></div>
 	<script type="text/javascript">
 		var map;
 		function initMap(center) {
@@ -78,55 +81,41 @@
 			});
 		}
         </script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
 	</script>
-	<script language="javascript">
-		//TODO: Fix this shoddiness
+	<script>
 		function logout(){
-			var xmlHttp = new XMLHttpRequest();
-          xmlHttp.open( "GET", "http://localhost:8000/logout/", false ); // false for synchronous request
-          xmlHttp.send( null );
-			window.location = "Login.html";
+			execHttpRequest("GET","http://localhost:8000/logout",false,"",function(){
+				window.location = "Login.html";
+			})
 		}
 	</script>
-	<script language="javascript">//unnessessary language identifier?
-		
-		//TODO: Can we call the utility function here?
-			
+	<script type="text/javascript">	
 		xmlhttp=new XMLHttpRequest();	
 		function addPackage()
 		{
-			var packageList;
-			xmlhttp.onreadystatechange=
-			function()
-			{			
-				if(xmlhttp.readyState ==4&& xmlhttp.status==200)
-				{
-					packageList=JSON.parse(xmlhttp.responseText);
-					var packageLocations=[];
-					packageList.forEach(
-						function(currentPackage) { 
-						    packageLocations.push(currentPackage.location);
-						});
-					//call midpoint function here with params packageLocations
-					initMap(findMidpoint(packageLocations));
-					packageList.forEach(
-						function(currentPackage) { 
-							showPackage(currentPackage);
-						});
-				}else{
-				}
-			}		
 			var params = "uuid="+document.getElementById('uuid').value;
-			xmlhttp.open("POST", "http://localhost:8000/addPackage",true);
-			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xmlhttp.setRequestHeader("Content-length", params.length);
-			xmlhttp.setRequestHeader("Connection", "close");
-			xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-			xmlhttp.send(params);
+			execHttpRequest("POST","http://localhost:8000/addPackage",true,params,function(responseText){showMyPackages()});
 		}
   </script>
-	<script language="javascript">
+	<script type="text/javascript">	
+  		function showMyPackages()
+		{
+			execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
+				var packageList=JSON.parse(responseText);
+				var packageLocations=[];
+				packageList.forEach(function(currentPackage) { 
+					packageLocations.push(currentPackage.location);
+				});
+				initMap(findMidpoint(packageLocations));
+				packageList.forEach(function(currentPackage) { 
+					showPackage(currentPackage);
+				});
+			});
+		}
+  	</script>
+	<script>
 		function findMidpoint(positions){
 		var leftEdge = 180; //lon
     		var rightEdge = -180; //lon

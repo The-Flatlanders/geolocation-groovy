@@ -1,5 +1,5 @@
 		xmlhttp=new XMLHttpRequest();	
-		function execHttpRequest(path,params, responseRecieved)
+		function execHttpRequest(method,path,async,params, responseRecieved)
 		{
 		xmlhttp.onreadystatechange=
 			function()
@@ -10,7 +10,7 @@
 				}
 			}
 		
-			xmlhttp.open("POST",path,true);
+			xmlhttp.open(method,path,async);
 			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xmlhttp.setRequestHeader("Content-length", params.length);
 			xmlhttp.setRequestHeader("Connection", "close");
