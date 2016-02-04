@@ -29,10 +29,10 @@ class SimpleGroovyServlet extends HttpServlet {
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		//TODO: Split this up like doPost
-		println("er")
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			def uuids = req.getParameterMap().get("uuid")
 			def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
+			println(responseString);
 			double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 			double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
 			trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
@@ -209,7 +209,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 }
 
-//Starts the server on port 800
+//Starts the server on port 8000
 def server = new Server(8000)
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
