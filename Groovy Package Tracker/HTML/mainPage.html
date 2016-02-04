@@ -31,9 +31,8 @@
 			<div id="UUIDtab">
 				<a href="#UUIDtab">UUID</a>
 				<div id="form">
-					Package UUID:<br />
-					<input id="uuid" type="text" name="uuid" /><br /> <input
-						type="button" value="Submit uuid" onclick="addPackage()" />
+					Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
+					<input type="button" value="Submit uuid" onclick="addPackage()" />
 				</div>
 			</div>
 			<div id="AccountTab">
@@ -72,17 +71,29 @@
 			if(map.getZoom() > 14){
 				  map.setZoom(14);
 			}
-			
+			var location;
+			var geocoder=new google.maps.Geocoder();
+			geocoder.geocode({'location': myLatLng}, function(results, status) {
+					if (status === google.maps.GeocoderStatus.OK) {
+  					if (results[1]) {
+  						location=(results[1].formatted_address);
+  					} else {
+    					console.log('No results found');
+  					}
+				} else {
+  					console.log('Geocoder failed due to: ' + status);
+				}
+			});
 			marker.addListener('click', function(){
-				  console.log(myPackage);
-				  var html;
-				  if(myPackage.delivered){
-						html="Delivered";
-					}else{
-						html="ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
-					  "Distance: "+(Math.round(myPackage.distanceFromDestination/10) / 100)+" Km";
-					}
-				  document.getElementById('details').innerHTML=html;
+				var html;
+				if(myPackage.delivered){
+					html="Delivered";
+				}else{
+					html="ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
+					"Distance: "+(Math.round(myPackage.distanceFromDestination/10) / 100)+" Km"+"<br>"+
+					"Current Location: "+location;
+				}
+				 	document.getElementById('details').innerHTML=html;
 			});
 		}
         </script>
