@@ -1,6 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<title>Package Tracker</title>
+	<script type="text/javascript">
+		//makes UUIDs the default tab
+		if (document.location.hash == "" || document.location.hash == "#")
+			document.location.hash = "#UUIDtab";
+	</script>
 	<style type="text/css">
 		#details {
 			font-family:sans-serif;
@@ -9,59 +14,67 @@
 			height: 100%; 
 			width:100%
 			float:left;
-       		}
-       	#controlPanel{
-       		float:left;
+		}
+		#controlPanel{
+			float:left;
 			height:100%;
-      		width:20%;
-       	}
+			width:20%;
+			padding-right:17px;
+		}
+		body {
+			background-color:#999966;
+		}
 		div.tabs {
-			min-height: 7em;
+			min-height: 100%;
 			position: relative;
 			line-height: 1;
-			z-index: 0
+			z-index: 0;
 		}
 		div.tabs > div {
 			display: inline
 		}
 		div.tabs > div > a {
 			color: black;
-			background: #CCC;
+			background: #6699ff;
 			text-decoration: none;
 			padding: 0.2em;
-			border: 0.1em outset #BBB;
-			border-bottom: 0.1em solid #CCC;
+			border: 0.1em outset #003bb3;
+			border-bottom: 0.1em solid #6699ff;
+			
 		}
+		div.tabs > div > a:hover {
+			color: white;
+		}
+		/* unselected tab header */
 		div.tabs > div:not(:target) > a {
 			border-bottom: none;
-			background: #999
+			background: #0040ff;
 		}
-		div.tabs > div:target > a,	/* Apply to the targeted item or... */
-		:target #default2 > a {		/* ... to the default item */
-			border-bottom: 0.1em solid #CCC;
-			background: #CCC
+		div.tabs > div:target > a,
+		:target #default2 > a {
+			border-bottom: 0.1em solid #6699ff;
+			background: #6699ff
 		}
 		div.tabs > div > div {
-			background: #CCC;		/* Light gray */
-			z-index: -2;			/* Behind, because the borders overlap */
-			left: 0; top: 1.3em;		/* The top needs some calculation... */
-			bottom: 0; right: 0;		/* Other sides flush with containing block */
-			overflow: auto;		/* Scroll bar if needed */
-			padding: 0.3em;		/* Looks better */
-			border: 0.1em outset #BBB
+			background: #6699ff;
+			z-index: -2;
+			left: 0; top: 1.3em;
+			bottom: 0; right: 0;
+			overflow: auto;
+			padding: 0.3em;
+			border: 0.1em outset #003bb3
 		}
-		div.tabs > div:not(:target) > div { /* Protect CSS1 & CSS2 browsers */
+		div.tabs > div:not(:target) > div {
 			position: absolute
-		}		/* All these DIVs overlap */
+		}
 		div.tabs > div:target > div, :target #default2 > div {
-			position: absolute;		/* All these DIVs overlap */
+			position: absolute;
 			z-index: -1
-		}			/* Raise it above the others */
-
+		}
 		div.tabs :target {
 			outline: none
 		}
-    </style>
+	</style>
 </head>
 <body onload="addPackage()">
 	<script language=javascript>
@@ -70,35 +83,33 @@
 			//window.location="login.html";
 		}
 		function getCookie(cname) {
-    			var name = cname + "=";
-    			var ca = document.cookie.split(';');
-    			for(var i=0; i<ca.length; i++) {
-        			var c = ca[i];
-        			while (c.charAt(0)==' ') c = c.substring(1);
-        			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    			}
-    			return "";
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+			}
+			return "";
 		}
 	</script>
 	<div id="controlPanel">
 		<div class = "tabs">
-			<div id="tab1"> <a href="#tab1">UUID</a>
+			<div id="UUIDtab"> <a href="#UUIDtab">UUID</a>
 				<div id="form">
 					Package UUID:<br/><input id="uuid" type="text" name="uuid"><br/>
 					<input type="button" value="Submit uuid" onclick="addPackage()">
 				</div>
 			</div>
-
-			<div id="tab2"> <a href="#tab2">Account</a>
+			<div id="AccountTab"> <a href="#AccountTab">Account</a>
 				<div>
 					<input type="button" value="Logout" onclick="logout()">
 				</div>
 			</div>
-
-			<div id="tab3"> <a href="#tab3">Tab&nbsp;3</a>
-				<div id ="details"><p>details would pop up here. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words. Lots of words.</p></div>
+			<div id="DetailTab"> <a href="#DetailTab">Details</a>
+				<div id ="details">
+				</div>
 			</div>
-
 		</div>
 	</div>
 	<div id="map">
@@ -106,13 +117,13 @@
 	<script type="text/javascript">
 		var map;
 		function initMap(center) {
-  			map = new google.maps.Map(document.getElementById('map'), {
-   			center: center,
-    			zoom: 8
-  			});
+			map = new google.maps.Map(document.getElementById('map'), {
+			center: center,
+			zoom: 8
+			});
 		}
 		function showPackage(myPackage){
-		  	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
+			var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
 			var marker = new google.maps.Marker({
 				    position: myLatLng,
 				    map: map,
@@ -134,12 +145,12 @@
 		//TODO: Fix this shoddiness
 		function logout(){
 			var xmlHttp = new XMLHttpRequest();
-    		xmlHttp.open( "GET", "http://localhost:8000/logout/", false ); // false for synchronous request
-        	xmlHttp.send( null );
+		xmlHttp.open( "GET", "http://localhost:8000/logout/", false ); // false for synchronous request
+		xmlHttp.send( null );
 			window.location = "Login.html";
 		}
 	</script>
-	<script language="javascript">//unnessessary language identifier?
+	<script language="javascript">
 		
 		//TODO: Can we call the utility function here?
 			
@@ -179,29 +190,28 @@
 	<script language="javascript">
 		function findMidpoint(positions){
 		var leftEdge = 180; //lon
-    		var rightEdge = -180; //lon
+		var rightEdge = -180; //lon
 		var topEdge = -90; //lat
 		var bottomEdge = 90; //lat
-       		
-  		for(var i = 0; i < positions.length; i++){
-    		var lat = positions[i].lat;
-        	var lon = positions[i].lon;
-        	if(lat < bottomEdge){
-        		bottomEdge = lat;
-        	}
-        	if(lat > topEdge){
-        		topEdge = lat;
-        	}
-        	if(lon < leftEdge){
-        		leftEdge = lon;
-       		}
-        	if(lon > rightEdge){
-        		rightEdge = lon;
-        	}
-  		}
-  		var midLat=(topEdge + bottomEdge) / 2;
-  		var midLon=(rightEdge + leftEdge) / 2;
-  		return {lat:midLat,lng:midLon};
+		for(var i = 0; i < positions.length; i++){
+		var lat = positions[i].lat;
+		var lon = positions[i].lon;
+		if(lat < bottomEdge){
+			bottomEdge = lat;
+		}
+		if(lat > topEdge){
+			topEdge = lat;
+		}
+		if(lon < leftEdge){
+			leftEdge = lon;
+		}
+		if(lon > rightEdge){
+			rightEdge = lon;
+		}
+		}
+		var midLat=(topEdge + bottomEdge) / 2;
+		var midLon=(rightEdge + leftEdge) / 2;
+		return {lat:midLat,lng:midLon};
 	}
 	</script>
 </body>
