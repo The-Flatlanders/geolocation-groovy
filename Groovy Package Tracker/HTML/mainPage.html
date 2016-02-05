@@ -68,10 +68,10 @@
 			var bounds = map.getBounds();
 			bounds.extend(marker.getPosition());
 			map.fitBounds(bounds);
-			map.setZoom(8);		
 			if(map.getZoom() > 14){
 				  map.setZoom(14);
 			}
+			
 			var location;
 			var geocoder=new google.maps.Geocoder();
 			geocoder.geocode({'location': myLatLng}, function(results, status) {
@@ -123,6 +123,9 @@
 		{
   			var userPackages=[];
 			execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
+				if(responseText == "noUser"){
+					window.location = "Login.html"
+				}
 				var packageList=JSON.parse(responseText);
 				var packageLocations=[];
 				packageList.forEach(function(currentPackage) { 
