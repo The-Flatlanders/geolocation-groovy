@@ -39,6 +39,7 @@
 				<a href="#AccountTab">Account</a>
 				<div>
 					<input type="button" value="Logout" onclick="logout()">
+					<div id="trackedPackages"></div>
 				</div>
 			</div>
 			<div id="DetailTab">
@@ -81,10 +82,12 @@
     					console.log('No results found');
   					}
 				} else {
+					location="Unknown or unpopulated area"
   					console.log('Geocoder failed due to: ' + status);
 				}
 			});
 			marker.addListener('click', function(){
+				window.location="#DetailTab";
 				var html;
 				if(myPackage.delivered){
 					html="Delivered";
@@ -118,6 +121,7 @@
 	<script type="text/javascript">	
   		function showMyPackages()
 		{
+  			var userPackages=[];
 			execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
 				var packageList=JSON.parse(responseText);
 				var packageLocations=[];
@@ -127,7 +131,11 @@
 				initMap(findMidpoint(packageLocations));
 				packageList.forEach(function(currentPackage) { 
 					showPackage(currentPackage);
+					console.log("currentPackage");
+					userPackages.push(currentPackage.uuid);
 				});
+				document.getElementById('trackedPackages').innerHtml=userPackages.toString();
+				console.log(userPackages);
 			});
 		}
   	</script>
