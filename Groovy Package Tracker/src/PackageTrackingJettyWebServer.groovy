@@ -127,8 +127,17 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @param resp The server response, contains JSON of the packages
 	 */
 	void getPackages(HttpServletRequest req, HttpServletResponse resp){
-		def info = req.getCookies()
-		def username = info[0].getValue()
+		def writer = resp.getWriter()
+		resp.setContentType("application/json")
+		def username
+		try{
+			def info = req.getCookies()
+			username = info[0].getValue()
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			writer.print("noUser");	
+			return;
+		}
 
 		//Creates list of packages either entered by the user previously or now
 		HashSet<TrackablePackage> packageInfos
@@ -145,8 +154,6 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 
 		//Returns packages
-		def writer = resp.getWriter()
-		resp.setContentType("application/json")
 		def toJson = JsonOutput.toJson(packageInfos)
 		writer.print(toJson)
 		writer.flush()
