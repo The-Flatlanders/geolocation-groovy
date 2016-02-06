@@ -165,8 +165,10 @@ class SimpleGroovyServlet extends HttpServlet {
 			packageInfos = trackedIDs.values()
 		}
 
+		println(packageInfos)
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
+		println(toJson)
 		writer.print(toJson)
 		writer.flush()
 	}

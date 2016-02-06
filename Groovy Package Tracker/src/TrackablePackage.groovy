@@ -57,7 +57,7 @@ class TrackablePackage {
 		//println "distance from destination: "+getDistanceFromDestination();
 		return getDistanceFromDestination()/averageSpeed
 	}
-	public double getETA(){
+	public double geteta(){
 		int ns= getETAInSeconds()
 		return ns/3600;
 	}
@@ -76,7 +76,7 @@ class TrackablePackage {
 				averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
 				time=newTime;
 				location=updateLocation
-				eta=getETA();
+				eta=geteta();
 			}
 		}
 	}
@@ -109,7 +109,7 @@ class TrackablePackage {
 	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
-		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA()+"\nNumber of updates: "+numOfUpdates);
+		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+geteta()+"\nNumber of updates: "+numOfUpdates);
 	}
 
 }

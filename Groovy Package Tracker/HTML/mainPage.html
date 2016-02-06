@@ -1,178 +1,162 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head>
-<title>Package Tracker</title>
-<script>
-		//makes UUIDs the default tab
-		if (document.location.hash == "" || document.location.hash == "#")
-			document.location.hash = "#UUIDtab";
-	</script>
-<script src=serverPostRequest.js></script>
-<link rel="stylesheet" type="text/css" href="MainStyleSheet.css" />
-</head>
-<body onload="showMyPackages()">
-	<script>
-		console.log(document.cookie);
-		if(getCookie("username")==""){
-			//window.location="login.html";
-		}
-		function getCookie(cname) {
-          var name = cname + "=";
-          var ca = document.cookie.split(';');
-          for(var i=0; i<ca.length; i++) {
-              var c = ca[i];
-              while (c.charAt(0)==' ') c = c.substring(1);
-              if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-          }
-          return "";
-		}
-	</script>
-	<div id="controlPanel">
-		<div class="tabs">
-			<div id="UUIDtab">
-				<a href="#UUIDtab">UUID</a>
-				<div id="form">
-					Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
-					<input type="button" value="Submit uuid" onclick="addPackage()" />
-				</div>
-			</div>
-			<div id="AccountTab">
-				<a href="#AccountTab">Account</a>
-				<div>
-					<input type="button" value="Logout" onclick="logout()">
-					<div id="trackedPackages"></div>
-				</div>
-			</div>
-			<div id="DetailTab">
-				<a href="#DetailTab">Details</a>
-				<div id="details"></div>
-			</div>
-		</div>
-	</div>
-	<div id="map"></div>
-	<script type="text/javascript">
-		var map;
-		var noPackagesYet = true;
-		function initMap(center) {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: center,
-          zoom: 2
-        });
-		}
-		function showPackage(myPackage){
-		  	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
-			var marker = new google.maps.Marker({
-				    position: myLatLng,
-				    map: map,
-				    title: myPackage.uuid
-			});
-			
-			if(noPackagesYet){
-				noPackagesYet = false;
-				map.setZoom(10);
-			}
-			var bounds = map.getBounds();
-			bounds.extend(marker.getPosition());
-			map.fitBounds(bounds);
-
-			
-			var location;
-			var geocoder=new google.maps.Geocoder();
-			geocoder.geocode({'location': myLatLng}, function(results, status) {
-					if (status === google.maps.GeocoderStatus.OK) {
-  					if (results[1]) {
-  						location=(results[1].formatted_address);
-  					} else {
-    					console.log('No results found');
-  					}
-				} else {
-					location="Unknown or unpopulated area"
-  					console.log('Geocoder failed due to: ' + status);
-				}
-			});
-			marker.addListener('click', function(){
-				window.location="#DetailTab";
-				var html;
-				if(myPackage.delivered){
-					html="Delivered";
-				}else{
-					html="ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
-					"Distance: "+(Math.round(myPackage.distanceFromDestination/10) / 100)+" Km"+"<br>"+
-					"Current Location: "+location;
-				}
-				 	document.getElementById('details').innerHTML=html;
-			});
-		}
-        </script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap">
-	</script>
-	<script>
-		function logout(){
-			execHttpRequest("GET","http://localhost:8000/logout",false,"",function(){
-				window.location = "Login.html";
-			})
-		}
-		window.onunload = "logout()";
-	</script>
-	<script type="text/javascript">	
-		xmlhttp=new XMLHttpRequest();	
-		function addPackage()
-		{
-			var params = "uuid="+document.getElementById('uuid').value;
-			execHttpRequest("POST","http://localhost:8000/addPackage",true,params,function(responseText){showMyPackages()});
-		}
-  </script>
-	<script type="text/javascript">	
-  		function showMyPackages()
-		{
-  			var userPackages=[];
-			execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
-				if(responseText == "noUser"){
-					window.location = "Login.html"
-				}
-				var packageList=JSON.parse(responseText);
-				var packageLocations=[];
-				packageList.forEach(function(currentPackage) { 
-					packageLocations.push(currentPackage.location);
-				});
-				initMap(findMidpoint(packageLocations));
-				packageList.forEach(function(currentPackage) { 
-					showPackage(currentPackage);
-					console.log("currentPackage");
-					userPackages.push(currentPackage.uuid);
-				});
-				document.getElementById('trackedPackages').innerHtml=userPackages.toString();
-				console.log(userPackages);
-			});
-		}
-  	</script>
-	<script>
-		function findMidpoint(positions){
-		var leftEdge = 180; //lon
-    		var rightEdge = -180; //lon
-		var topEdge = -90; //lat
-		var bottomEdge = 90; //lat
-       		
-      for(var i = 0; i < positions.length; i++){
-    		var lat = positions[i].lat;
-        	var lon = positions[i].lon;
-        	if(lat < bottomEdge){
-        		bottomEdge = lat;
-        	}
-        	if(lat > topEdge){
-        		topEdge = lat;
-        	}
-        	if(lon < leftEdge){
-        		leftEdge = lon;
-       		}
-        	if(lon > rightEdge){
-        		rightEdge = lon;
-        	}
-      }
-      var midLat=(topEdge + bottomEdge) / 2;
-      var midLon=(rightEdge + leftEdge) / 2;
-      return {lat:midLat,lng:midLon};
-  }
-  </script>
-</body>
+   <head>
+      <title>Package Tracker</title>
+      <script>
+         //makes UUIDs the default tab
+         if (document.location.hash == "" || document.location.hash == "#")
+         	document.location.hash = "#UUIDtab";
+      </script>
+      <script src=serverPostRequest.js></script>
+      <link rel="stylesheet" type="text/css" href="MainStyleSheet.css" />
+   </head>
+   <body onload="showMyPackages()">
+      <div id="controlPanel">
+         <div class="tabs">
+            <div id="UUIDtab">
+               <a href="#UUIDtab">UUID</a>
+               <div id="form">
+                  Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
+                  <input type="button" value="Submit uuid" onclick="addPackage()" />
+               </div>
+            </div>
+            <div id="AccountTab">
+               <a href="#AccountTab">Account</a>
+               <div>
+                  <input type="button" value="Logout" onclick="logout()">
+                  <div id="trackedPackages"></div>
+               </div>
+            </div>
+            <div id="DetailTab">
+               <a href="#DetailTab">Details</a>
+               <div id="details"></div>
+            </div>
+         </div>
+      </div>
+      <div id="map"></div>
+      <script type="text/javascript">
+         var map;
+         var noPackagesYet = true;
+         function initMap(center) {
+               map = new google.maps.Map(document.getElementById('map'), {
+                 center: center,
+                 zoom: 2
+               });
+         }
+         function showPackage(myPackage){
+           	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
+         	var marker = new google.maps.Marker({
+         		    position: myLatLng,
+         		    map: map,
+         		    title: myPackage.uuid
+         	});
+         	
+         	if(noPackagesYet){
+         		noPackagesYet = false;
+         		map.setZoom(10);
+         	}
+         	var bounds = map.getBounds();
+         	bounds.extend(marker.getPosition());
+         	map.fitBounds(bounds);
+         
+         	
+         	var location;
+         	var geocoder=new google.maps.Geocoder();
+         	geocoder.geocode({'location': myLatLng}, function(results, status) {
+         			if (status === google.maps.GeocoderStatus.OK) {
+         					if (results[1]) {
+         						location=(results[1].formatted_address);
+         					} else {
+           					console.log('No results found');
+         					}
+         		} else {
+         			location="Unknown or unpopulated area"
+         					console.log('Geocoder failed due to: ' + status);
+         		}
+         	});
+         	marker.addListener('click', function(){
+         		window.location="#DetailTab";
+         		var html;
+         		if(myPackage.delivered){
+         			html="Delivered";
+         		}else{
+         			html="ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
+         			"Distance: "+(Math.round(myPackage.distanceFromDestination/10) / 100)+" Km"+"<br>"+
+         			"Current Location: "+location;
+         		}
+         		 	document.getElementById('details').innerHTML=html;
+         	});
+         }
+               
+      </script>
+      <script async defer
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap"></script>
+      <script>
+         function logout(){
+         	execHttpRequest("GET","http://localhost:8000/logout",false,"",function(){
+         		window.location = "Login.html";
+         	})
+         }
+         window.onunload = "logout()";
+      </script>
+      <script type="text/javascript">	
+         xmlhttp=new XMLHttpRequest();	
+         function addPackage()
+         {
+         	var params = "uuid="+document.getElementById('uuid').value;
+         	execHttpRequest("POST","http://localhost:8000/addPackage",true,params,function(responseText){showMyPackages()});
+         }
+      </script>
+      <script type="text/javascript">	
+         function showMyPackages()
+         {
+         	var userPackages=[];
+         execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
+         if(responseText == "noUser"){
+         	window.location = "Login.html"
+         }
+         var packageList=JSON.parse(responseText);
+         var packageLocations=[];
+         packageList.forEach(function(currentPackage) { 
+         	packageLocations.push(currentPackage.location);
+         });
+         initMap(findMidpoint(packageLocations));
+         packageList.forEach(function(currentPackage) { 
+         	showPackage(currentPackage);
+         	console.log("currentPackage");
+         	userPackages.push(currentPackage.uuid);
+         });
+         document.getElementById('trackedPackages').innerHtml=userPackages.toString();
+         console.log(userPackages);
+         });
+         }
+      </script>
+      <script>
+         function findMidpoint(positions){
+         var leftEdge = 180; //lon
+           		var rightEdge = -180; //lon
+         var topEdge = -90; //lat
+         var bottomEdge = 90; //lat
+              		
+             for(var i = 0; i < positions.length; i++){
+           		var lat = positions[i].lat;
+               	var lon = positions[i].lon;
+               	if(lat < bottomEdge){
+               		bottomEdge = lat;
+               	}
+               	if(lat > topEdge){
+               		topEdge = lat;
+               	}
+               	if(lon < leftEdge){
+               		leftEdge = lon;
+              		}
+               	if(lon > rightEdge){
+               		rightEdge = lon;
+               	}
+             }
+             var midLat=(topEdge + bottomEdge) / 2;
+             var midLon=(rightEdge + leftEdge) / 2;
+             return {lat:midLat,lng:midLon};
+         }
+      </script>
+   </body>
 </html>
