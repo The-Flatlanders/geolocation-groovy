@@ -218,9 +218,7 @@ class SimpleGroovyServlet extends HttpServlet {
 				}
 				else{
 					//This code tracks all non delivery events
-					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)
-					println(JsonOutput.toJson(currentPackage));
-					
+					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)					
 				}
 			}
 		} catch (Exception e) { e.printStackTrace() /*report an error*/ }
