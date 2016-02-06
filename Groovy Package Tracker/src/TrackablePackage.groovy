@@ -1,19 +1,22 @@
 import java.text.SimpleDateFormat
 import groovy.json.*;
 
-
+/**
+ *Represents a single package and all of its information  
+ *
+ */
 class TrackablePackage {
 	// to hide a field from the JSON ouptut, make its visibility public instead of the default.
-	String uuid;
-	Coordinate location;
-	Coordinate destination;
-	double averageSpeed;
-	double eta;
-	Coordinate startingLocation;
-	int time;
-	int startTime;
-	boolean delivered;
-	private double updates;
+	private String uuid;
+	private Coordinate location;
+	private Coordinate destination;
+	private double averageSpeed;
+	private double eta;
+	private Coordinate startingLocation;
+	private int time;
+	private int startTime;
+	private boolean delivered;
+	private double numOfUpdates;
 
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
@@ -21,7 +24,7 @@ class TrackablePackage {
 		this.destination=destination;
 		location=new Coordinate(1,1);
 		delivered = false;
-		updates = 0;
+		numOfUpdates = 0;
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -60,7 +63,7 @@ class TrackablePackage {
 	}
 	public void update(Coordinate updateLocation, String updateTime){
 		if(!delivered){
-			updates++;
+			numOfUpdates++;
 			updateTime=updateTime.replace("-06:00","")
 			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 			Date date=format.parse(updateTime);
@@ -102,7 +105,7 @@ class TrackablePackage {
 		return averageSpeed;
 	}
 	public int getNumOfUpdates(){
-		return updates;
+		return numOfUpdates;
 	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";

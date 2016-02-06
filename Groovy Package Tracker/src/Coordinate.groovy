@@ -1,6 +1,6 @@
 public class Coordinate {
-	double lon;
-	double lat;
+	private double lon;
+	private double lat;
 	final public double ELE;
 	public Coordinate(double lat, double lon, double ELE){
 		this.lat=lat;
