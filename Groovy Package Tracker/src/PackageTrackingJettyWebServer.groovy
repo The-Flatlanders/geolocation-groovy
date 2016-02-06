@@ -153,7 +153,18 @@ class SimpleGroovyServlet extends HttpServlet {
 			packageInfos = trackedIDs.values()
 		}
 		
-
+		//Removes packages with no updates yet
+		ArrayList<TrackablePackage> packagesToRemove = new ArrayList<TrackablePackage>()
+		for(TrackablePackage pack: packageInfos){
+			if(pack.getNumOfUpdates() == 0){
+				packagesToRemove.add(pack)
+				println(pack)
+			}
+		}
+		for(TrackablePackage pack : packagesToRemove){
+			packageInfos.remove(pack);
+		}
+		
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
 		writer.print(toJson)

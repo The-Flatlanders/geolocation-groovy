@@ -13,6 +13,7 @@ class TrackablePackage {
 	int time;
 	int startTime;
 	boolean delivered;
+	private double updates;
 
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
@@ -20,6 +21,7 @@ class TrackablePackage {
 		this.destination=destination;
 		location=new Coordinate(1,1);
 		delivered = false;
+		updates = 0;
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -58,12 +60,14 @@ class TrackablePackage {
 	}
 	public void update(Coordinate updateLocation, String updateTime){
 		if(!delivered){
+			updates++;
 			updateTime=updateTime.replace("-06:00","")
 			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 			Date date=format.parse(updateTime);
 			int newTime=date.getTime();
 			if(startingLocation==null){
 				startingLocation=updateLocation
+				location=updateLocation
 				startTime=newTime;
 			}else{
 				averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
@@ -97,8 +101,12 @@ class TrackablePackage {
 	public double getSpeed(){
 		return averageSpeed;
 	}
+	public int getNumOfUpdates(){
+		return updates;
+	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
-		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA());
+		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA()+"\nNumber of updates: "+updates);
 	}
+
 }
