@@ -102,7 +102,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		String password = req.getParameter("password")
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
-		
+
 		//Checks for a mismatch
 		if((authorization.containsKey(username) && authorization.get(username) != password)){
 			writer.print("mismatch")
@@ -135,7 +135,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			username = info[0].getValue()
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			writer.print("noUser");	
+			writer.print("noUser");
 			return;
 		}
 
@@ -152,6 +152,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(username.equals("admin")){
 			packageInfos = trackedIDs.values()
 		}
+		
 
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
@@ -166,10 +167,17 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @param resp The server response, contains all packages asociated with user cookie, including new one
 	 */
 	void addPackage(HttpServletRequest req, HttpServletResponse resp){
-		def info = req.getCookies()
-		def username = info[0].getValue()
-		def packageInfos = userOpenedPackages.get(username)
 
+		def info = req.getCookies()
+		def username
+		try{
+			info[0].getValue()
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			return;
+		}
+
+		def packageInfos = userOpenedPackages.get(username)
 		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
 		if(trackedIDs.containsKey(uuid)){
 			packageInfos.add((trackedIDs.get(uuid)))

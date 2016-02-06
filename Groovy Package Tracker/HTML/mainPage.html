@@ -51,6 +51,7 @@
 	<div id="map"></div>
 	<script type="text/javascript">
 		var map;
+		var noPackagesYet = true;
 		function initMap(center) {
         map = new google.maps.Map(document.getElementById('map'), {
           center: center,
@@ -65,12 +66,14 @@
 				    title: myPackage.uuid
 			});
 			
+			if(noPackagesYet){
+				noPackagesYet = false;
+				map.setZoom(10);
+			}
 			var bounds = map.getBounds();
 			bounds.extend(marker.getPosition());
 			map.fitBounds(bounds);
-			if(map.getZoom() > 14){
-				  map.setZoom(14);
-			}
+
 			
 			var location;
 			var geocoder=new google.maps.Geocoder();
@@ -109,6 +112,7 @@
 				window.location = "Login.html";
 			})
 		}
+		window.onunload = "logout()";
 	</script>
 	<script type="text/javascript">	
 		xmlhttp=new XMLHttpRequest();	
