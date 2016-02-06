@@ -44,7 +44,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void trackNewPackage(HttpServletRequest req, HttpServletResponse resp){
 		def uuids = req.getParameterMap().get("uuid")
 		def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
-		//println(responseString);
 		//TODO: Support for multiple UUIDS
 		double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
@@ -168,8 +167,6 @@ class SimpleGroovyServlet extends HttpServlet {
 
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
-		println(packageInfos);
-		println(toJson)
 		writer.print(toJson)
 		writer.flush()
 	}
