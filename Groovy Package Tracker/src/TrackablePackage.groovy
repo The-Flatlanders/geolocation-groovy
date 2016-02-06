@@ -109,7 +109,7 @@ class TrackablePackage {
 	}
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
-		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA()+"\nNumber of updates: "+updates);
+		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+getETA()+"\nNumber of updates: "+numOfUpdates);
 	}
 
 }

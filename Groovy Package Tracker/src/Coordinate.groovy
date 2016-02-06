@@ -10,6 +10,12 @@ public class Coordinate {
 	public Coordinate(double lat,double lon){
 		this(lat,lon,0.0);
 	}
+	public double getlon(){
+		return lon;
+	}
+	public double getlat(){
+		return lat;
+	}
 	public String toString(){
 		return "{"+lat+","+lon+","+ELE+"}";
 	}

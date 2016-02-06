@@ -20,7 +20,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	private HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
 	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
 	//TODO Is the above stuff thread safe?
-	
+
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage 
@@ -31,10 +31,10 @@ class SimpleGroovyServlet extends HttpServlet {
 			trackNewPackage(req, resp);
 		}
 		if(req.getPathInfo().equals("/logout")){
-			logout(req, resp);	
+			logout(req, resp);
 		}
 	}
-	
+
 	/**
 	 * Records a new package and adds it to the package hashmap, using the packages UUID
 	 * as a key and the object as the value	
@@ -45,18 +45,18 @@ class SimpleGroovyServlet extends HttpServlet {
 		def uuids = req.getParameterMap().get("uuid")
 		def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 		//println(responseString);
+		//TODO: Support for multiple UUIDS
 		double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
-		
+
 		//Creates a new package
 		trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
-		
 		resp.setContentType("application/json")
 		def writer = resp.getWriter()
 		writer.print(responseString)
 		writer.flush()
 	}
-	
+
 	/**
 	 * Logs the user out by deleting all serverside information on the user
 	 * @param req The server request, contains user cookie
@@ -165,9 +165,11 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(username.equals("admin")){
 			packageInfos = trackedIDs.values()
 		}
-		
+
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
+		println(packageInfos);
+		println(toJson)
 		writer.print(toJson)
 		writer.flush()
 	}
@@ -217,6 +219,8 @@ class SimpleGroovyServlet extends HttpServlet {
 				else{
 					//This code tracks all non delivery events
 					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)
+					println(JsonOutput.toJson(currentPackage));
+					
 				}
 			}
 		} catch (Exception e) { e.printStackTrace() /*report an error*/ }
