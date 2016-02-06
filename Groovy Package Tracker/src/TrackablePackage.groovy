@@ -1,12 +1,11 @@
 import java.text.SimpleDateFormat
 import groovy.json.*;
-
 /**
  *Represents a single package and all of its information  
  *
  */
 class TrackablePackage {
-	// to hide a field from the JSON ouptut, make its visibility public instead of the default.
+	// to hide a field from the JSON ouptut, make its visibility public instead of private.
 	private String uuid;
 	private Coordinate location;
 	private Coordinate destination;
@@ -17,7 +16,8 @@ class TrackablePackage {
 	private int startTime;
 	private boolean delivered;
 	private double numOfUpdates;
-
+	private double distanceTraveledSoFar;
+		
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
 		this.uuid=uuid;
@@ -25,6 +25,8 @@ class TrackablePackage {
 		location=new Coordinate(1,1);
 		delivered = false;
 		numOfUpdates = 0;
+		distanceTraveledSoFar = 0;
+		
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -55,7 +57,7 @@ class TrackablePackage {
 	}
 	public int getETAInSeconds(){
 		//println "distance from destination: "+getDistanceFromDestination();
-		return getDistanceFromDestination()/averageSpeed
+		return (getDistanceFromDestination()/averageSpeed) * (getDistanceTraveledSoFar() / calculateLineDistance())
 	}
 	public double geteta(){
 		int ns= getETAInSeconds()
@@ -68,11 +70,13 @@ class TrackablePackage {
 			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 			Date date=format.parse(updateTime);
 			int newTime=date.getTime();
+			
 			if(startingLocation==null){
 				startingLocation=updateLocation
 				location=updateLocation
 				startTime=newTime;
 			}else{
+				distanceTraveledSoFar += Coordinate.getDistance(location, updateLocation);
 				averageSpeed=calculateAverageSpeed(newTime-startTime,Coordinate.getDistance(startingLocation, updateLocation))
 				time=newTime;
 				location=updateLocation
@@ -110,6 +114,12 @@ class TrackablePackage {
 	public String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
 		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+geteta()+"\nNumber of updates: "+numOfUpdates);
+	}
+	public double getDistanceTraveledSoFar(){
+		return distanceTraveledSoFar;
+	}
+	public double calculateLineDistance(){
+		return Coordinate.getDistance(startingLocation, location);
 	}
 
 }

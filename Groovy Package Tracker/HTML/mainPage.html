@@ -50,6 +50,7 @@
          		    title: myPackage.uuid
          	});
          	
+         	
          	if(noPackagesYet){
          		noPackagesYet = false;
          		map.setZoom(10);
@@ -58,7 +59,6 @@
          	bounds.extend(marker.getPosition());
          	map.fitBounds(bounds);
          
-         	
          	var location;
          	var geocoder=new google.maps.Geocoder();
          	geocoder.geocode({'location': myLatLng}, function(results, status) {
@@ -73,6 +73,7 @@
          					console.log('Geocoder failed due to: ' + status);
          		}
          	});
+         	
          	marker.addListener('click', function(){
          		window.location="#DetailTab";
          		var html;
