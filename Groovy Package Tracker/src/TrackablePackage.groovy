@@ -7,6 +7,7 @@ import groovy.json.*;
 class TrackablePackage {
 	// to hide a field from the JSON ouptut, make its visibility public instead of private.
 	private String uuid;
+	private String notes;
 	private Coordinate location;
 	private Coordinate destination;
 	private double averageSpeed;
@@ -30,7 +31,7 @@ class TrackablePackage {
 		delivered = false;
 		numOfUpdates = 0;
 		distanceTraveledSoFar = 0;
-		pastCords = new ArrayList<Coordinate>();		
+		pastCords = new ArrayList<Coordinate>();
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -46,6 +47,12 @@ class TrackablePackage {
 	}
 	public String getUuid() {
 		return uuid;
+	}
+	public String getNotes() {
+		return notes;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	public boolean getDelivered() {
 		return delivered;
