@@ -18,6 +18,7 @@
 					Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
 					<input type="button" value="Submit uuid" onclick="addPackage()" />
 				</div>
+				
 			</div>
 			<div id="AccountTab">
 				<a href="#AccountTab">Account</a>
@@ -25,10 +26,19 @@
 					<input type="button" value="Logout" onclick="logout()">
 					<div id="trackedPackages"></div>
 				</div>
+				
 			</div>
 			<div id="DetailTab">
 				<a href="#DetailTab">Details</a>
-				<div id="details"></div>
+				<div>
+					<div id="notes">
+						UUID: <input type="text" id="notesInputUUID" name="notesInputUUID"><br>
+						Notes: <input type="text" id="notesInput" name="notesInput"><br>
+						<input type="button" value="Submit Notes" onclick="addNotes()"/>
+						<br>
+					</div>
+					<div id="details"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -98,14 +108,16 @@
          	marker.addListener('click', function(){
          		window.location="#DetailTab";
          		var html;
+         		//myPackage.notes = "happened";
          		if(myPackage.delivered){
          			html="Delivered";
          		}else{
-         			html="ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
+         			html="UUID: "+myPackage.uuid+"<br>ETA: "+Math.round(myPackage.eta * 100) / 100+" hours"+"<br>"+
          			"Distance: "+(Math.round(myPackage.distanceFromDestination/10) / 100)+" Km"+"<br>"+
-         			"Current Location: "+location;
+         			"Current Location: "+location+"<br><br><br>Notes:<br>"+myPackage.notes;
          		}
          		 	document.getElementById('details').innerHTML=html;
+         		 	document.getElementById('notesInputUUID').value=myPackage.uuid;
          	});
          	
          	marker.addListener('click', function(){
@@ -152,7 +164,6 @@
          		
          	});
          }
-               
       </script>
 	<script async defer
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap"></script>
@@ -172,30 +183,44 @@
          	execHttpRequest("POST","http://localhost:8000/addPackage",true,params,function(responseText){showMyPackages()});
          }
       </script>
-	<script type="text/javascript">	
+	<script type="text/javascript">
+		 var packages;
          function showMyPackages()
          {
          	var userPackages=[];
-         execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
-         if(responseText == "noUser"){
-         	window.location = "Login.html"
+         	execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
+         		if(responseText == "noUser"){
+         			window.location = "Login.html"
+         		}
+         		console.log(responseText);
+         		var packageList=JSON.parse(responseText);
+         		var packageLocations=[];
+         		packageList.forEach(function(currentPackage) { 
+         			packageLocations.push(currentPackage.location);
+         		});
+         		initMap();
+         		packageList.forEach(function(currentPackage) { 
+         			showPackage(currentPackage);
+         			console.log("currentPackage");
+         			userPackages.push(currentPackage.uuid);
+        		});
+         		document.getElementById('trackedPackages').innerHtml=userPackages.toString();
+         		console.log(userPackages);
+         		packages = packageList;
+         	});
          }
-         console.log(responseText);
-         var packageList=JSON.parse(responseText);
-         var packageLocations=[];
-         packageList.forEach(function(currentPackage) { 
-         	packageLocations.push(currentPackage.location);
-         });
-         initMap();
-         packageList.forEach(function(currentPackage) { 
-         	showPackage(currentPackage);
-         	console.log("currentPackage");
-         	userPackages.push(currentPackage.uuid);
-         });
-         document.getElementById('trackedPackages').innerHtml=userPackages.toString();
-         console.log(userPackages);
-         });
-         }
+         //TODO: Make notes persist over refreshes (they are currently stored on the userside, but not the serverside)
+         function addNotes(){
+			var myPackageUUID = document.getElementById('notesInputUUID').value;
+			packages.forEach(function(currentPackage) {
+         		if(currentPackage.uuid === myPackageUUID){
+         			if(confirm("Are you sure? This will over write any current notes on this package.")){
+						currentPackage.notes = document.getElementById('notesInput').value;
+						document.getElementById('notesInput').value = "";
+					}
+         		}
+        	});
+		}
       </script>
 </body>
 </html>
