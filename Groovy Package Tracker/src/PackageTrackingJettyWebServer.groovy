@@ -47,7 +47,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		//TODO: Support for multiple UUIDS
 		double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
-
+		println responseString;
 		//Creates a new package
 		trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
 		resp.setContentType("application/json")
@@ -116,7 +116,6 @@ class SimpleGroovyServlet extends HttpServlet {
 		String password = req.getParameter("password")
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
-
 		//Checks for a mismatch
 		if((authorization.containsKey(username) && authorization.get(username) != password)){
 			writer.print("mismatch")
@@ -128,6 +127,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		else{
 			authorization.put(username, password)
+			
 			Cookie user = new Cookie("username", username)
 			resp.addCookie(user)
 		}
@@ -185,13 +185,18 @@ class SimpleGroovyServlet extends HttpServlet {
 		catch(ArrayIndexOutOfBoundsException e){
 			return;
 		}
-
-		def packageInfos = userOpenedPackages.get(username)
+		HashSet<TrackablePackage> packageInfos
+		if(userOpenedPackages.containsKey(username)){
+			packageInfos = userOpenedPackages.get(username)
+		}
+		else{
+			packageInfos=new HashSet<TrackablePackage>();
+			userOpenedPackages.put(username,packageInfos);
+		}
 		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
 		if(trackedIDs.containsKey(uuid)){
-			packageInfos.add((trackedIDs.get(uuid)))
+			packageInfos.add(trackedIDs.get(uuid))
 		}
-		getPackages(req, resp) //Return all user packages
 	}
 
 	/**
