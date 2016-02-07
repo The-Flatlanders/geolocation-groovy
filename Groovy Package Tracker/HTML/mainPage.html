@@ -115,6 +115,7 @@
          if(responseText == "noUser"){
          	window.location = "Login.html"
          }
+         console.log(responseText);
          var packageList=JSON.parse(responseText);
          var packageLocations=[];
          packageList.forEach(function(currentPackage) { 

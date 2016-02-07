@@ -180,7 +180,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		def info = req.getCookies()
 		def username
 		try{
-			info[0].getValue()
+			username=info[0].getValue()
 		}
 		catch(ArrayIndexOutOfBoundsException e){
 			return;
