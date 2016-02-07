@@ -15,7 +15,7 @@ import javax.servlet.*
  *	Associate package with user (doPost)<br>
  */
 class SimpleGroovyServlet extends HttpServlet {
-	private HashMap trackedIDs=new HashMap() //Hashmap of all tracked packages and their information
+	private HashMap<String, TrackablePackage> trackedIDs=new HashMap() //Hashmap of all tracked packages and their information
 	private HashMap<String, String> authorization = new HashMap<String, String>() //Hashmap of all usernames and password
 	private HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
 	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
@@ -100,6 +100,10 @@ class SimpleGroovyServlet extends HttpServlet {
 
 		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
 			packageTrackUpdate(req,resp)
+		}
+		
+		if(req.getPathInfo().startsWith("/updateNotes/")) {
+			updateNotes(req,resp)
 		}
 	}
 
@@ -198,6 +202,18 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(trackedIDs.containsKey(uuid)){
 			packageInfos.add(trackedIDs.get(uuid))
 		}
+	}
+	
+	/**
+	 * Associates packages with a user to be displayed later
+	 * @param req The server request, contains new package UUIDs to add and user cookie
+	 * @param resp The server response, contains all packages asociated with user cookie, including new one
+	 */
+	private void updateNotes(HttpServletRequest req, HttpServletResponse resp){
+		def uuid = req.getParameter("uuid")
+		def notes = req.getParameter("notes")
+		def currentPackage = trackedIDs.get(uuid);
+		currentPackage.setNotes(notes);
 	}
 
 	/**

@@ -48,6 +48,7 @@
          var noPackagesYet = true;
          var deleteOnReclick = [];
          var allMarkers = [];
+         var activePackage;
          function initMap() {
                map = new google.maps.Map(document.getElementById('map'), {
                  center: {lat:0,lng:0},
@@ -78,6 +79,9 @@
       		}
 				deleteOnReclick.length = 0;
          }
+         function getCurrentPackage(){
+        	 return currentPackage;
+         }
          function showPackage(myPackage){
            	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
          	var marker = new google.maps.Marker({
@@ -106,6 +110,7 @@
          	
          	
          	marker.addListener('click', function(){
+         		activePackage = myPackage;
          		window.location="#DetailTab";
          		var html;
          		//myPackage.notes = "happened";
@@ -187,7 +192,6 @@
 		 var packages;
          function showMyPackages()
          {
-         	var userPackages=[];
          	execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
          		if(responseText == "noUser"){
          			window.location = "Login.html"
@@ -206,20 +210,14 @@
         		});
          		document.getElementById('trackedPackages').innerHtml=userPackages.toString();
          		console.log(userPackages);
-         		packages = packageList;
          	});
          }
          //TODO: Make notes persist over refreshes (they are currently stored on the userside, but not the serverside)
-         function addNotes(){
-			var myPackageUUID = document.getElementById('notesInputUUID').value;
-			packages.forEach(function(currentPackage) {
-         		if(currentPackage.uuid === myPackageUUID){
+         function addNotes(){		
          			if(confirm("Are you sure? This will over write any current notes on this package.")){
-						currentPackage.notes = document.getElementById('notesInput').value;
+						getCurrentPackage().notes = document.getElementById('notesInput').value;
 						document.getElementById('notesInput').value = "";
 					}
-         		}
-        	});
 		}
       </script>
 </body>
