@@ -167,6 +167,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
+		println(toJson)
 		writer.print(toJson)
 		writer.flush()
 	}

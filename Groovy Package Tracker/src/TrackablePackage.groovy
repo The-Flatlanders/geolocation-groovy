@@ -17,7 +17,11 @@ class TrackablePackage {
 	private boolean delivered;
 	private double numOfUpdates;
 	private double distanceTraveledSoFar;
+	private ArrayList<Coordinate> pastCords;
 		
+	public ArrayList<Coordinate> getPastCords() {
+		return pastCords;
+	}
 	public TrackablePackage(String uuid, Coordinate destination){
 		time=0;
 		this.uuid=uuid;
@@ -26,7 +30,7 @@ class TrackablePackage {
 		delivered = false;
 		numOfUpdates = 0;
 		distanceTraveledSoFar = 0;
-		
+		pastCords = new ArrayList<Coordinate>();		
 	}
 	public Coordinate getLocation() {
 		return location;
@@ -64,6 +68,7 @@ class TrackablePackage {
 		return ns/3600;
 	}
 	public void update(Coordinate updateLocation, String updateTime){
+		pastCords.add(updateLocation);
 		if(!delivered){
 			numOfUpdates++;
 			updateTime=updateTime.replace("-06:00","")
@@ -120,6 +125,9 @@ class TrackablePackage {
 	}
 	public double calculateLineDistance(){
 		return Coordinate.getDistance(startingLocation, location);
+	}
+	public Coordinate getStartingLocation(){
+		return startingLocation;
 	}
 
 }

@@ -36,6 +36,7 @@
       <script type="text/javascript">
          var map;
          var noPackagesYet = true;
+         var deleteOnReclick = [];
          function initMap(center) {
                map = new google.maps.Map(document.getElementById('map'), {
                  center: center,
@@ -74,6 +75,7 @@
          		}
          	});
          	
+         	
          	marker.addListener('click', function(){
          		window.location="#DetailTab";
          		var html;
@@ -85,6 +87,51 @@
          			"Current Location: "+location;
          		}
          		 	document.getElementById('details').innerHTML=html;
+         	});
+         	
+         	marker.addListener('click', function(){
+         		for(var i = 0; i < deleteOnReclick.length; i++){
+         			deleteOnReclick[i].setMap(null);
+         		}
+				deleteOnReclick.length = 0;
+				
+         		var pastCords = myPackage.pastCords;
+         		for (var i = 0; i < pastCords.length - 1; i++) {
+         			var cord1 = pastCords[i];
+                   	var cord2 = pastCords[i + 1];
+         			var latlong1 = {lat: cord1.lat, lng: cord1.lon};
+                   	var latlong2 = {lat: cord2.lat, lng: cord2.lon};
+                   	
+                   	var polyline = new google.maps.Polyline({
+                   	    path:[latlong1,latlong2],
+                   		strokeColor: '#FF0000',
+                   	    strokeOpacity: 1.0,
+                   	    strokeWeight: 10,
+                   	    map: map
+                   	});
+                   	deleteOnReclick.push(polyline); 
+         		}
+         		
+         		var green = 'green-dot.png';
+                var start = new google.maps.Marker({
+                  position: {lat: myPackage.startingLocation.lat, lng: myPackage.startingLocation.lon},
+                  map: map,
+                  icon: green
+                });
+                
+                var blue = 'blue-dot.png';
+                var end = new google.maps.Marker({
+                  position: {lat: myPackage.destination.lat, lng: myPackage.destination.lon},
+                  map: map,
+                  icon: blue
+                });
+                
+               	deleteOnReclick.push(start);
+               	deleteOnReclick.push(end); 
+
+
+         		
+         		
          	});
          }
                
