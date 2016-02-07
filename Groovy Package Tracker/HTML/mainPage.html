@@ -83,7 +83,7 @@
         	 return currentPackage;
          }
          function showPackage(myPackage){
-           	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
+        	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
          	var marker = new google.maps.Marker({
          		    position: myLatLng,
          		    map: map,
@@ -92,7 +92,7 @@
          	
          	allMarkers.push(marker);
          	sizeMap();
-         	
+
          	var location;
          	var geocoder=new google.maps.Geocoder();
          	geocoder.geocode({'location': myLatLng}, function(results, status) {
@@ -168,6 +168,7 @@
          		sizeMap();
          		
          	});
+
          }
       </script>
 	<script async defer
@@ -192,6 +193,7 @@
 		 var packages;
          function showMyPackages()
          {
+        	var userPackages = [];
          	execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
          		if(responseText == "noUser"){
          			window.location = "Login.html"
@@ -207,15 +209,17 @@
          			showPackage(currentPackage);
          			console.log("currentPackage");
          			userPackages.push(currentPackage.uuid);
+
         		});
          		document.getElementById('trackedPackages').innerHtml=userPackages.toString();
          		console.log(userPackages);
          	});
          }
-         //TODO: Make notes persist over refreshes (they are currently stored on the userside, but not the serverside)
          function addNotes(){		
          			if(confirm("Are you sure? This will over write any current notes on this package.")){
 						getCurrentPackage().notes = document.getElementById('notesInput').value;
+						var params = "uuid=" + getCurrentPackage().uuid + "&notes=" + getCurrentPackage().notes;
+			         	execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){});
 						document.getElementById('notesInput').value = "";
 					}
 		}

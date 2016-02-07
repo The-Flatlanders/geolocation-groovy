@@ -98,11 +98,11 @@ class SimpleGroovyServlet extends HttpServlet {
 			addPackage(req,resp)
 		}
 
-		if(req.getPathInfo().startsWith("/packagetrackupdate/")) {
+		if(req.getPathInfo().startsWith("/packagetrackupdate")) {
 			packageTrackUpdate(req,resp)
 		}
 		
-		if(req.getPathInfo().startsWith("/updateNotes/")) {
+		if(req.getPathInfo().startsWith("/updateNotes")) {
 			updateNotes(req,resp)
 		}
 	}
@@ -171,7 +171,6 @@ class SimpleGroovyServlet extends HttpServlet {
 
 		//Returns packages
 		def toJson = JsonOutput.toJson(packageInfos)
-		println(toJson)
 		writer.print(toJson)
 		writer.flush()
 	}

@@ -7,7 +7,6 @@
 		                responseRecieved(xmlhttp.responseText);
 		            }
 		        }
-
 		    xmlhttp.open(method, path, async);
 		    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		    xmlhttp.setRequestHeader("Content-length", params.length);
