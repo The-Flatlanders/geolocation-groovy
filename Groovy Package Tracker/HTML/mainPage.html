@@ -1,47 +1,73 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-   <head>
-      <title>Package Tracker</title>
-      <script>
+<head>
+<title>Package Tracker</title>
+<script>
          //makes UUIDs the default tab
          if (document.location.hash == "" || document.location.hash == "#")
          	document.location.hash = "#UUIDtab";
       </script>
-      <script src=serverPostRequest.js></script>
-      <link rel="stylesheet" type="text/css" href="MainStyleSheet.css" />
-   </head>
-   <body onload="showMyPackages()">
-      <div id="controlPanel">
-         <div class="tabs">
-            <div id="UUIDtab">
-               <a href="#UUIDtab">UUID</a>
-               <div id="form">
-                  Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
-                  <input type="button" value="Submit uuid" onclick="addPackage()" />
-               </div>
-            </div>
-            <div id="AccountTab">
-               <a href="#AccountTab">Account</a>
-               <div>
-                  <input type="button" value="Logout" onclick="logout()">
-                  <div id="trackedPackages"></div>
-               </div>
-            </div>
-            <div id="DetailTab">
-               <a href="#DetailTab">Details</a>
-               <div id="details"></div>
-            </div>
-         </div>
-      </div>
-      <div id="map"></div>
-      <script type="text/javascript">
+<script src=serverPostRequest.js></script>
+<link rel="stylesheet" type="text/css" href="MainStyleSheet.css" />
+</head>
+<body onload="showMyPackages()">
+	<div id="controlPanel">
+		<div class="tabs">
+			<div id="UUIDtab">
+				<a href="#UUIDtab">UUID</a>
+				<div id="form">
+					Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
+					<input type="button" value="Submit uuid" onclick="addPackage()" />
+				</div>
+			</div>
+			<div id="AccountTab">
+				<a href="#AccountTab">Account</a>
+				<div>
+					<input type="button" value="Logout" onclick="logout()">
+					<div id="trackedPackages"></div>
+				</div>
+			</div>
+			<div id="DetailTab">
+				<a href="#DetailTab">Details</a>
+				<div id="details"></div>
+			</div>
+		</div>
+	</div>
+	<div id="map"></div>
+	<script type="text/javascript">
          var map;
          var noPackagesYet = true;
          var deleteOnReclick = [];
+         var allMarkers = [];
          function initMap(center) {
                map = new google.maps.Map(document.getElementById('map'), {
                  center: center,
                  zoom: 2
                });
+         }
+         function sizeMap(){
+        		 var bounds = new google.maps.LatLngBounds();
+        		 for(i=0;i<allMarkers.length;i++) {
+        		    bounds.extend(allMarkers[i].getPosition());
+        		 }
+
+        		 map.setCenter(bounds.getCenter());
+        		 map.fitBounds(bounds);
+        		 map.setZoom(map.getZoom()-1); 
+        		 if(map.getZoom()> 15){
+        		   map.setZoom(15);
+        		 }
+
+         }
+         function deleteMapObjects(){
+        	 for(var i = 0; i < deleteOnReclick.length; i++){
+      			for(var j = 0; j < allMarkers.length; j++){
+      				if(allMarkers[j] == deleteOnReclick[i]){
+      					allMarkers.splice(j,1);
+      				}
+      			}
+      			deleteOnReclick[i].setMap(null);
+      		}
+				deleteOnReclick.length = 0;
          }
          function showPackage(myPackage){
            	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
@@ -51,15 +77,9 @@
          		    title: myPackage.uuid
          	});
          	
+         	allMarkers.push(marker);
+         	sizeMap();
          	
-         	if(noPackagesYet){
-         		noPackagesYet = false;
-         		map.setZoom(10);
-         	}
-         	var bounds = map.getBounds();
-         	bounds.extend(marker.getPosition());
-         	map.fitBounds(bounds);
-         
          	var location;
          	var geocoder=new google.maps.Geocoder();
          	geocoder.geocode({'location': myLatLng}, function(results, status) {
@@ -90,11 +110,8 @@
          	});
          	
          	marker.addListener('click', function(){
-         		for(var i = 0; i < deleteOnReclick.length; i++){
-         			deleteOnReclick[i].setMap(null);
-         		}
-				deleteOnReclick.length = 0;
-				
+         		deleteMapObjects();
+
          		var pastCords = myPackage.pastCords;
          		for (var i = 0; i < pastCords.length - 1; i++) {
          			var cord1 = pastCords[i];
@@ -129,16 +146,18 @@
                	deleteOnReclick.push(start);
                	deleteOnReclick.push(end); 
 
+               	allMarkers.push(start);
+               	allMarkers.push(end);
 
-         		
+         		sizeMap();
          		
          	});
          }
                
       </script>
-      <script async defer
-         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap"></script>
-      <script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap"></script>
+	<script>
          function logout(){
          	execHttpRequest("GET","http://localhost:8000/logout",false,"",function(){
          		window.location = "Login.html";
@@ -146,7 +165,7 @@
          }
          window.onunload = "logout()";
       </script>
-      <script type="text/javascript">	
+	<script type="text/javascript">	
          xmlhttp=new XMLHttpRequest();	
          function addPackage()
          {
@@ -154,7 +173,7 @@
          	execHttpRequest("POST","http://localhost:8000/addPackage",true,params,function(responseText){showMyPackages()});
          }
       </script>
-      <script type="text/javascript">	
+	<script type="text/javascript">	
          function showMyPackages()
          {
          	var userPackages=[];
@@ -179,7 +198,7 @@
          });
          }
       </script>
-      <script>
+	<script>
          function findMidpoint(positions){
          var leftEdge = 180; //lon
            		var rightEdge = -180; //lon
@@ -207,5 +226,5 @@
              return {lat:midLat,lng:midLon};
          }
       </script>
-   </body>
+</body>
 </html>
