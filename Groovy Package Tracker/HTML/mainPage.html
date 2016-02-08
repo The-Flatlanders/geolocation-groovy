@@ -79,8 +79,8 @@
       		}
 				deleteOnReclick.length = 0;
          }
-         function getCurrentPackage(){
-        	 return currentPackage;
+         function getActivePackage(){
+        	 return activePackage;
          }
          function showPackage(myPackage){
         	var myLatLng = {lat: myPackage.location.lat, lng: myPackage.location.lon};
@@ -217,10 +217,16 @@
          }
          function addNotes(){		
          			if(confirm("Are you sure? This will over write any current notes on this package.")){
-						getCurrentPackage().notes = document.getElementById('notesInput').value;
-						var params = "uuid=" + getCurrentPackage().uuid + "&notes=" + getCurrentPackage().notes;
-			         	execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){});
-						document.getElementById('notesInput').value = "";
+         				var pack = getActivePackage();
+         				if(pack != null){
+							pack.notes = document.getElementById('notesInput').value;
+							var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
+			         		execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){});
+							document.getElementById('notesInput').value = "";
+         				}
+         				else{
+         					alert("No package selected to apply notes to. Click on a package to apply notes");
+         				}
 					}
 		}
       </script>
