@@ -50,7 +50,7 @@ function showPackage(myPackage) {
 	});
 	allMarkers.push(marker);
 	sizeMap();
-	var packageLocation;
+	addGeocode(myPackage);
 	marker.addListener('click', function(){
 		inspectPackage(myPackage);
 	});
@@ -63,6 +63,10 @@ function inspectPackage(myPackage) {
 }
 function addGeocode(myPackage){
 	var location;
+	var myLatLng = {
+			lat : myPackage.location.lat,
+			lng : myPackage.location.lon
+		};
 	var geocoder = new google.maps.Geocoder();
 	geocoder.geocode({
 		'location' : myLatLng

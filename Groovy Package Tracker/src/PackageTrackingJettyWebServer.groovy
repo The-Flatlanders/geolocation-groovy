@@ -19,14 +19,12 @@ class SimpleGroovyServlet extends HttpServlet {
 	private HashMap<String, String> authorization = new HashMap<String, String>() //Hashmap of all usernames and password
 	private HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
 	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
-	//TODO Is the above stuff thread safe?
-
+	
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage 
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
-		//TODO: Split this up like doPost
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			trackNewPackage(req, resp);
 		}
@@ -44,7 +42,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void trackNewPackage(HttpServletRequest req, HttpServletResponse resp){
 		def uuids = req.getParameterMap().get("uuid")
 		def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
-		//TODO: Support for multiple UUIDS
 		double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
 		println responseString;
@@ -249,7 +246,7 @@ class SimpleGroovyServlet extends HttpServlet {
 def server = new Server(8000)
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
-handler.addServletWithMapping(SimpleGroovyServlet.class, "/*") //TODO: Figure out what this line does
+handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
 println "Starting Jetty, press Ctrl+C to stop."
 server.start()
 server.join()

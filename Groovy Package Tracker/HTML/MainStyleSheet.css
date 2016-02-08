@@ -1,5 +1,5 @@
-* {
-    font-family: font-family: sans-serif;
+*{
+    font-family:sans-serif;
 }
 #details {
     font-family: sans-serif;
@@ -15,7 +15,7 @@
     padding-right: 17px;
 }
 body {
-    background-color: #333333;
+    background-color: #031634;
 }
 div.tabs {
     min-height: 100%;
@@ -24,40 +24,40 @@ div.tabs {
     z-index: 0;
 }
 div.tabs > div {
-    display: inline
+    display: inline-block;
 }
 div.tabs > div > a {
-    color: black;
-    background: #6699ff;
+	color:#E8DDCB;
+    background: #033649;
     text-decoration: none;
     padding: 0.2em;
-    border: 0.1em outset #003bb3;
-    border-bottom: 0.1em solid #6699ff;
+    border-top-left-radius:10%;
+    border-top-right-radius:10%;
 }
 div.tabs > div > a:hover {
-    color: white;
+    color: #CDB380;
 }
 /* unselected tab header */
 
 div.tabs > div:not(:target) > a {
     border-bottom: none;
-    background: #0040ff;
+    background: #036564;
 }
 div.tabs > div:target > a,
 :target #default2 > a {
-    border-bottom: 0.1em solid #6699ff;
-    background: #6699ff
+   /* border-bottom: 0.1em solid #6699ff;*/
+    background: #033649;
 }
 div.tabs > div > div {
-    background: #6699ff;
+	color:#E8DDCB;
+    background: #033649;
     z-index: -2;
     left: 0;
-    top: 1.3em;
+    top: 1.2em;
     bottom: 0;
     right: 0;
     overflow: auto;
     padding: 0.3em;
-    border: 0.1em outset #003bb3
 }
 div.tabs > div:not(:target) > div {
     position: absolute
@@ -69,4 +69,11 @@ div.tabs > div:target > div,
 }
 div.tabs:target {
     outline: none
+}
+#map{
+	top:1.2em;
+	z-index: -2;
+	bottom: 0;
+	overflow: auto;
+	height:95%;
 }
