@@ -29,3 +29,8 @@ commiting tells git to save your place as a checkpoint. This checkpoint can be r
 * run the file labelled Exec
 * input the args (simple args are -n *.gpx)
 
+E8DDCB
+CDB380
+036564
+033649
+031634
