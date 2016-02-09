@@ -57,9 +57,9 @@ function showPackage(myPackage) {
 }
 function inspectPackage(myPackage) {
 	activePackage=myPackage;
+	showPackagePath(myPackage);
 	window.location = "#DetailTab";
 	showPackageDetails(myPackage);
-	showPackagePath(myPackage);
 }
 function addGeocode(myPackage){
 	var location;
@@ -67,10 +67,12 @@ function addGeocode(myPackage){
 			lat : myPackage.location.lat,
 			lng : myPackage.location.lon
 		};
+	var destLatLng = {
+			lat : myPackage.destination.lat,
+			lng : myPackage.destination.lon
+	};
 	var geocoder = new google.maps.Geocoder();
-	geocoder.geocode({
-		'location' : myLatLng
-	}, function(results, status) {
+	geocoder.geocode({'location' : destLatLng}, function(results, status) {
 		if (status === google.maps.GeocoderStatus.OK) {
 			if (results[1]) {
 				location= (results[1].formatted_address);
@@ -81,23 +83,48 @@ function addGeocode(myPackage){
 			location = "Unknown or unpopulated area"
 			console.log('Geocoder failed due to: ' + status);
 		}
-		myPackage.packageLocation =location;
+		myPackage.packageDestination = location;
+	});
+	geocoder.geocode({'location' : myLatLng}, function(results, status) {
+		if (status === google.maps.GeocoderStatus.OK) {
+			if (results[1]) {
+				location= (results[1].formatted_address);
+			} else {
+				console.log('No results found');
+			}
+		} else {
+			location = "Unknown or unpopulated area"
+			console.log('Geocoder failed due to: ' + status);
+		}
+		myPackage.packageLocation = location;
 	});
 }
 function showPackageDetails(myPackage) {
-	var html;
-	if (myPackage.delivered) {
-		html = "Delivered";
+	var details;
+	var notes = myPackage.notes;
+	if (notes != null){
+		notes = "<br><br><br>Notes: " + notes;
 	} else {
-		html = "UUID: " + myPackage.uuid + "<br>ETA: "
-				+ Math.round(myPackage.eta * 100) / 100 + " hours" + "<br>"
+		notes = "";
+	}
+	if (myPackage.delivered) {
+		details = "UUID: " + myPackage.uuid
+			+ "<br><br> Current Location: " + myPackage.packageLocation
+			+ "<br><br> Delivered"
+			+ "<br>";
+	} else {
+		details = "UUID: " + myPackage.uuid 
+				+ "<br><br>Destination: " + myPackage.packageDestination
+				+ "<br><br>ETA: "
+				+ Math.round(myPackage.eta * 100) / 100 + " hours" + "<br><br>"
 				+ "Distance: "
 				+ (Math.round(myPackage.distanceFromDestination / 10) / 100)
-				+ " Km" + "<br>" + "Current Location: " + myPackage.packageLocation
-				+ "<br><br><br>Notes:<br>" + myPackage.notes;
+				+ " Km" + "<br><br>" + "Current Location: " + myPackage.packageLocation
+				+ "<br><br> Not delivered"
+				+ notes
+				+ "<br>";
 	}
-	document.getElementById('details').innerHTML = html;
-	//document.getElementById('notesInputUUID').value = myPackage.uuid;
+	document.getElementById('details').innerHTML = details;
 }
 function showPackagePath(myPackage) {
 	deleteMapObjects();
@@ -141,11 +168,7 @@ function showPackagePath(myPackage) {
 			lng : myPackage.destination.lon
 		},
 		map : map,
-		icon: {
-	        size: new google.maps.Size(20, 20),
-	        scaledSize: new google.maps.Size(20, 20),
-	        url: green
-		}
+		icon: green
 	});
 
 	deleteOnReclick.push(start);
