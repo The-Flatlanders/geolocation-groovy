@@ -1,5 +1,5 @@
 *{
-    font-family:monospace;
+    font-family:sans-serif;
 }
 #username{
 }
@@ -8,18 +8,33 @@
 body {
     text-align: center;
 	vertical-align: middle;
-	background-color: #E8DDCB;
-	color: #031634;
-	position: relative;
-	top: 100px;
-	padding: 0px;
-	font-size: 20px;
-	font-weight: bold;
 }
-div{
-	border: 20px solid #036564;
-	background-color: #036564;
+
+#card{
+	width:400px;
+	margin:auto;
+	position:relative;
+	top:100px;
+	border-radius:12px;
+	color:#E8DDCB;
+	background-color: #031634;
+	padding:20px;
+}
+.field{
+	border-radius:3px;
+	margin:10px;
+	padding:5px;
+	border: none;
+	width:70%;
 }
 input[type="button"]{
-	
+	color:#E8DDCB;
+	border-radius:3px;
+	padding:15px 32px;
+	background-color:#036564;
+	border: none;
+	width:70%;
+}
+input[type="button"]:hover{
+	color:#CDB380;
 }

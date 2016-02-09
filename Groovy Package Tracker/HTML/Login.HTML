@@ -4,19 +4,44 @@
 <link rel="stylesheet" type="text/css" href="LoginStyleSheet.css" />
 </head>
 <body>
-<div>
-	The Flatlanders' Package Tracker
+<div id=card>
+<img src="idt_logo.png"/>
+
+	<h3>Package Tracker</h3>
 	<br>
 	<br>
-	Username:
-	<input type = "text" id = "username"/>
+<input class=field type="text" id="userNamePlaceholder" value="username" onFocus="setUser();"/>
+<input class=field type="text" id="username" value="" onBlur="checkUser();" style="display: none;"/>	<br>
 	<br>
-	Password:
-	<input type = "password" id = "password"/>
-	<br>
+<input class=field type="text" id="placeholder" value="password" onFocus="setPass();"/>
+<input class=field type="password" id="password" value="" onBlur="checkPass();" style="display: none;"/>	<br>
 	<br>
 	<input type = "button" onclick="exec()" value = "Submit"/>
 </div>
+<script>
+function setPass() {
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('password').style.display = 'inline';
+    document.getElementById('password').focus();
+}
+function checkPass() {
+    if (document.getElementById('password').value.length == 0) {
+        document.getElementById('placeholder').style.display = 'inline';
+        document.getElementById('password').style.display = 'none';
+    }
+}
+function setUser() {
+    document.getElementById('userNamePlaceholder').style.display = 'none';
+    document.getElementById('username').style.display = 'inline';
+    document.getElementById('username').focus();
+}
+function checkUser() {
+    if (document.getElementById('username').value.length == 0) {
+        document.getElementById('userNamePlaceholder').style.display = 'inline';
+        document.getElementById('username').style.display = 'none';
+    }
+}
+</script>
 <script src=serverPostRequest.js></script>
 <script>
 function exec(){
