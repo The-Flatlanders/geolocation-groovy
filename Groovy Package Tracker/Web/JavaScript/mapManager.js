@@ -97,7 +97,7 @@ function showPackageDetails(myPackage) {
 				+ "<br><br><br>Notes:<br>" + myPackage.notes;
 	}
 	document.getElementById('details').innerHTML = html;
-	document.getElementById('notesInputUUID').value = myPackage.uuid;
+	//document.getElementById('notesInputUUID').value = myPackage.uuid;
 }
 function showPackagePath(myPackage) {
 	deleteMapObjects();
@@ -116,9 +116,9 @@ function showPackagePath(myPackage) {
 
 		var polyline = new google.maps.Polyline({
 			path : [ latlong1, latlong2 ],
-			strokeColor : '#033649',
-			strokeOpacity : .78,
-			strokeWeight : 2,
+			strokeColor : '#036564',
+			strokeOpacity : 1.0,
+			strokeWeight : 4,
 			map : map
 		});
 		deleteOnReclick.push(polyline);
