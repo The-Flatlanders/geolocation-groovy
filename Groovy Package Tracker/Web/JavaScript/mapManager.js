@@ -116,15 +116,15 @@ function showPackagePath(myPackage) {
 
 		var polyline = new google.maps.Polyline({
 			path : [ latlong1, latlong2 ],
-			strokeColor : '#FF0000',
-			strokeOpacity : 1.0,
-			strokeWeight : 5,
+			strokeColor : '#033649',
+			strokeOpacity : .78,
+			strokeWeight : 2,
 			map : map
 		});
 		deleteOnReclick.push(polyline);
 	}
 
-	var blue = 'blue-dot.png';''
+	var blue = '../Resources/blue-dot.png';
 	var start = new google.maps.Marker({
 		position : {
 			lat : myPackage.startingLocation.lat,
@@ -134,7 +134,7 @@ function showPackagePath(myPackage) {
 		icon:blue
 	});
 
-	var green = 'green-dot.png';
+	var green = '../Resources/green-dot.png';
 	var end = new google.maps.Marker({
 		position : {
 			lat : myPackage.destination.lat,
