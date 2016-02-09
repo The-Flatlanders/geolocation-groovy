@@ -134,7 +134,7 @@ function showPackagePath(myPackage) {
 		icon:blue
 	});
 
-	var green = 'green-circle.png';
+	var green = 'green-dot.png';
 	var end = new google.maps.Marker({
 		position : {
 			lat : myPackage.destination.lat,
