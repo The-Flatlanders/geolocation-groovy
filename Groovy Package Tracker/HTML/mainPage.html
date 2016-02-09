@@ -31,13 +31,12 @@
 			<div id="DetailTab">
 				<a href="#DetailTab">Details</a>
 				<div>
+					<div id="details"></div>
 					<div id="notes">
-						UUID: <div id="notesInputUUID" name="notesInputUUID"></div><br>
 						Notes: <input type="text" id="notesInput" name="notesInput"><br>
 						<input type="button" value="Submit Notes" onclick="addNotes()"/>
 						<br>
 					</div>
-					<div id="details"></div>
 				</div>
 			</div>
 		</div>
@@ -89,7 +88,7 @@
          	});
          }
          function addNotes(){		
-         			if(confirm("Are you sure? This will over write any current notes on this package.")){
+         			if(confirm("Are you sure? This will over write any current notes on this package?")){
          				var pack = getActivePackage();
          				if(pack != null){
 							pack.notes = document.getElementById('notesInput').value;
