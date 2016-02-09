@@ -1,0 +1,25 @@
+*{
+    font-family:monospace;
+}
+#username{
+}
+#password{
+}
+body {
+    text-align: center;
+	vertical-align: middle;
+	background-color: #E8DDCB;
+	color: #031634;
+	position: relative;
+	top: 100px;
+	padding: 0px;
+	font-size: 20px;
+	font-weight: bold;
+}
+div{
+	border: 20px solid #036564;
+	background-color: #036564;
+}
+input[type="button"]{
+	
+}

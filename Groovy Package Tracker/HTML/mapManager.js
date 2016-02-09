@@ -46,7 +46,7 @@ function showPackage(myPackage) {
 	var marker = new google.maps.Marker({
 		position : myLatLng,
 		map : map,
-		title : myPackage.uuid
+		title : myPackage.uuid,
 	});
 	allMarkers.push(marker);
 	sizeMap();
@@ -118,30 +118,34 @@ function showPackagePath(myPackage) {
 			path : [ latlong1, latlong2 ],
 			strokeColor : '#FF0000',
 			strokeOpacity : 1.0,
-			strokeWeight : 10,
+			strokeWeight : 5,
 			map : map
 		});
 		deleteOnReclick.push(polyline);
 	}
 
-	var green = 'green-dot.png';
+	var blue = 'blue-dot.png';
 	var start = new google.maps.Marker({
 		position : {
 			lat : myPackage.startingLocation.lat,
 			lng : myPackage.startingLocation.lon
 		},
 		map : map,
-		icon : green
+		icon:blue
 	});
 
-	var blue = 'blue-dot.png';
+	var green = 'green-circle.png';
 	var end = new google.maps.Marker({
 		position : {
 			lat : myPackage.destination.lat,
 			lng : myPackage.destination.lon
 		},
 		map : map,
-		icon : blue
+		icon: {
+	        size: new google.maps.Size(20, 20),
+	        scaledSize: new google.maps.Size(20, 20),
+	        url: green
+		}
 	});
 
 	deleteOnReclick.push(start);
