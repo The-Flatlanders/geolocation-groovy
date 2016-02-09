@@ -1,17 +1,17 @@
-Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html
-Serve the project from a web server instead of localhost
-add the website to a localhost to fix the chrome bug
-only consider the currently selected package in zoom function
-implement a control to zoom back out in the details tab
-clean up and style all tabs
-change password from the account tab
-user registration page
-store user accounts in a file so they persist when server goes down
-organize HTML folder
-update git readme
-document code
-fix login javascript checkpass and setpass to accept parameters to eliminate redundancy
-REMEMBER TO RETEST THE CODE BEFORE YOU PUSH
+* Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html
+* Serve the project from a web server instead of localhost
+* add the website to a localhost to fix the chrome bug
+* only consider the currently selected package in zoom function
+* implement a control to zoom back out in the details tab
+* clean up and style all tabs
+* change password from the account tab
+* user registration page
+* store user accounts in a file so they persist when server goes down
+* organize HTML folder
+* update git readme
+* document code
+* fix login javascript checkpass and setpass to accept parameters to eliminate redundancy
+* REMEMBER TO RETEST THE CODE BEFORE YOU PUSH
 
 # geolocation-groovy
 IDT is starting a valuable package delivery service and has already developed half of the software/hardware solution needed to track all of the valuable packages. IDT has built custom GPS units for each package that will transmit positional data to our network. IDT has also aggregated all of the data for all of the packages in one place since all of the packages report to the same RESTful web service. This program is intended to be the other side: the interface with the user.
