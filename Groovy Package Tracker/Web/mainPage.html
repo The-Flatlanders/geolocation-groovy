@@ -15,8 +15,10 @@
 			<div id="UUIDtab">
 				<a href="#UUIDtab">UUID</a>
 				<div id="form">
-					Package UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
+					Add UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
 					<input type="button" value="Submit uuid" onclick="addPackage()" />
+					<br><br><br><input type="button" value="Refresh Map" onclick="showMyPackages()" />
+					
 				</div>
 				
 			</div>
@@ -33,7 +35,9 @@
 				<div>
 					<div id="details"></div>
 					<div id="notes">
-						Notes: <input type="text" id="notesInput" name="notesInput"><br>
+						<br>
+						Change Notes:<br>
+						<textarea id="notesInput" name="notesInput" maxlength= "100" cols="26" rows="5"></textarea>
 						<input type="button" value="Submit Notes" onclick="addNotes()"/>
 						<br>
 					</div>
@@ -88,18 +92,18 @@
          	});
          }
          function addNotes(){		
-         			if(confirm("Are you sure? This will over write any current notes on this package?")){
-         				var pack = getActivePackage();
-         				if(pack != null){
-							pack.notes = document.getElementById('notesInput').value;
-							var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
-			         		execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){inspectPackage(pack)});
-							document.getElementById('notesInput').value = "";
-         				}
-         				else{
-         					alert("No package selected to apply notes to. Click on a package to apply notes");
-         				}
+				if(confirm("Are you sure? This will over write any current notes on this package?")){
+					var pack = getActivePackage();
+					if(pack != null){
+						pack.notes = document.getElementById('notesInput').value;
+						var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
+						execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){inspectPackage(pack)});
+						document.getElementById('notesInput').value = "";
 					}
+					else{
+						alert("No package selected to apply notes to. Click on a package to apply notes");
+					}
+				}
 		}
       </script>
 </body>
