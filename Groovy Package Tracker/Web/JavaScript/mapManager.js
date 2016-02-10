@@ -11,7 +11,7 @@ var map;
  */
 var noPackagesYet = true;
 /**
- * Map items to delete on a reclick of a different marker than the one currently selected
+ * Map items (markers, or polylines) to delete on a reclick of a different marker than the one currently selected
  */
 var deleteOnReclick = [];
 /**
@@ -62,17 +62,10 @@ function sizeMap(markersToUse) {
  */
 function deleteMapObjects() {
 	for (var i = 0; i < deleteOnReclick.length; i++) {
-		for (var j = 0; j < allMarkers.length; j++) {
-			if (allMarkers[j] == deleteOnReclick[i]) {
-				allMarkers.splice(j, 1);
-			}
-		}
 		deleteOnReclick[i].setMap(null);
 	}
-	deleteOnReclick.length = 0;
+	deleteOnReclick=[];
 }
-
-
 /**
  * If a package has been clicked on, returns that package. Otherwise return null.
  * @returns
