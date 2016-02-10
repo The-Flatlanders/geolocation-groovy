@@ -69,6 +69,7 @@
 		 var packages;
          function showMyPackages()
          {
+        	document.getElementById("notes").style.visibility = "hidden"
         	var userPackages = [];
          	execHttpRequest("POST","http://localhost:8000/packages",true,"",function(responseText){
          		if(responseText == "noUser"){
@@ -99,10 +100,6 @@
 						var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
 						execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){inspectPackage(pack)});
 						document.getElementById('notesInput').value = "";
-					}
-					else{
-						alert("No package selected to apply notes to. Click on a package to apply notes");
-					}
 				}
 		}
       </script>

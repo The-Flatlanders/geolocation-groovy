@@ -101,6 +101,7 @@ function addGeocode(myPackage){
 }
 function showPackageDetails(myPackage) {
 	var details;
+	document.getElementById('notes').style.visibility = "visible";
 	var notes = myPackage.notes;
 	if (notes != null){
 		notes = "<br><br><br>Notes: " + notes;
@@ -174,11 +175,17 @@ function showPackagePath(myPackage) {
 	deleteOnReclick.push(start);
 	deleteOnReclick.push(end);
 	
+	var current = new google.maps.Marker({
+		position : {
+			lat : myPackage.currentLocation.lat,
+			lng : myPackage.currentLocation.lon
+		}
+	});
+	
 	var markersToInclude = [];
 	markersToInclude.push(start);
 	markersToInclude.push(end);
-	//markersToInclude.push();
-	
+	markersToInclude.push(current);
 	
 	sizeMap(markersToInclude);
 }
