@@ -74,7 +74,6 @@
          		if(responseText == "noUser"){
          			window.location.href = "Login.html"
          		}
-         		console.log(responseText);
          		var packageList=JSON.parse(responseText);
          		var packageLocations=[];
          		packageList.forEach(function(currentPackage) { 
@@ -83,12 +82,10 @@
          		initMap();
          		packageList.forEach(function(currentPackage) { 
          			showPackage(currentPackage);
-         			console.log("currentPackage");
          			userPackages.push(currentPackage.uuid);
 
         		});
          		document.getElementById('trackedPackages').innerHtml=userPackages.toString();
-         		console.log(userPackages);
          	});
          }
          function addNotes(){		
