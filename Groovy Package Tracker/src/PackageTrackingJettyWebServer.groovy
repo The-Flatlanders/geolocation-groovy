@@ -15,10 +15,19 @@ import javax.servlet.*
  *	Associate package with user (doPost)<br>
  */
 class SimpleGroovyServlet extends HttpServlet {
-	private HashMap<String, TrackablePackage> trackedIDs=new HashMap() //Hashmap of all tracked packages and their information
-	private HashMap<String, String> authorization = new HashMap<String, String>() //Hashmap of all usernames and password
+	/**
+	 * Hashmap of all tracked packages and their information
+	 */
+	private HashMap<String, TrackablePackage> trackedIDs=new HashMap() 
+	/**
+	 * Hashmap of all usernames and password
+	 */
+	private HashMap<String, String> authorization = new HashMap<String, String>()
 	private HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
-	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() //For associating packages to users
+	/**
+	 * For associating packages to users
+	 */
+	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() 
 	
 	/**
 	 * Handles server doGet requests<br>
