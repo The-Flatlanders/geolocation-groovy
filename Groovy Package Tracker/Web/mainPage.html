@@ -58,7 +58,6 @@
          window.onunload = "logout()";
       </script>
 	<script type="text/javascript">	
-         xmlhttp=new XMLHttpRequest();	
          function addPackage()
          {
          	var params = "uuid="+document.getElementById('uuid').value;
@@ -97,6 +96,7 @@
 						var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
 						execHttpRequest("POST","http://localhost:8000/updateNotes",true,params,function(){inspectPackage(pack)});
 						document.getElementById('notesInput').value = "";
+				}
 				}
 		}
       </script>

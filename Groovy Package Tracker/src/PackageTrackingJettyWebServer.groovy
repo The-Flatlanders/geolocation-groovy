@@ -81,7 +81,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 	/**
 	 * Handles server doPost request
-	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*
+	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*, /updateNotes/.*
 	 */
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
 		if(req.getPathInfo().equals("/login")){

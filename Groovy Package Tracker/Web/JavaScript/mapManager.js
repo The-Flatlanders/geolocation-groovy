@@ -40,8 +40,8 @@ function getActivePackage() {
 }
 function showPackage(myPackage) {
 	var myLatLng = {
-		lat : myPackage.location.lat,
-		lng : myPackage.location.lon
+			lat : myPackage.location.lat,
+			lng : myPackage.location.lon
 	};
 	var marker = new google.maps.Marker({
 		position : myLatLng,
@@ -54,6 +54,7 @@ function showPackage(myPackage) {
 	marker.addListener('click', function(){
 		inspectPackage(myPackage);
 	});
+
 }
 function inspectPackage(myPackage) {
 	activePackage=myPackage;
@@ -66,7 +67,7 @@ function addGeocode(myPackage){
 	var myLatLng = {
 			lat : myPackage.location.lat,
 			lng : myPackage.location.lon
-		};
+	};
 	var destLatLng = {
 			lat : myPackage.destination.lat,
 			lng : myPackage.destination.lon
@@ -81,7 +82,7 @@ function addGeocode(myPackage){
 			}
 		} else {
 			location = "Unknown or unpopulated area"
-			console.log('Geocoder failed due to: ' + status);
+				console.log('Geocoder failed due to: ' + status);
 		}
 		myPackage.packageDestination = location;
 	});
@@ -94,7 +95,7 @@ function addGeocode(myPackage){
 			}
 		} else {
 			location = "Unknown or unpopulated area"
-			console.log('Geocoder failed due to: ' + status);
+				console.log('Geocoder failed due to: ' + status);
 		}
 		myPackage.packageLocation = location;
 	});
@@ -110,20 +111,20 @@ function showPackageDetails(myPackage) {
 	}
 	if (myPackage.delivered) {
 		details = "UUID: " + myPackage.uuid
-			+ "<br><br> Current Location: " + myPackage.packageLocation
-			+ "<br><br> Delivered"
-			+ "<br>";
+		+ "<br><br> Current Location: " + myPackage.packageLocation
+		+ "<br><br> Delivered"
+		+ "<br>";
 	} else {
 		details = "UUID: " + myPackage.uuid 
-				+ "<br><br>Destination: " + myPackage.packageDestination
-				+ "<br><br>ETA: "
-				+ Math.round(myPackage.eta * 100) / 100 + " hours" + "<br><br>"
-				+ "Distance: "
-				+ (Math.round(myPackage.distanceFromDestination / 10) / 100)
-				+ " Km" + "<br><br>" + "Current Location: " + myPackage.packageLocation
-				+ "<br><br> Not delivered"
-				+ notes
-				+ "<br>";
+		+ "<br><br>Destination: " + myPackage.packageDestination
+		+ "<br><br>ETA: "
+		+ Math.round(myPackage.eta * 100) / 100 + " hours" + "<br><br>"
+		+ "Distance: "
+		+ (Math.round(myPackage.distanceFromDestination / 10) / 100)
+		+ " Km" + "<br><br>" + "Current Location: " + myPackage.packageLocation
+		+ "<br><br> Not delivered"
+		+ notes
+		+ "<br>";
 	}
 	document.getElementById('details').innerHTML = details;
 }
@@ -134,12 +135,12 @@ function showPackagePath(myPackage) {
 		var cord1 = pastCords[i];
 		var cord2 = pastCords[i + 1];
 		var latlong1 = {
-			lat : cord1.lat,
-			lng : cord1.lon
+				lat : cord1.lat,
+				lng : cord1.lon
 		};
 		var latlong2 = {
-			lat : cord2.lat,
-			lng : cord2.lon
+				lat : cord2.lat,
+				lng : cord2.lon
 		};
 
 		var polyline = new google.maps.Polyline({
@@ -174,18 +175,19 @@ function showPackagePath(myPackage) {
 
 	deleteOnReclick.push(start);
 	deleteOnReclick.push(end);
-	
+
 	var current = new google.maps.Marker({
 		position : {
-			lat : myPackage.currentLocation.lat,
-			lng : myPackage.currentLocation.lon
-		}
+			lat : myPackage.location.lat,
+			lng : myPackage.location.lon
+		},
+		map : map,
 	});
-	
+
 	var markersToInclude = [];
 	markersToInclude.push(start);
 	markersToInclude.push(end);
 	markersToInclude.push(current);
-	
+
 	sizeMap(markersToInclude);
 }
