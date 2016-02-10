@@ -1,8 +1,8 @@
-* Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html
+* Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html DONE
 * Serve the project from a web server instead of localhost
 * add the website to a localhost to fix the chrome bug
-* only consider the currently selected package in zoom function
-* implement a control to zoom back out in the details tab
+* only consider the currently selected package in zoom function DONE
+* implement a control to zoom back out in the details tab <-- It seems like this is the same button as 1, so DONE?
 * clean up and style all tabs
 * change password from the account tab
 * user registration page
