@@ -12,14 +12,14 @@ function initMap() {
 		zoom : 2
 	});
 }
-function sizeMap() {
+function sizeMap(markersToUse) {
 	var bounds = new google.maps.LatLngBounds();
-	for (i = 0; i < allMarkers.length; i++) {
-		bounds.extend(allMarkers[i].getPosition());
+	for (i = 0; i < markersToUse.length; i++) {
+		bounds.extend(markersToUse[i].getPosition());
 	}
 	map.setCenter(bounds.getCenter());
 	map.fitBounds(bounds);
-	map.setZoom(map.getZoom() - 1);
+	map.setZoom(map.getZoom());
 	if (map.getZoom() > 10) {
 		map.setZoom(10);
 	}
@@ -49,7 +49,7 @@ function showPackage(myPackage) {
 		title : myPackage.uuid,
 	});
 	allMarkers.push(marker);
-	sizeMap();
+	sizeMap(allMarkers);
 	addGeocode(myPackage);
 	marker.addListener('click', function(){
 		inspectPackage(myPackage);
@@ -151,7 +151,7 @@ function showPackagePath(myPackage) {
 		deleteOnReclick.push(polyline);
 	}
 
-	var blue = '../Resources/blue-dot.png';
+	var blue = '../Web/Resources/blue-dot.png';
 	var start = new google.maps.Marker({
 		position : {
 			lat : myPackage.startingLocation.lat,
@@ -161,7 +161,7 @@ function showPackagePath(myPackage) {
 		icon:blue
 	});
 
-	var green = '../Resources/green-dot.png';
+	var green = '../Web/Resources/green-dot.png';
 	var end = new google.maps.Marker({
 		position : {
 			lat : myPackage.destination.lat,
@@ -173,7 +173,12 @@ function showPackagePath(myPackage) {
 
 	deleteOnReclick.push(start);
 	deleteOnReclick.push(end);
-	allMarkers.push(start);
-	allMarkers.push(end);
-	sizeMap();
+	
+	var markersToInclude = [];
+	markersToInclude.push(start);
+	markersToInclude.push(end);
+	//markersToInclude.push();
+	
+	
+	sizeMap(markersToInclude);
 }
