@@ -43,7 +43,7 @@ commiting tells git to save your place as a checkpoint. This checkpoint can be r
 * go to the event simulator folder in the project
 * run the file labelled Exec
 * input the args (simple args are -n *.gpx)
-
+http://stackoverflow.com/questions/2539461/how-to-access-java-servlet-running-on-my-pc-from-outside
 E8DDCB
 CDB380
 036564
