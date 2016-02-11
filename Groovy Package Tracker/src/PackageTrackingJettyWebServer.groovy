@@ -84,7 +84,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @param resp The server response, contains help document information
 	 */
 	private void help(HttpServletRequest req, HttpServletResponse resp){
-		String helpText = returnText("Text/help");
+		String helpText = returnText("Text/helpText");
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
 		writer.print(helpText)
