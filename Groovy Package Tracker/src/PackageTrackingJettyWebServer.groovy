@@ -18,7 +18,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	/**
 	 * Hashmap of all tracked packages and their information
 	 */
-	private HashMap<String, TrackablePackage> trackedIDs=new HashMap() 
+	private HashMap<String, TrackablePackage> trackedIDs=new HashMap()
 	/**
 	 * Hashmap of all usernames and password
 	 */
@@ -27,8 +27,8 @@ class SimpleGroovyServlet extends HttpServlet {
 	/**
 	 * For associating packages to users
 	 */
-	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() 
-	
+	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>()
+
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage , /logout, /help
@@ -77,7 +77,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		cookie.setMaxAge(0);
 		resp.addCookie(cookie);
 	}
-	
+
 	/**
 	 * Return the help document to display
 	 * @param req The server request
@@ -122,7 +122,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(req.getPathInfo().startsWith("/packagetrackupdate")) {
 			packageTrackUpdate(req,resp)
 		}
-		
+
 		if(req.getPathInfo().startsWith("/updateNotes")) {
 			updateNotes(req,resp)
 		}
@@ -152,7 +152,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		else{
 			authorization.put(username, password)
-			
+
 			Cookie user = new Cookie("username", username)
 			resp.addCookie(user)
 		}
@@ -189,11 +189,13 @@ class SimpleGroovyServlet extends HttpServlet {
 		if(username.equals("admin")){
 			packageInfos = trackedIDs.values()
 		}
+		synchronized(packageInfos){
 
-		//Returns packages
-		def toJson = JsonOutput.toJson(packageInfos)
-		writer.print(toJson)
-		writer.flush()
+			//Returns packages
+			def toJson = JsonOutput.toJson(packageInfos)
+			writer.print(toJson)
+			writer.flush()
+		}
 	}
 
 	/**
@@ -223,7 +225,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			packageInfos.add(trackedIDs.get(uuid))
 		}
 	}
-	
+
 	/**
 	 * Associates packages with a user to be displayed later
 	 * @param req The server request, contains new package UUIDs to add and user cookie
@@ -257,7 +259,7 @@ class SimpleGroovyServlet extends HttpServlet {
 				}
 				else{
 					//This code tracks all non delivery events
-					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)					
+					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)
 				}
 			}
 		} catch (Exception e) { e.printStackTrace() /*report an error*/ }
