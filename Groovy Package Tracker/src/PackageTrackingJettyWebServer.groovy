@@ -31,7 +31,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	
 	/**
 	 * Handles server doGet requests<br>
-	 * Accepts path info types: /tracknewpackage 
+	 * Accepts path info types: /tracknewpackage , /logout, /help
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		if(req.getPathInfo().equals("/tracknewpackage")) {
@@ -39,6 +39,9 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		if(req.getPathInfo().equals("/logout")){
 			logout(req, resp);
+		}
+		if(req.getPathInfo().equals("/help")){
+			help(req, resp);
 		}
 	}
 
@@ -74,6 +77,18 @@ class SimpleGroovyServlet extends HttpServlet {
 		cookie.setMaxAge(0);
 		resp.addCookie(cookie);
 	}
+	
+	/**
+	 * Return the help document to display
+	 * @param req The server request
+	 * @param resp The server response, contains help document information
+	 */
+	private void help(HttpServletRequest req, HttpServletResponse resp){
+		String helpText = returnText("Text/helpText");
+		def writer = resp.getWriter()
+		resp.setContentType("text/plain")
+		writer.print(helpText)
+	}
 
 	/**
 	 * Returns all of the text from a given file 
@@ -81,7 +96,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @return The text from a given file
 	 */
 	private String returnText(String path){
-		def scanner = new Scanner( new File(path))
+		def scanner = new Scanner(new File(path));
 		String text = scanner.useDelimiter("\\A").next()
 		scanner.close()
 		return text

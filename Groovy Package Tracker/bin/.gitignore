@@ -1,5 +1,7 @@
-/Coordinate.class
 /PackageTrackingJettyWebServer.class
 /SimpleGroovyServlet.class
+<<<<<<< HEAD
 /TrackablePackage.class
 /UserAccount.class
+=======
+>>>>>>> branch 'master' of https://github.com/The-Flatlanders/geolocation-groovy

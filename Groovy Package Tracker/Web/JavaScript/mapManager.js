@@ -160,17 +160,17 @@ function showPackagePath(myPackage) {
 		map : map,
 		icon: green
 	});
-
-	deleteOnReclick.push(start);
-	deleteOnReclick.push(end);
-
 	var current = new google.maps.Marker({
 		position : {
 			lat : myPackage.location.lat,
 			lng : myPackage.location.lon
 		},
-		map : map,
 	});
+
+	deleteOnReclick.push(current);
+	deleteOnReclick.push(start);
+	deleteOnReclick.push(end);
+
 
 	var markersToInclude = [];
 	markersToInclude.push(start);
