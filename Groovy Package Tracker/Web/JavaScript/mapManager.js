@@ -171,7 +171,7 @@ function showPackagePath(myPackage) {
 	deleteOnReclick.push(start);
 	deleteOnReclick.push(end);
 
-	
+
 	var markersToInclude = [];
 	markersToInclude.push(start);
 	markersToInclude.push(end);
