@@ -3,10 +3,10 @@ package server
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.servlet.*
 import geo.*
-import accounts.*;
+import accounts.*
 import accounts.AccountManager
-import geo.Coordinate;
-import geo.TrackablePackage;
+import geo.Coordinate
+import geo.TrackablePackage
 import groovy.json.*
 import javax.servlet.http.*
 import javax.servlet.*
@@ -31,13 +31,13 @@ class SimpleGroovyServlet extends HttpServlet {
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
 		if(req.getPathInfo().equals("/tracknewpackage")) {
-			trackNewPackage(req, resp);
+			trackNewPackage(req, resp)
 		}
 		if(req.getPathInfo().equals("/logout")){
-			logout(req, resp);
+			logout(req, resp)
 		}
 		if(req.getPathInfo().equals("/help")){
-			help(req, resp);
+			help(req, resp)
 		}
 	}
 	
@@ -80,7 +80,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		def responseString = "{ \"ackUUID\":\""+uuids+"\" }"
 		double lat=Double.parseDouble(req.getParameterMap().get("destinationLat")[0])
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
-		println responseString;
+		println responseString
 		//Creates a new package
 		allTrackedPackages.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
 		resp.setContentType("application/json")
@@ -97,9 +97,9 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void logout(HttpServletRequest req, HttpServletResponse resp){
 		def info = req.getCookies()
 		def cookie = info[0]
-		cookie.setValue(null);
-		cookie.setMaxAge(0);
-		resp.addCookie(cookie);
+		cookie.setValue(null)
+		cookie.setMaxAge(0)
+		resp.addCookie(cookie)
 	}
 
 	/**
@@ -108,7 +108,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @param resp The server response, contains help document information
 	 */
 	private void help(HttpServletRequest req, HttpServletResponse resp){
-		String helpText = returnText("Text/helpText");
+		String helpText = returnText("Text/helpText")
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
 		writer.print(helpText)
@@ -125,26 +125,26 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Uses cookies to score username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
-		AccountManager.restoreAccountsFromFile();
-		def accounts = AccountManager.getAccounts();
-		String response;
+		AccountManager.restoreAccountsFromFile()
+		def accounts = AccountManager.getAccounts()
+		String response
 		//Checks for a null field
 		if(username == "" || password == ""){
 			response=("blankfield")
 		}
 		//checks if the username does not exist or password is incorrect
 		else if(!(accounts.containsKey(username))  || accounts.get(username).getPassword()!= password){
-			response="mismatch";
+			response="mismatch"
 		}
 		else{
 			//log the user into the web page
-			println "new Login from user "+username;
+			println "new Login from user "+username
 			Cookie user = new Cookie("username", username)
 			resp.addCookie(user)
 		}
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
-		writer.print(response);
+		writer.print(response)
 	}
 
 	/**
@@ -160,14 +160,14 @@ class SimpleGroovyServlet extends HttpServlet {
 			username = info[0].getValue()
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			writer.print("noUser"); //no user logged in, redirect to login page
-			return;
+			writer.print("noUser") //no user logged in, redirect to login page
+			return
 		}
 
 		//Creates list of packages either entered by the user previously or now
 		HashSet<TrackablePackage> packageInfos
 		//if this user exists
-		def accounts = AccountManager.getAccounts();
+		def accounts = AccountManager.getAccounts()
 		if(accounts.containsKey(username)){ //if username exists
 			if(accounts.get(username).isAdmin()){//if user is an admin
 				packageInfos=allTrackedPackages.values()//return all currently tracked packages
@@ -175,8 +175,8 @@ class SimpleGroovyServlet extends HttpServlet {
 				packageInfos=accounts.get(username).getTrackedPackages()//return that user's tracked packages
 			}
 		}else{
-			writer.print("noUser");// username is invalid, redirect to login page
-			return;
+			writer.print("noUser")// username is invalid, redirect to login page
+			return
 		}
 		//Returns packages
 		resp.setContentType("application/json")
@@ -197,7 +197,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			username=info[0].getValue()
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			return;
+			return
 		}
 		def accounts = AccountManager.getAccounts()
 		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
@@ -214,8 +214,8 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void updateNotes(HttpServletRequest req, HttpServletResponse resp){
 		def uuid = req.getParameter("uuid")
 		def notes = req.getParameter("notes")
-		def currentPackage = allTrackedPackages.get(uuid);
-		currentPackage.setNotes(notes);
+		def currentPackage = allTrackedPackages.get(uuid)
+		currentPackage.setNotes(notes)
 	}
 
 	/**
@@ -247,7 +247,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 
 }
-AccountManager.initAccounts();
+AccountManager.initAccounts()
 //Starts the server on port 8000
 def server = new Server(8000)
 ServletHandler handler = new ServletHandler()
