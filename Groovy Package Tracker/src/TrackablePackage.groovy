@@ -99,10 +99,20 @@ class TrackablePackage {
 		return Coordinate.getDistance(startingLocation, location);
 	}
 
+	/**
+	 * Returns the estimated time of arrival in seconds. 
+	 * It finds the distance to destination and divides by the average speed. Then, it multiplies by a ratio that is the 
+	 * average deviation from the straight line path to the starting location.
+	 * @return The ETA
+	 */
 	public synchronized int getETAInSeconds(){
 		return (getDistanceFromDestination()/averageSpeed) * (getDistanceTraveledSoFar() / calculateLineDistance())
 	}
 
+	/**
+	 * Returns the ETA in seconds
+	 * @return The ETA
+	 */
 	public synchronized double geteta(){
 		int ns= getETAInSeconds()
 		return ns/3600;
