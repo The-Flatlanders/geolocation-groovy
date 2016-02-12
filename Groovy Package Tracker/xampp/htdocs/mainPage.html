@@ -56,7 +56,7 @@
 		function logout() {
 			execHttpRequest("GET", "http://localhost:8000/logout", false, "",
 					function() {
-						/*window.location.href = "Login.html"*/;
+						window.location.href = "Login.html";
 					})
 		}
 		window.onunload = "logout()";
@@ -82,8 +82,8 @@
 					"",
 					function(responseText) {
 						if (responseText == "noUser") {
-							/*window.location.href = "Login.html"
-	*/					}
+							//window.location.href = "Login.html";
+												}
 						var packageList = JSON.parse(responseText);
 						var packageLocations = [];
 						packageList.forEach(function(currentPackage) {

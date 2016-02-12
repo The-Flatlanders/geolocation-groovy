@@ -1,6 +1,12 @@
+package server
 @Grab(group='org.eclipse.jetty.aggregate', module='jetty-all', version='7.6.15.v20140411')
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.servlet.*
+import geo.*
+import accounts.*;
+import accounts.AccountManager
+import geo.Coordinate;
+import geo.TrackablePackage;
 import groovy.json.*
 import javax.servlet.http.*
 import javax.servlet.*
@@ -109,18 +115,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns all of the text from a given file 
-	 * @param The path of the file to return text from
-	 * @return The text from a given file
-	 */
-	private String returnText(String path){
-		def scanner = new Scanner(new File(path));
-		String text = scanner.useDelimiter("\\A").next()
-		scanner.close()
-		return text
-	}
-
-	/**
 	 * Authorizes the user, and, if confirmed, adds a cookie of the user's username
 	 * <br>Prints out to resp an error message in different cases:
 	 * @param req The server request, contains username and password
@@ -131,6 +125,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Uses cookies to score username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
+		AccountManager.restoreAccountsFromFile();
 		def accounts = AccountManager.getAccounts();
 		String response;
 		//Checks for a null field
@@ -138,7 +133,10 @@ class SimpleGroovyServlet extends HttpServlet {
 			response=("blankfield")
 		}
 		//checks if the username does not exist or password is incorrect
-		else if(!accounts.containsKey(username)  || accounts.get(username).getPassword()!= password){
+		else if(!(accounts.containsKey(username))  || accounts.get(username).getPassword()!= password){
+			println username;
+			println password;
+			println accounts;
 			response="mismatch";
 		}
 		else{
@@ -148,6 +146,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		def writer = resp.getWriter()
 		resp.setContentType("text/plain")
+		writer.print(response);
 	}
 
 	/**

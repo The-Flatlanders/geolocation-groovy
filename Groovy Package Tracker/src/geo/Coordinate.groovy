@@ -1,3 +1,4 @@
+package geo
 /**
  * Represents a single point located on the globe. All fields of the class are final. If the object represented
  * by the Coordinate moves, than a new Coordinate should be constructed.

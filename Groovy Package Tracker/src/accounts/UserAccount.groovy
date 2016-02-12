@@ -1,10 +1,13 @@
+package accounts
+import TrackablePackage;
 import groovy.json.*
-
+import geo.*;
+import server.*; 
 class UserAccount{
-	private String username;
-	private String password;
-	private HashSet<TrackablePackage> myTrackedPackages;
-	private boolean isAdmin;
+	protected String username;
+	protected String password;
+	protected HashSet<TrackablePackage> myTrackedPackages;
+	protected boolean isAdmin;
 	public UserAccount(String username,String password,boolean isAdmin){
 		this.username=username;
 		this.password=password;
@@ -12,7 +15,7 @@ class UserAccount{
 		myTrackedPackages=new HashSet<TrackablePackage>();
 	}
 	public void addPackage(TrackablePackage myPackage){
-		myTrackedPackages.put(myPackage);
+		myTrackedPackages.add(myPackage);
 	}
 	public HashSet<TrackablePackage> getTrackedPackages(){
 		return myTrackedPackages;
@@ -34,3 +37,4 @@ class UserAccount{
 	}
 	
 }
+

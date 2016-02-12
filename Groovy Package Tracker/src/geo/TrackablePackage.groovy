@@ -1,4 +1,7 @@
+package geo
 import java.text.SimpleDateFormat
+
+import Coordinate;
 import groovy.json.*;
 /**
  *Represents a single package and all of its information.  

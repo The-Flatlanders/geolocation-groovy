@@ -1,3 +1,4 @@
+package accounts
 import java.util.HashMap;
 import groovy.json.*;
 class AccountManager {
@@ -16,8 +17,11 @@ class AccountManager {
 		String text = scanner.useDelimiter("\\A").next();
 		scanner.close();
 		def jsonSlurper = new JsonSlurper()
-		accounts = jsonSlurper.parseText(text);
-		println(accounts);
+		def oldAccounts = jsonSlurper.parseText(text);
+		for(Object user:oldAccounts.values()){
+			println user;
+			addUserAccount(user.username,user.password,user.admin)
+		}
 	}
 	public static void addUserAccountFromConsole(){
 		Scanner input=new Scanner(System.in);

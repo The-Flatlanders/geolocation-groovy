@@ -1,1 +1,1 @@
-{"a":{"password":"m1","username":"a","trackedPackages":[],"admin":true}}
+{"a":{"password":"m1","username":"a","trackedPackages":[],"admin":true},"reg":{"password":"test","username":"reg","trackedPackages":[],"admin":false},"admin":{"password":"test","username":"admin","trackedPackages":[],"admin":true}}
