@@ -131,7 +131,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Uses cookies to score username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
-		def accounts = UserAccount.getAccounts();
+		def accounts = AccountManager.getAccounts();
 		String response;
 		//Checks for a null field
 		if(username == "" || password == ""){
@@ -170,7 +170,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Creates list of packages either entered by the user previously or now
 		HashSet<TrackablePackage> packageInfos
 		//if this user exists
-		def accounts = UserAccount.getAccounts();
+		def accounts = AccountManager.getAccounts();
 		if(accounts.containsKey(username)){ //if username exists
 			if(accounts.get(username).isAdmin()){//if user is an admin
 				packageInfos=allTrackedPackages.values()//return all currently tracked packages
@@ -202,7 +202,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		catch(ArrayIndexOutOfBoundsException e){
 			return;
 		}
-		def accounts = UserAccount.getAccounts()
+		def accounts = AccountManager.getAccounts()
 		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
 		if(allTrackedPackages.containsKey(uuid)&&accounts.containsKey(username)){
 			accounts.get(username).addPackage(allTrackedPackages.get(uuid))
@@ -250,14 +250,12 @@ class SimpleGroovyServlet extends HttpServlet {
 
 
 }
+AccountManager.initAccounts();
 //Starts the server on port 8000
 def server = new Server(8000)
-UserAccount.restoreAccountsFromFile()
-UserAccount.resetUserTrackedPackages();
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
 handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
 println "Starting Jetty, press Ctrl+C to stop."
-println "type \"newAccount\" to create a new account in the console."
 server.start()
 server.join()
