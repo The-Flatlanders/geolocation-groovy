@@ -1,3 +1,5 @@
+I LOST MY GRANDMA BECAUSE I DIDNT SAVE HER TO DESKTOP 
+
 * Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html DONE
 * Serve the project from a web server instead of localhost
 * add the website to a localhost to fix the chrome bug
