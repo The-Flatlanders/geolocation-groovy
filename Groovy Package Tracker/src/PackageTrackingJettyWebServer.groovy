@@ -250,13 +250,14 @@ class SimpleGroovyServlet extends HttpServlet {
 
 
 }
-
 //Starts the server on port 8000
 def server = new Server(8000)
-new UserAccount("ari","test",true)
+UserAccount.restoreAccountsFromFile()
+UserAccount.resetUserTrackedPackages();
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
 handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
 println "Starting Jetty, press Ctrl+C to stop."
+println "type \"newAccount\" to create a new account in the console."
 server.start()
 server.join()
