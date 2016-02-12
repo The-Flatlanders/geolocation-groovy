@@ -16,19 +16,10 @@ import javax.servlet.*
  */
 class SimpleGroovyServlet extends HttpServlet {
 	/**
-	 * Hashmap of all tracked packages and their information
+	 * Hashmap of all tracked packages and their information. Key is the uuid of the package, Value is a trackable package object
 	 */
-	private HashMap<String, TrackablePackage> trackedIDs=new HashMap() 
-	/**
-	 * Hashmap of all usernames and password
-	 */
-	private HashMap<String, String> authorization = new HashMap<String, String>()
-	private HashMap<String, String> adminAuthorization=new HashMap<String,String>() //TODO
-	/**
-	 * For associating packages to users
-	 */
-	private HashMap<String, HashSet<TrackablePackage>> userOpenedPackages = new HashMap<>() 
-	
+	private HashMap<String, TrackablePackage> allTrackedPackages=new HashMap()
+
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage , /logout, /help
@@ -44,7 +35,35 @@ class SimpleGroovyServlet extends HttpServlet {
 			help(req, resp);
 		}
 	}
+	
+	/**
+	 * Handles server doPost request
+	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*, /updateNotes/.*
+	 */
+	void doPost(HttpServletRequest req, HttpServletResponse resp) {
+		if(req.getPathInfo().equals("/login")){
+			userLogin(req,resp)
+		}
+		if(req.getPathInfo().equals("/packages")){
+			getPackages(req,resp)
+		}
 
+		if(req.getPathInfo().startsWith("/addPackage")) {
+			addPackage(req,resp)
+		}
+
+		if(req.getPathInfo().startsWith("/packagetrackupdate")) {
+			packageTrackUpdate(req,resp)
+		}
+
+		if(req.getPathInfo().startsWith("/updateNotes")) {
+			updateNotes(req,resp)
+		}
+		if(req.getPathInfo().startsWith("/addAccount")){
+			//createAccount(req,resp)
+		}
+	}
+	
 	/**
 	 * Records a new package and adds it to the package hashmap, using the packages UUID
 	 * as a key and the object as the value	
@@ -58,7 +77,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		double lon=Double.parseDouble(req.getParameterMap().get("destinationLon")[0])
 		println responseString;
 		//Creates a new package
-		trackedIDs.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
+		allTrackedPackages.putAt(uuids[0],new TrackablePackage(uuids[0], new Coordinate(lat,lon)))
 		resp.setContentType("application/json")
 		def writer = resp.getWriter()
 		writer.print(responseString)
@@ -77,7 +96,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		cookie.setMaxAge(0);
 		resp.addCookie(cookie);
 	}
-	
+
 	/**
 	 * Return the help document to display
 	 * @param req The server request
@@ -102,32 +121,6 @@ class SimpleGroovyServlet extends HttpServlet {
 		return text
 	}
 
-
-	/**
-	 * Handles server doPost request
-	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*, /updateNotes/.*
-	 */
-	void doPost(HttpServletRequest req, HttpServletResponse resp) {
-		if(req.getPathInfo().equals("/login")){
-			userLogin(req,resp)
-		}
-		if(req.getPathInfo().equals("/packages")){
-			getPackages(req,resp)
-		}
-
-		if(req.getPathInfo().startsWith("/addPackage")) {
-			addPackage(req,resp)
-		}
-
-		if(req.getPathInfo().startsWith("/packagetrackupdate")) {
-			packageTrackUpdate(req,resp)
-		}
-		
-		if(req.getPathInfo().startsWith("/updateNotes")) {
-			updateNotes(req,resp)
-		}
-	}
-
 	/**
 	 * Authorizes the user, and, if confirmed, adds a cookie of the user's username
 	 * <br>Prints out to resp an error message in different cases:
@@ -139,24 +132,23 @@ class SimpleGroovyServlet extends HttpServlet {
 		//Uses cookies to score username
 		String username = req.getParameter("username")
 		String password = req.getParameter("password")
-		def writer = resp.getWriter()
-		resp.setContentType("text/plain")
-		//Checks for a mismatch
-		if((authorization.containsKey(username) && authorization.get(username) != password)){
-			writer.print("mismatch")
-			return
-		}
+		def accounts = UserAccount.getAccounts();
+		String response;
 		//Checks for a null field
-		else if(username == "" || password == ""){
-			writer.print("blankfield")
+		if(username == "" || password == ""){
+			response=("blankfield")
+		}
+		//checks if the username does not exist or password is incorrect
+		else if(!accounts.containsKey(username)  || accounts.get(username).getPassword()!= password){
+			response="mismatch";
 		}
 		else{
-			authorization.put(username, password)
-			
+			//log the user into the web page
 			Cookie user = new Cookie("username", username)
 			resp.addCookie(user)
 		}
-
+		def writer = resp.getWriter()
+		resp.setContentType("text/plain")
 	}
 
 	/**
@@ -165,32 +157,33 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * @param resp The server response, contains JSON of the packages or the string "noUser" when there is not a current username cookie
 	 */
 	private void getPackages(HttpServletRequest req, HttpServletResponse resp){
-		def writer = resp.getWriter()
-		resp.setContentType("application/json")
 		def username
+		def writer = resp.getWriter()
 		try{
 			def info = req.getCookies()
 			username = info[0].getValue()
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			writer.print("noUser");
+			writer.print("noUser"); //no user logged in, redirect to login page
 			return;
 		}
 
 		//Creates list of packages either entered by the user previously or now
 		HashSet<TrackablePackage> packageInfos
-		if(userOpenedPackages.containsKey(username)){
-			packageInfos = userOpenedPackages.get(username)
+		//if this user exists
+		def accounts = UserAccount.getAccounts();
+		if(accounts.containsKey(username)){ //if username exists
+			if(accounts.get(username).isAdmin()){//if user is an admin
+				packageInfos=allTrackedPackages.values()//return all currently tracked packages
+			}else{//if user is a regular user
+				packageInfos=accounts.get(username).getTrackedPackages()//return that user's tracked packages
+			}
+		}else{
+			writer.print("noUser");// username is invalid, redirect to login page
+			return;
 		}
-		else{
-			packageInfos = new HashSet<TrackablePackage>()
-			userOpenedPackages.put(username, packageInfos)
-		}
-		if(username.equals("admin")){
-			packageInfos = trackedIDs.values()
-		}
-
 		//Returns packages
+		resp.setContentType("application/json")
 		def toJson = JsonOutput.toJson(packageInfos)
 		writer.print(toJson)
 		writer.flush()
@@ -210,20 +203,13 @@ class SimpleGroovyServlet extends HttpServlet {
 		catch(ArrayIndexOutOfBoundsException e){
 			return;
 		}
-		HashSet<TrackablePackage> packageInfos
-		if(userOpenedPackages.containsKey(username)){
-			packageInfos = userOpenedPackages.get(username)
-		}
-		else{
-			packageInfos=new HashSet<TrackablePackage>();
-			userOpenedPackages.put(username,packageInfos);
-		}
+		def accounts = UserAccount.getAccounts()
 		def uuid = req.getParameter("uuid") //Not sure if this will work. If errors, look here
-		if(trackedIDs.containsKey(uuid)){
-			packageInfos.add(trackedIDs.get(uuid))
+		if(allTrackedPackages.containsKey(uuid)&&accounts.containsKey(username)){
+			accounts.get(username).addPackage(allTrackedPackages.get(uuid))
 		}
 	}
-	
+
 	/**
 	 * Associates packages with a user to be displayed later
 	 * @param req The server request, contains new package UUIDs to add and user cookie
@@ -232,7 +218,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void updateNotes(HttpServletRequest req, HttpServletResponse resp){
 		def uuid = req.getParameter("uuid")
 		def notes = req.getParameter("notes")
-		def currentPackage = trackedIDs.get(uuid);
+		def currentPackage = allTrackedPackages.get(uuid);
 		currentPackage.setNotes(notes);
 	}
 
@@ -249,7 +235,7 @@ class SimpleGroovyServlet extends HttpServlet {
 				def slurper=new JsonSlurper()
 				def inf=slurper.parseText(line)
 				def uuid = req.getPathInfo().replace("/packagetrackupdate/","")
-				TrackablePackage currentPackage = trackedIDs.get(uuid)
+				TrackablePackage currentPackage = allTrackedPackages.get(uuid)
 				if(line.contains("delivered")) {
 					//This code registers delivery events
 					println uuid +" -> "+ line
@@ -257,7 +243,7 @@ class SimpleGroovyServlet extends HttpServlet {
 				}
 				else{
 					//This code tracks all non delivery events
-					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)					
+					currentPackage.update(new Coordinate(Double.parseDouble(inf.lat),Double.parseDouble(inf.lon),Double.parseDouble(inf.ele)),inf.time)
 				}
 			}
 		} catch (Exception e) { e.printStackTrace() /*report an error*/ }
@@ -268,6 +254,7 @@ class SimpleGroovyServlet extends HttpServlet {
 
 //Starts the server on port 8000
 def server = new Server(8000)
+new UserAccount("ari","test",true)
 ServletHandler handler = new ServletHandler()
 server.setHandler(handler)
 handler.addServletWithMapping(SimpleGroovyServlet.class, "/*")
