@@ -1,5 +1,5 @@
 
-class UserAccount {
+class UserAccount implements Serializable{
 	public static final String accountsBackupPath="User Accounts List.map";
 	static HashMap<String,UserAccount> accounts;
 	private String username;
@@ -45,17 +45,24 @@ class UserAccount {
 		FileOutputStream fout = new FileOutputStream(accountsBackupPath);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(accounts);
+		oos.close();
+		fout.close();
 	}
 	public static void restoreAccountsFromFile(){
+		HashMap acc;
 		try{
 			FileInputStream fin = new FileInputStream(accountsBackupPath);
 			ObjectInputStream ois = new ObjectInputStream(fin);
-			accounts=new HashMap<String,UserAccount>();
-			accounts = (HashMap) ois.readObject();
+			acc = (HashMap) ois.readObject();
 			ois.close();
-			println(accounts);
-		}catch(Exception ex){
+			fin.close();
+		}catch(EOFException e){
 		}
+			if(acc!=null){
+				accounts=acc;
+			}
+			println(accounts);
+
 	}
 	public static  void resetUserTrackedPackages(){
 		for(UserAccount user:accounts){
@@ -82,6 +89,7 @@ class UserAccount {
 		}
 	}
 	public static void main(String[] args){
+		accounts=new HashMap<String,UserAccount>();
 		restoreAccountsFromFile();
 		resetUserTrackedPackages();
 		UserAccount.addUserAccountFromConsole()
@@ -96,5 +104,16 @@ class UserAccount {
 		}else{
 			return null
 		}
+	}
+	public void loadMap(HashMap map){
+		Properties properties = new Properties();
+		properties.putAll(map);
+		properties.store(new FileOutputStream(accountsBackupPath), null);
+	}
+	public void loadMap(){
+		HashMap map;
+		Properties properties = new Properties();
+		properties.load(new FileInputStream(accountsBackupPath));
+		map = new HashMap<Object, Object>(properties);
 	}
 }
