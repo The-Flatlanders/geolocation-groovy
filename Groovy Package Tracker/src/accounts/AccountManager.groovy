@@ -19,7 +19,6 @@ class AccountManager {
 		def jsonSlurper = new JsonSlurper()
 		def oldAccounts = jsonSlurper.parseText(text);
 		for(Object user:oldAccounts.values()){
-			println user;
 			addUserAccount(user.username,user.password,user.admin)
 		}
 	}

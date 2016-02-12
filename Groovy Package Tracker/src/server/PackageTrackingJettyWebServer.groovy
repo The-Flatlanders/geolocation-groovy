@@ -134,13 +134,11 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 		//checks if the username does not exist or password is incorrect
 		else if(!(accounts.containsKey(username))  || accounts.get(username).getPassword()!= password){
-			println username;
-			println password;
-			println accounts;
 			response="mismatch";
 		}
 		else{
 			//log the user into the web page
+			println "new Login from user "+username;
 			Cookie user = new Cookie("username", username)
 			resp.addCookie(user)
 		}
