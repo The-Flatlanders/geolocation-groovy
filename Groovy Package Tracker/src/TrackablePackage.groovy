@@ -20,7 +20,7 @@ class TrackablePackage {
 	private double distanceTraveledSoFar;
 	private ArrayList<Coordinate> pastCords;
 		
-	public ArrayList<Coordinate> getPastCords() {
+	public synchronized ArrayList<Coordinate> getPastCords() {
 		return pastCords;
 	}
 	public TrackablePackage(String uuid, Coordinate destination){
@@ -33,48 +33,45 @@ class TrackablePackage {
 		distanceTraveledSoFar = 0;
 		pastCords = new ArrayList<Coordinate>();
 	}
-	public Coordinate getLocation() {
+	public synchronized Coordinate getLocation() {
 		return location;
 	}
-	public void setLocation(Coordinate location) {
+	public synchronized void setLocation(Coordinate location) {
 		this.location = location;
 	}
-	public void setElevation(int elevation) {
-		this.elevation = elevation;
-	}
-	public String getTime() {
+	public synchronized String getTime() {
 		return time;
 	}
-	public String getUuid() {
+	public synchronized String getUuid() {
 		return uuid;
 	}
-	public String getNotes() {
+	public synchronized String getNotes() {
 		return notes;
 	}
-	public void setNotes(String notes) {
+	public synchronized void setNotes(String notes) {
 		this.notes = notes;
 	}
-	public boolean getDelivered() {
+	public synchronized boolean getDelivered() {
 		return delivered;
 	}
-	public void setDelivered(boolean delivered) {
+	public synchronized void setDelivered(boolean delivered) {
 		this.delivered = delivered;
 	}
-	public Coordinate getDestination() {
+	public synchronized Coordinate getDestination() {
 		return destination;
 	}
-	public double getDistanceFromDestination(){
+	public synchronized double getDistanceFromDestination(){
 		return Coordinate.getDistance(location, destination)
 	}
-	public int getETAInSeconds(){
+	public synchronized int getETAInSeconds(){
 		//println "distance from destination: "+getDistanceFromDestination();
 		return (getDistanceFromDestination()/averageSpeed) * (getDistanceTraveledSoFar() / calculateLineDistance())
 	}
-	public double geteta(){
+	public synchronized double geteta(){
 		int ns= getETAInSeconds()
 		return ns/3600;
 	}
-	public void update(Coordinate updateLocation, String updateTime){
+	public synchronized void update(Coordinate updateLocation, String updateTime){
 		pastCords.add(updateLocation);
 		if(!delivered){
 			numOfUpdates++;
@@ -96,7 +93,7 @@ class TrackablePackage {
 			}
 		}
 	}
-	public double calculateInstantaneousSpeed(double t1,double t2,double distance){
+	public synchronized double calculateInstantaneousSpeed(double t1,double t2,double distance){
 		double currentSpeed;
 		double dt=t2-t1
 		if(dt>0){
@@ -106,7 +103,7 @@ class TrackablePackage {
 		}
 		println "moved "+distance+" meters in "+dt+" seconds. Speed="+currentSpeed;
 	}
-	public double calculateAverageSpeed(double time,double distance){
+	public synchronized double calculateAverageSpeed(double time,double distance){
 		double averageSpeed;
 		if(time>0){
 			averageSpeed=(1000)*distance/time
@@ -117,23 +114,23 @@ class TrackablePackage {
 		return averageSpeed;
 
 	}
-	public double getSpeed(){
+	public synchronized double getSpeed(){
 		return averageSpeed;
 	}
-	public int getNumOfUpdates(){
+	public synchronized int getNumOfUpdates(){
 		return numOfUpdates;
 	}
-	public String toString(){
+	public synchronized String toString(){
 		String delivered = delivered? "Package is delivered" : "Package is not delivered";
 		return ("Package: "+uuid+"\nDestination: "+destination+"\nCurrent Location: "+location + "\n" + delivered+"\nETA"+geteta()+"\nNumber of updates: "+numOfUpdates);
 	}
-	public double getDistanceTraveledSoFar(){
+	public synchronized double getDistanceTraveledSoFar(){
 		return distanceTraveledSoFar;
 	}
-	public double calculateLineDistance(){
+	public synchronized double calculateLineDistance(){
 		return Coordinate.getDistance(startingLocation, location);
 	}
-	public Coordinate getStartingLocation(){
+	public synchronized Coordinate getStartingLocation(){
 		return startingLocation;
 	}
 

@@ -19,7 +19,6 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * Hashmap of all tracked packages and their information. Key is the uuid of the package, Value is a trackable package object
 	 */
 	private HashMap<String, TrackablePackage> allTrackedPackages=new HashMap()
-
 	/**
 	 * Handles server doGet requests<br>
 	 * Accepts path info types: /tracknewpackage , /logout, /help
