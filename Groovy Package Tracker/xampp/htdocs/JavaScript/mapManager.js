@@ -141,7 +141,7 @@ function showPackagePath(myPackage) {
 		deleteOnReclick.push(polyline);
 	}
 
-	var blue = '../Web/Resources/blue-dot.png';
+	var blue = './Resources/blue-dot.png';
 	var start = new google.maps.Marker({
 		position : {
 			lat : myPackage.startingLocation.lat,
@@ -151,7 +151,7 @@ function showPackagePath(myPackage) {
 		icon:blue
 	});
 
-	var green = '../Web/Resources/green-dot.png';
+	var green = './Resources/green-dot.png';
 	var end = new google.maps.Marker({
 		position : {
 			lat : myPackage.destination.lat,
