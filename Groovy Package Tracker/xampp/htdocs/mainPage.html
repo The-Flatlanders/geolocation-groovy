@@ -1,0 +1,126 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Package Tracker</title>
+<script>
+	//makes UUIDs the default tab
+	if (document.location.hash == "" || document.location.hash == "#")
+		document.location.hash = "#UUIDtab";
+</script>
+<script src=JavaScript/serverPostRequest.js></script>
+<link rel="stylesheet" type="text/css" href="CSS/MainStyleSheet.css" />
+</head>
+<body onload="showMyPackages()">
+	<div id="controlPanel">
+		<div class="tabs">
+			<div id="UUIDtab">
+				<a href="#UUIDtab">UUID</a>
+				<div id="form">
+					Add UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
+					<input type="button" value="Submit uuid" onclick="addPackage()" />
+					<br> <br> <br> <input type="button"
+						value="Refresh Map" onclick="showMyPackages()" /> <br> <br>
+					<br> <input type="button" value="Help" onclick="getHelpInfo()" />
+
+
+				</div>
+
+			</div>
+			<div id="AccountTab">
+				<a href="#AccountTab">Account</a>
+				<div>
+					<input type="button" value="Logout" onclick="logout()">
+					<div id="trackedPackages"></div>
+				</div>
+
+			</div>
+			<div id="DetailTab">
+				<a href="#DetailTab">Details</a>
+				<div>
+					<div id="details"></div>
+					<div id="notes">
+						<br> Change Notes:<br>
+						<textarea id="notesInput" name="notesInput" maxlength="100"
+							cols="26" rows="5"></textarea>
+						<input type="button" value="Submit Notes" onclick="addNotes()" />
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="map"></div>
+	<script src="javascript/mapManager.js"></script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh8IK9eDqqGB8Wx2k0Vr_pcisZD1qw74A&callback=initMap"></script>
+	<script>
+		function logout() {
+			execHttpRequest("GET", "http://localhost:8000/logout", false, "",
+					function() {
+						/*window.location.href = "Login.html"*/;
+					})
+		}
+		window.onunload = "logout()";
+	</script>
+	<script type="text/javascript">
+		function addPackage() {
+			var params = "uuid=" + document.getElementById('uuid').value;
+			execHttpRequest("POST", "http://localhost:8000/addPackage", true,
+					params, function(responseText) {
+						showMyPackages()
+					});
+		}
+	</script>
+	<script type="text/javascript">
+		var packages;
+		function showMyPackages() {
+			document.getElementById("notes").style.visibility = "hidden"
+			var userPackages = [];
+			execHttpRequest(
+					"POST",
+					"http://localhost:8000/packages",
+					true,
+					"",
+					function(responseText) {
+						if (responseText == "noUser") {
+							/*window.location.href = "Login.html"
+	*/					}
+						var packageList = JSON.parse(responseText);
+						var packageLocations = [];
+						packageList.forEach(function(currentPackage) {
+							packageLocations.push(currentPackage.location);
+						});
+						initMap();
+						packageList.forEach(function(currentPackage) {
+							showPackage(currentPackage);
+							userPackages.push(currentPackage.uuid);
+
+						});
+						document.getElementById('trackedPackages').innerHtml = userPackages
+								.toString();
+					});
+		}
+		function addNotes() {
+			if (confirm("Are you sure? This will over write any current notes on this package?")) {
+				var pack = getActivePackage();
+				if (pack != null) {
+					pack.notes = document.getElementById('notesInput').value;
+					var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
+					execHttpRequest("POST",
+							"http://localhost:8000/updateNotes", true, params,
+							function() {
+								inspectPackage(pack)
+							});
+					document.getElementById('notesInput').value = "";
+				}
+			}
+		}
+		function getHelpInfo() {
+
+			execHttpRequest("GET", "http://localhost:8000/help", true, "",
+					function(responseText) {
+						alert(responseText);
+					});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[Thu Feb 11 19:40:12.247090 2016] [ssl:warn] [pid 52220:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:40:12.484010 2016] [ssl:warn] [pid 52220:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:40:12.495017 2016] [mpm_winnt:notice] [pid 52220:tid 388] AH00455: Apache/2.4.18 (Win32) OpenSSL/1.0.2e PHP/7.0.2 configured -- resuming normal operations
+[Thu Feb 11 19:40:12.495017 2016] [mpm_winnt:notice] [pid 52220:tid 388] AH00456: Apache Lounge VC14 Server built: Dec  9 2015 10:17:39
+[Thu Feb 11 19:40:12.495017 2016] [core:notice] [pid 52220:tid 388] AH00094: Command line: 'apache\\bin\\httpd.exe -d C:/Users/amind_000/Documents/xampp-portable-win32-7.0.2-0-VC14/xampp/apache -f conf\\httpd.conf'
+[Thu Feb 11 19:40:12.499021 2016] [mpm_winnt:notice] [pid 52220:tid 388] AH00418: Parent: Created child process 51424
+Apache server shutdown initiated...
+sl:warn] [pid 51424:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:40:13.535452 2016] [ssl:warn] [pid 51424:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:40:13.543460 2016] [mpm_winnt:notice] [pid 51424:tid 388] AH00354: Child: Starting 150 worker threads.
+[Thu Feb 11 19:41:29.287796 2016] [mpm_winnt:notice] [pid 52220:tid 388] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Thu Feb 11 19:41:31.289293 2016] [mpm_winnt:notice] [pid 51424:tid 388] AH00364: Child: All worker threads have exited.
+[Thu Feb 11 19:41:31.310316 2016] [mpm_winnt:notice] [pid 52220:tid 388] AH00430: Parent: Child process 51424 exited successfully.
+[Thu Feb 11 19:42:16.941378 2016] [ssl:warn] [pid 53212:tid 376] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:42:17.103487 2016] [ssl:warn] [pid 53212:tid 376] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:42:17.108491 2016] [mpm_winnt:notice] [pid 53212:tid 376] AH00455: Apache/2.4.18 (Win32) OpenSSL/1.0.2e PHP/7.0.2 configured -- resuming normal operations
+[Thu Feb 11 19:42:17.108491 2016] [mpm_winnt:notice] [pid 53212:tid 376] AH00456: Apache Lounge VC14 Server built: Dec  9 2015 10:17:39
+[Thu Feb 11 19:42:17.108491 2016] [core:notice] [pid 53212:tid 376] AH00094: Command line: 'c:\\users\\amind_000\\documents\\xampp-portable-win32-7.0.2-0-vc14\\xampp\\apache\\bin\\httpd.exe -d C:/Users/amind_000/Documents/xampp-portable-win32-7.0.2-0-VC14/xampp/apache'
+[Thu Feb 11 19:42:17.112493 2016] [mpm_winnt:notice] [pid 53212:tid 376] AH00418: Parent: Created child process 49124
+[Thu Feb 11 19:42:17.743214 2016] [ssl:warn] [pid 49124:tid 400] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:42:17.916329 2016] [ssl:warn] [pid 49124:tid 400] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 19:42:17.924334 2016] [mpm_winnt:notice] [pid 49124:tid 400] AH00354: Child: Starting 150 worker threads.
+[Thu Feb 11 22:14:21.942615 2016] [ssl:warn] [pid 105484:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:14:22.086775 2016] [core:warn] [pid 105484:tid 388] AH00098: pid file C:/Users/amind_000/Desktop/IDT Contest/Git/geolocation-groovy/Groovy Package Tracker/xampp/apache/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Thu Feb 11 22:14:22.184841 2016] [ssl:warn] [pid 105484:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:14:22.189844 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00455: Apache/2.4.18 (Win32) OpenSSL/1.0.2e PHP/7.0.2 configured -- resuming normal operations
+[Thu Feb 11 22:14:22.189844 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00456: Apache Lounge VC14 Server built: Dec  9 2015 10:17:39
+[Thu Feb 11 22:14:22.189844 2016] [core:notice] [pid 105484:tid 388] AH00094: Command line: 'c:\\users\\amind_000\\desktop\\idt contest\\git\\geolocation-groovy\\groovy package tracker\\xampp\\apache\\bin\\httpd.exe -d C:/Users/amind_000/Desktop/IDT Contest/Git/geolocation-groovy/Groovy Package Tracker/xampp/apache'
+[Thu Feb 11 22:14:22.194847 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00418: Parent: Created child process 106804
+[Thu Feb 11 22:14:22.854478 2016] [ssl:warn] [pid 106804:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:14:23.238571 2016] [ssl:warn] [pid 106804:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:14:23.246577 2016] [mpm_winnt:notice] [pid 106804:tid 388] AH00354: Child: Starting 150 worker threads.
+[Thu Feb 11 22:22:59.305224 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00428: Parent: child process 106804 exited with status 1 -- Restarting.
+[Thu Feb 11 22:22:59.520796 2016] [ssl:warn] [pid 105484:tid 388] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:22:59.524799 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00455: Apache/2.4.18 (Win32) OpenSSL/1.0.2e PHP/7.0.2 configured -- resuming normal operations
+[Thu Feb 11 22:22:59.524799 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00456: Apache Lounge VC14 Server built: Dec  9 2015 10:17:39
+[Thu Feb 11 22:22:59.524799 2016] [core:notice] [pid 105484:tid 388] AH00094: Command line: 'c:\\users\\amind_000\\desktop\\idt contest\\git\\geolocation-groovy\\groovy package tracker\\xampp\\apache\\bin\\httpd.exe -d C:/Users/amind_000/Desktop/IDT Contest/Git/geolocation-groovy/Groovy Package Tracker/xampp/apache'
+[Thu Feb 11 22:22:59.529802 2016] [mpm_winnt:notice] [pid 105484:tid 388] AH00418: Parent: Created child process 111344
+[Thu Feb 11 22:23:00.174233 2016] [ssl:warn] [pid 111344:tid 396] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:23:00.355623 2016] [ssl:warn] [pid 111344:tid 396] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Thu Feb 11 22:23:00.362629 2016] [mpm_winnt:notice] [pid 111344:tid 396] AH00354: Child: Starting 150 worker threads.
+[Thu Feb 11 22:23:01.717849 2016] [mpm_winnt:crit] [pid 111344:tid 396] AH02538: Child: Parent process exited abruptly. Child process is ending
+[Thu Feb 11 22:23:01.717849 2016] [mpm_winnt:warn] [pid 111344:tid 1772] (OS 995)The I/O operation has been aborted because of either a thread exit or an application request.  : AH00341: winnt_accept: Asynchronous AcceptEx failed.
+[Thu Feb 11 22:23:01.717849 2016] [mpm_winnt:warn] [pid 111344:tid 1768] (OS 995)The I/O operation has been aborted because of either a thread exit or an application request.  : AH00341: winnt_accept: Asynchronous AcceptEx failed.
