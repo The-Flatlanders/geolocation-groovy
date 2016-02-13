@@ -40,7 +40,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			help(req, resp)
 		}
 	}
-	
+
 	/**
 	 * Handles server doPost request
 	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*, /updateNotes/.*
@@ -68,7 +68,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			//createAccount(req,resp)
 		}
 	}
-	
+
 	/**
 	 * Records a new package and adds it to the package hashmap, using the packages UUID
 	 * as a key and the object as the value	
@@ -97,9 +97,8 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void logout(HttpServletRequest req, HttpServletResponse resp){
 		def info = req.getCookies()
 		def cookie = info[0]
-		cookie.setValue(null)
-		cookie.setMaxAge(0)
-		resp.addCookie(cookie)
+		cookie.setMaxAge(0);
+		resp.addCookie(cookie);
 	}
 
 	/**
@@ -163,7 +162,6 @@ class SimpleGroovyServlet extends HttpServlet {
 			writer.print("noUser") //no user logged in, redirect to login page
 			return
 		}
-
 		//Creates list of packages either entered by the user previously or now
 		HashSet<TrackablePackage> packageInfos
 		//if this user exists
