@@ -4,62 +4,67 @@
 <link rel="stylesheet" type="text/css" href="CSS/LoginStyleSheet.css" />
 </head>
 <body>
-<div id=card>
-<img src="resources/idt_logo.png"/>
+	<div id=card>
+		<img src="resources/idt_logo.png" />
 
-	<h3>Package Tracker</h3>
-	<br>
-	<br>
-<input class=field type="text" id="userNamePlaceholder" value="username" onFocus="setUser();"/>
-<input class=field type="text" id="username" value="" onBlur="checkUser();" style="display: none;"/>	<br>
-	<br>
-<input class=field type="text" id="placeholder" value="password" onFocus="setPass();"/>
-<input class=field type="password" id="password" value="" onBlur="checkPass();" style="display: none;"/>	<br>
-	<br>
-	<input type = "button" onclick="exec()" value = "Submit"/>
-</div>
-<script>
-function setPass() {
-    document.getElementById('placeholder').style.display = 'none';
-    document.getElementById('password').style.display = 'inline';
-    document.getElementById('password').focus();
-}
-function checkPass() {
-    if (document.getElementById('password').value.length == 0) {
-        document.getElementById('placeholder').style.display = 'inline';
-        document.getElementById('password').style.display = 'none';
-    }
-}
-function setUser() {
-    document.getElementById('userNamePlaceholder').style.display = 'none';
-    document.getElementById('username').style.display = 'inline';
-    document.getElementById('username').focus();
-}
-function checkUser() {
-    if (document.getElementById('username').value.length == 0) {
-        document.getElementById('userNamePlaceholder').style.display = 'inline';
-        document.getElementById('username').style.display = 'none';
-    }
-}
-</script>
-<script src=Javascript/serverPostRequest.js></script>
-<script>
-function exec(){
-	var username=document.getElementById('username').value;
-	var password=document.getElementById('password').value;
-	var params = "username=" + username +"&password=" + password;
-	execHttpRequest("POST","http://localhost:8000/login",true,params,function(responseString){
-		if(responseString==("mismatch")){
-			window.alert("Incorrect username or password");
+		<h3>Package Tracker</h3>
+		<br> <br> <input class=field type="text"
+			id="userNamePlaceholder" value="username" onFocus="setUser();" /> <input
+			class=field type="text" id="username" value="" onBlur="checkUser();"
+			style="display: none;" /> <br> <br> <input class=field
+			type="text" id="placeholder" value="password" onFocus="setPass();" />
+		<input class=field type="password" id="password" value=""
+			onBlur="checkPass();" style="display: none;" /> <br> <br> <input
+			type="button" onclick="exec()" value="Submit" />
+	</div>
+	<a id=createAccount href="http://google.com">Create Account</a>
+	<div id=cookiesMessage>
+		This website requires cookies to function properly. Please enable them
+		in order to continue. You can find out how to enable Cookies  
+		<a href="http://windows.microsoft.com/en-us/windows-vista/block-or-allow-cookies">here</a>.
+	</div>
+	</center>
+	<script>
+		function setPass() {
+			document.getElementById('placeholder').style.display = 'none';
+			document.getElementById('password').style.display = 'inline';
+			document.getElementById('password').focus();
 		}
-		else if(responseString == ("blankfield")){
-			window.alert("Please fill in all fields");
+		function checkPass() {
+			if (document.getElementById('password').value.length == 0) {
+				document.getElementById('placeholder').style.display = 'inline';
+				document.getElementById('password').style.display = 'none';
+			}
 		}
-		else{
-			window.location="mainPage.html";
+		function setUser() {
+			document.getElementById('userNamePlaceholder').style.display = 'none';
+			document.getElementById('username').style.display = 'inline';
+			document.getElementById('username').focus();
 		}
-	});
-	}
-</script>
+		function checkUser() {
+			if (document.getElementById('username').value.length == 0) {
+				document.getElementById('userNamePlaceholder').style.display = 'inline';
+				document.getElementById('username').style.display = 'none';
+			}
+		}
+	</script>
+	<script src=Javascript/serverPostRequest.js></script>
+	<script>
+		function exec() {
+			var username = document.getElementById('username').value;
+			var password = document.getElementById('password').value;
+			var params = "username=" + username + "&password=" + password;
+			execHttpRequest("POST", "http://localhost:8000/login", true,
+					params, function(responseString) {
+						if (responseString == ("mismatch")) {
+							window.alert("Incorrect username or password");
+						} else if (responseString == ("blankfield")) {
+							window.alert("Please fill in all fields");
+						} else {
+							window.location = "mainPage.html";
+						}
+					});
+		}
+	</script>
 </html>
 </body>
