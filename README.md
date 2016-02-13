@@ -1,11 +1,11 @@
 * Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html DONE
-* add the website to a localhost to fix the chrome bug DONE (but a new bug with cookies has arisen)
+* add the website to a localhost to fix the chrome bug DONE (but a new bug with cookies has arisen) FIXED
 * only consider the currently selected package in zoom function DONE
 * implement a control to zoom back out in the details tab <-- It seems like this is the same button as 1, so DONE?
 * clean up and style all tabs
 * change password from the account tab
-* user registration page
-* store user accounts in a file so they persist when server goes down
+* user registration page 
+* store user accounts in a file so they persist when server goes down DONE
 * organize HTML folder DONE
 * update git readme
 * document code
