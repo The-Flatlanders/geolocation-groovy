@@ -16,57 +16,57 @@
 
 #Software Requirments and How We Satisfied Them: 
 
-The solution shall handle multiple simultaneous GPS tracked packages sending updates.
+-The solution shall handle multiple simultaneous GPS tracked packages sending updates.
 
 We ran the simulator with up to four packages sending updates at once and the packages were properly displayed on the map.
 
 
-The solution shall be easily accessible from a Windows 7 computer. 
+-The solution shall be easily accessible from a Windows 7 computer. 
 
 This was tested on a Windowss 7 computer and worked successfully.
 
 
-The solution shall support an admin mode that shows all package location updates on a map.
+-The solution shall support an admin mode that shows all package location updates on a map.
 
 We logged in with an admin accont and all package markers were displayed on the map.
 
 
-The solution shall support a user mode that shows a subset of package location updates on a map.
+-The solution shall support a user mode that shows a subset of package location updates on a map.
 
 We made user accounts and successfully showed only those the user had access to.
 
 
-The solution shall accept a list of UUIDs in user mode to control the subset of package location updates displayed on the map. 
+-The solution shall accept a list of UUIDs in user mode to control the subset of package location updates displayed on the map. 
 
 We entered many UUIDs for a user and those UUUID's markers were displayed on the map.
 
 
-The solution shall accept name, destination, and GPS unit UUID information as HTTP query parameters on a HTTP GET of the URL path "/tracknewpackage". An example follows: GET http://127.0.0.1:8080/tracknewpackage?name=Some+Name+Here&destinationLat=42.4877185&destinationLon=-71.8249125&uuid=b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 
+-The solution shall accept name, destination, and GPS unit UUID information as HTTP query parameters on a HTTP GET of the URL path "/tracknewpackage". An example follows: GET http://127.0.0.1:8080/tracknewpackage?name=Some+Name+Here&destinationLat=42.4877185&destinationLon=-71.8249125&uuid=b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 
 
 We ran the event simulator which called the doGet() method with this type of query successfully.
 
 
-The solution shall respond with a JSON encoded body which includes the registered uuid on an HTTP GET of the URL path "/tracknewpackage". An example follows: GET Response Body: { "ackUUID":"[b0f9bb21-160f-4089-ad1c-56ae8b2d5c93]" }
+-The solution shall respond with a JSON encoded body which includes the registered uuid on an HTTP GET of the URL path "/tracknewpackage". An example follows: GET Response Body: { "ackUUID":"[b0f9bb21-160f-4089-ad1c-56ae8b2d5c93]" }
 
 We printed out the response of the get request and confirmed that it was indeed correct.
 
 
-The solution shall accept a JSON encoded body which includes location, elevation, and time on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 POST Body: {"lat":"42.4879714","lon":"-71.8250924","ele":"195.9","time":"2015-12-08T08:42:33.188-05:00"}
+-The solution shall accept a JSON encoded body which includes location, elevation, and time on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 POST Body: {"lat":"42.4879714","lon":"-71.8250924","ele":"195.9","time":"2015-12-08T08:42:33.188-05:00"}
 
 We ran the event simulator which called the doPost() method with this type of query successfully.
 
 
-The solution shall accept a JSON encoded body which includes a delivered flag on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93  POST Body: {"delivered":"true"} 
+-The solution shall accept a JSON encoded body which includes a delivered flag on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93  POST Body: {"delivered":"true"} 
 
 We ran a simulated package that finished in under a second to ensure that end behavior of a package functioned as predicted.
 
 
-The solution shall calculate and display distance to destination. 
+-The solution shall calculate and display distance to destination. 
 
 We ran our program that calculates the distance between any two points, of which this requirment is a subset, and checked the answer.
 
 
-The solution shall calculate and display estimated arrival time. 
+-The solution shall calculate and display estimated arrival time. 
 
 We calculated estimated time and then the actual time the package took and made sure that the numbers were relatively close to each other.
 
