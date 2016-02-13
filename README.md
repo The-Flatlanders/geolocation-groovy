@@ -1,19 +1,3 @@
-* Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html DONE
-* add the website to a localhost to fix the chrome bug DONE (but a new bug with cookies has arisen) FIXED
-* only consider the currently selected package in zoom function DONE
-* implement a control to zoom back out in the details tab <-- It seems like this is the same button as 1, so DONE?
-* clean up and style all tabs
-* change password from the account tab
-* user registration page 
-* store user accounts in a file so they persist when server goes down DONE
-* organize HTML folder DONE
-* update git readme
-* document code
-* fix login javascript checkpass and setpass to accept parameters to eliminate redundancy
-* REMEMBER TO RETEST THE CODE BEFORE YOU PUSH
-
-
-
 #Software Requirments and How We Satisfied Them: 
 
 -The solution shall handle multiple simultaneous GPS tracked packages sending updates.
@@ -71,6 +55,22 @@ We ran our program that calculates the distance between any two points, of which
 We calculated estimated time and then the actual time the package took and made sure that the numbers were relatively close to each other.
 
 
+#Software Documentation
+
+#Product Documentation or How to Use the Package Tracker
+
+Login page:
+If you already have an account, you can simply login and access all of your packages. Note that you must have cookies enabled at all times. If you do not have an account, simply press the Create Account button and enter all information asked of you. You can then go on to the main page, discussed in detail below.
+
+Adding a package to the map:
+Navigate to the UUID tab by clicking on the tab labeled UUID on the upper left. It is also the default tab when you first access the map page. Then, enter into the text box labeled "Add UUID" the UUID associated with your package. This is just a long string of letters and numbers unique to every package. After you press submit your package will be easily viewed on the map to the right.
+Clicking on "Refresh Map" will refresh all of your packages. This will update their positions on the map and their details in the details tab, described more later. Clicking on "Help" brings up this menu.
+
+Details Tab:
+When you first navigate to the details tab, you may be dismayed because it is empty. The key is that the tab remains blank until you click on a package. After you click on a package, henceforth referred to as the active package, you can see all of its information in the details tab. This includes aspects of the active package like its location, destination, and Estimated Time of Arrival (ETA). You will also see a notes section. This is a place that you can add notes to remind yourself about the package. Notes you add will be visible by anyone else who has access to the UUID, usually just you and the package administrator. This therefore serves as a great and easy way to communicate with IDT. 
+
+Map Help:
+Clicking on a package places focus on it, turning it into the current active package. The map automatically zooms in to focus on the package, its destination point, and its start point, conveniently marked with pins. A green pin signifies the end while a blue pin signifies the beginning. You will also notice that an active package has a line leading back from it to its starting point. This shows the path the package took with as much accuracy as possible. 
 
 
 # geolocation-groovy
@@ -109,3 +109,5 @@ CDB380
 036564
 033649
 031634
+
+
