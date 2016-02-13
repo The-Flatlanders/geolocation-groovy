@@ -72,7 +72,7 @@ Clicking on a package places focus on it, turning it into the current active pac
 
 #Software Documentation
 
-# #geolocation-groovy
+##geolocation-groovy
 IDT is starting a valuable package delivery service and has already developed half of the software/hardware solution needed to track all of the valuable packages. IDT has built custom GPS units for each package that will transmit positional data to our network. IDT has also aggregated all of the data for all of the packages in one place since all of the packages report to the same RESTful web service. This program is intended to be the other side: the interface with the user.
 
 ##Setting up Eclipse
