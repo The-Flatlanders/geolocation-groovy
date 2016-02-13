@@ -1,3 +1,18 @@
+* Add a button to refresh the map by calling the ShowMyPackages method in mainPage.html DONE
+* add the website to a localhost to fix the chrome bug DONE (but a new bug with cookies has arisen) FIXED
+* only consider the currently selected package in zoom function DONE
+* implement a control to zoom back out in the details tab DONE ← Move this button to the outside window 
+* clean up and style all tabs
+* change password from the account tab
+* user registration page DONE
+* store user accounts in a file so they persist when server goes down DONE
+* organize HTML folder DONE
+* update git readme 
+* document code
+* fix login javascript checkpass and setpass to accept parameters to eliminate redundancy
+* REMEMBER TO RETEST THE CODE BEFORE YOU PUSH
+
+
 #Software Requirments and How We Satisfied Them: 
 
 -The solution shall handle multiple simultaneous GPS tracked packages sending updates.
