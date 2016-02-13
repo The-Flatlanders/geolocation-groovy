@@ -47,7 +47,7 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 							cols="26" rows="5"></textarea>
 						<input type="button" value="Submit Notes" onclick="addNotes()" />
 						<br>
-						<input type="button" value="deletePackage" onclick="removeCurrentPackage()">
+						<input type="button" value="Delete This Package" onclick="removeCurrentPackage()">
 						<div id="deletePackage"></div>
 						<br>
 					</div>
@@ -106,7 +106,7 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 					});
 		}
 		function addNotes() {
-			if (confirm("Are you sure? This will over write any current notes on this package? Remember, all users with acces to the package can see this note.")) {
+			if (confirm("Are you sure? This will over write any current notes on this package? Remember, all users with access to the package can see this note.")) {
 				var pack = getActivePackage();
 				if (pack != null) {
 					pack.notes = document.getElementById('notesInput').value;
@@ -131,7 +131,9 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 			var params = "uuid=" + pack.uuid;
 			execHttpRequest("POST", "http://localhost:8000/removePackage", false, params, function(){});
 			resetActivePackage();
-			showMyPackages();
+			activePackage=null;
+			window.location="mainPage.html"
+
 		}
 	</script>
 </body>
