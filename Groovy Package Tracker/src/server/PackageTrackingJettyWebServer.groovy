@@ -205,7 +205,7 @@ class SimpleGroovyServlet extends HttpServlet {
 			if(accounts.get(username).isAdmin()){//if user is an admin
 				packageInfos=allTrackedPackages.values()//return all currently tracked packages
 			}else{//if user is a regular user
-				packageInfos=accounts.get(username).getTrackedPackages()//return that user's tracked packages
+				packageInfos=accounts.get(username).getTrackedPackages().values()//return that user's tracked packages
 			}
 		}else{
 			writer.print("noUser")// username is invalid, redirect to login page

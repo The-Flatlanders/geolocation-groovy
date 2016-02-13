@@ -1,5 +1,5 @@
 <!--   
-Most functions referenced in this class are actually in the JavaScript foulder. See message documentations there for more information.
+Most functions referenced in this class are actually in the JavaScript folder. See message documentations there for more information.
  -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -14,6 +14,7 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 <link rel="stylesheet" type="text/css" href="CSS/MainStyleSheet.css" />
 </head>
 <body onload="showMyPackages()">
+	<input type="button" value="Refresh Map" onclick="showMyPackages()" />
 	<div id="controlPanel">
 		<div class="tabs">
 			<div id="UUIDtab">
@@ -21,10 +22,6 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 				<div id="form">
 					Add UUID:<br /> <input id="uuid" type="text" name="uuid" /><br />
 					<input type="button" value="Submit uuid" onclick="addPackage()" />
-					<br> <br> <br> <input type="button"
-						value="Refresh Map" onclick="showMyPackages()" /> <br> <br>
-					<br> <input type="button" value="Help" onclick="getHelpInfo()" />
-
 
 				</div>
 
@@ -46,8 +43,8 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 						<textarea id="notesInput" name="notesInput" maxlength="100"
 							cols="26" rows="5"></textarea>
 						<input type="button" value="Submit Notes" onclick="addNotes()" />
-						<br>
-						<input type="button" value="Delete This Package" onclick="removeCurrentPackage()">
+						<br> <input type="button" value="Delete This Package"
+							onclick="removeCurrentPackage()">
 						<div id="deletePackage"></div>
 						<br>
 					</div>

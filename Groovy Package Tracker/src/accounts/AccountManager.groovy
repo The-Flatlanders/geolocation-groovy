@@ -38,7 +38,7 @@ class AccountManager {
 		resetUserTrackedPackages()
 	}
 	public static resetUserTrackedPackages(){
-		for(UserAccount user:accounts){
+		for(UserAccount user:accounts.values()){
 			user.myTrackedPackages=new HashMap<String, TrackablePackage>()
 		}
 	}
@@ -57,7 +57,12 @@ class AccountManager {
 	 */
 	public static void restoreAccountsFromFile(){
 		Scanner scanner = new Scanner( new File(accountsBackupPath) )
-		String text = scanner.useDelimiter("\\A").next()
+		def text;
+		try{
+			 text = scanner.useDelimiter("\\A").next()
+		}catch(Exception e){
+			text="{}";
+		}
 		scanner.close()
 		def jsonSlurper = new JsonSlurper()
 		def oldAccounts = jsonSlurper.parseText(text)

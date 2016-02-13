@@ -37,7 +37,7 @@ class UserAccount{
 			myTrackedPackages.remove(uuid);
 		}
 	}
-	public HashSet<TrackablePackage> getTrackedPackages(){
+	public HashMap<String, TrackablePackage> getTrackedPackages(){
 		return myTrackedPackages;
 	}
 	
