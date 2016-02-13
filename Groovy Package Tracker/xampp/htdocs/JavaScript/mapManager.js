@@ -66,12 +66,21 @@ function deleteMapObjects() {
 	}
 	deleteOnReclick=[];
 }
+
 /**
  * If a package has been clicked on, returns that package. Otherwise return null.
- * @returns
  */
 function getActivePackage() {
 	return activePackage;
+}
+
+/**
+ * Resets the active package to nothing
+ */
+function resetActivePackage() {
+	return activePackage;
+	document.getElementById('notes').style.visibility = "hidden";
+	document.getElementById('details').innerHTML = "";
 }
 
 /**

@@ -1,3 +1,7 @@
+<!--   
+Most functions referenced in this class are actually in the JavaScript foulder. See message documentations there for more information.
+ -->
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <title>Package Tracker</title>
@@ -43,6 +47,9 @@
 							cols="26" rows="5"></textarea>
 						<input type="button" value="Submit Notes" onclick="addNotes()" />
 						<br>
+						<input type="button" value="deletePackage" onclick="removeCurrentPackage()">
+						<div id="deletePackage"></div>
+						<br>
 					</div>
 				</div>
 			</div>
@@ -56,10 +63,9 @@
 		function logout() {
 			execHttpRequest("GET", "http://localhost:8000/logout", false, "",
 					function() {
-						window.location.href = "Login.html";
+						window.location.href = "Login.html"; //Redirects to login after notifying the server
 					})
 		}
-		window.onunload = "logout()";
 	</script>
 	<script type="text/javascript">
 		function addPackage() {
@@ -73,7 +79,7 @@
 	<script type="text/javascript">
 		var packages;
 		function showMyPackages() {
-			document.getElementById("notes").style.visibility = "hidden"
+			document.getElementById("notes").style.visibility = "hidden" //Hides notes because no package is yet selected
 			var userPackages = [];
 			execHttpRequest(
 					"POST",
@@ -83,8 +89,8 @@
 					function(responseText) {
 						if (responseText == "noUser") {
 							window.location.href = "Login.html";
-												}
-						var packageList = JSON.parse(responseText);
+						}
+						var packageList = JSON.parse(responseText); //Parses the packages and all of their fields
 						var packageLocations = [];
 						packageList.forEach(function(currentPackage) {
 							packageLocations.push(currentPackage.location);
@@ -100,11 +106,11 @@
 					});
 		}
 		function addNotes() {
-			if (confirm("Are you sure? This will over write any current notes on this package?")) {
+			if (confirm("Are you sure? This will over write any current notes on this package? Remember, all users with acces to the package can see this note.")) {
 				var pack = getActivePackage();
 				if (pack != null) {
 					pack.notes = document.getElementById('notesInput').value;
-					var params = "uuid=" + pack.uuid + "&notes=" + pack.notes;
+					var params = "uuid=" + pack.uuid + "&notes=" + pack.notes; //
 					execHttpRequest("POST",
 							"http://localhost:8000/updateNotes", true, params,
 							function() {
@@ -115,11 +121,17 @@
 			}
 		}
 		function getHelpInfo() {
-
 			execHttpRequest("GET", "http://localhost:8000/help", true, "",
 					function(responseText) {
 						alert(responseText);
 					});
+		}
+		function removeCurrentPackage() {
+			var pack = getActivePackage();
+			var params = "uuid=" + pack.uuid;
+			execHttpRequest("POST", "http://localhost:8000/removePackage", false, params, function(){});
+			resetActivePackage();
+			showMyPackages();
 		}
 	</script>
 </body>
