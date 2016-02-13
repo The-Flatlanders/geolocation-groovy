@@ -1,0 +1,89 @@
+<head>
+<link rel="stylesheet" type="text/css" href="CSS/UserRegistration.css" />
+</head>
+<body>
+	<div class="sign-up" id="card">
+		<span class=alert id=emptyField hidden=true>
+			Somefields are empty. Please complete these fields before continuing
+		</span>
+		<span class=goodAlert id=allClear hidden=true>
+			Account was created successfully. Click <a class="backButton" href="Login.html">here</a> to log in.
+		</span> 
+		<span class=alert id=passwordsDontMatch hidden=true>
+			Passwords do not match
+		</span>
+		<span class=alert id=usernameTaken hidden=true>
+			Username is Taken
+		</span> 
+		<strong>Name </strong>
+		<br>
+		<div class="signup-box">
+			<label id="firstname-label" class="firstname"> <input
+				type="text" value="First" name="FirstName" id="FirstName">
+			</label> <label id="lastname-label" class="lastname"> <input
+				type="text" value="Last" name="LastName" id="LastName">
+			</label>
+		</div>
+		<div>
+			<label id="username-label"> <strong> Choose your
+					username </strong> <input id="username" type="text" maxlength="30" value="">
+			</label>
+		</div>
+		<div class="form-element" id="password-form-element">
+			<label id="password-label"> <strong>Create a
+					password</strong> <input type="password" name="Passwd" id="Passwd">
+			</label>
+		</div>
+		<div class="form-element" id="confirm-password-form-element">
+			<label id="confirm-password-label"> <strong>Confirm
+					your password</strong> <input type="password" name="PasswdAgain"
+				id="PasswdAgain">
+			</label>
+		</div>
+		<div class="form-element" id="submit">
+			<label id="sumbit-button"> <input type="button" name="submit"
+				id="submit" value="submit" onclick="exec()">
+			</label>
+		</div>
+	</div>
+	<a id=Back href="Login.html">Back to Login</a>
+</body>
+<script src=Javascript/serverPostRequest.js></script>
+<script>
+	function exec() {
+		document.getElementById("passwordsDontMatch").setAttribute("hidden", true);
+
+		document.getElementById("usernameTaken").setAttribute("hidden", true);
+		document.getElementById("allClear").setAttribute("hidden", true);
+		document.getElementById("emptyField").setAttribute("hidden", true);
+		var username = document.getElementById('username').value;
+		var password = document.getElementById('Passwd').value;
+		var confirmPassword = document.getElementById('PasswdAgain').value;
+		var first = document.getElementById('FirstName').value;
+		var last = document.getElementById('LastName').value;
+
+		if (username == "" || password == "" || confirmPassword == ""
+				|| first == "" || last == "") {
+			document.getElementById("emptyField").setAttribute("hidden", false);
+		} else if (password != confirmPassword) {
+			document.getElementById("passwordsDontMatch").setAttribute("hidden", false);
+
+			//Checks for a null field
+		} else {
+			var params = "username=" + username + "&password=" + password;
+			execHttpRequest(
+					"POST",
+					"http://localhost:8000/addAccount",
+					true,
+					params,
+					function(responseString) {
+						if (responseString == ("userNameTaken")) {
+							document.getElementById("usernameTaken").setAttribute("hidden", false);
+
+						} else {
+							document.getElementById("allClear").setAttribute("hidden", false);
+						}
+					});
+		}
+	}
+</script>

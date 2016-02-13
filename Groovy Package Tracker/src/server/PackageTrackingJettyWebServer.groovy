@@ -65,10 +65,29 @@ class SimpleGroovyServlet extends HttpServlet {
 			updateNotes(req,resp)
 		}
 		if(req.getPathInfo().startsWith("/addAccount")){
-			//createAccount(req,resp)
+			createAccount(req,resp)
 		}
 	}
-
+	private void createAccount(HttpServletRequest req, HttpServletResponse resp){
+		//Gets the username and password from the request
+		//Uses cookies to score username
+		String username = req.getParameter("username")
+		String password = req.getParameter("password")
+		AccountManager.restoreAccountsFromFile()
+		String response
+		//checks if the username does not exist or password is incorrect
+		if(AccountManager.getAccounts().containsKey(username)){
+			response="userNameTaken"
+		}
+		else{
+			AccountManager.addUserAccount(username,password,false);
+			AccountManager.backUpAccountList();
+			println "Welcome user "+username;
+		}
+		def writer = resp.getWriter()
+		resp.setContentType("text/plain")
+		writer.print(response)
+	}
 	/**
 	 * Records a new package and adds it to the package hashmap, using the packages UUID
 	 * as a key and the object as the value	

@@ -1,0 +1,111 @@
+* {
+	font-family: sans-serif;
+}
+
+#FirstName, #LastName {
+	width: 49%;
+	display: inline;
+}
+
+body {
+	text-align: center;
+	vertical-align: middle;
+}
+
+#createAccount {
+	display: block;
+	margin-top: 125px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#cookiesMessage {
+	color: grey;
+	display: block;
+	margin-top: 50px;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.backButton{
+	position: inherit;
+}
+a {
+	position: relative;
+	top: 120px;
+	color: #427fed;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+.goodAlert{
+	/*color:green;*/
+}
+.alert {
+	color:red;
+}
+
+span {
+	display: block;
+}
+
+a:visited {
+	color: #427fed;
+}
+
+#card {
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	text-align: left;
+	margin-top: 3%;
+	display: block;
+	width: 400px;
+	margin-bottom: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 100px;
+	border-radius: 12px;
+	color: #E8DDCB;
+	background-color: #031634;
+	margin-top: 3%;
+	display: block;
+	width: 400px;
+	margin-bottom: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 100px;
+	border-radius: 12px;
+	color: #E8DDCB;
+	background-color: #031634;
+	padding: 20px;
+}
+
+*[hidden=true] {
+	display: none;
+	width: 0;
+}
+
+input[type="text"], input[type="password"] {
+	border-radius: 3px;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	padding: 5px;
+	border: none;
+	width: 100%;
+}
+
+input[type="button"] {
+	color: #E8DDCB;
+	border-radius: 3px;
+	padding: 15px 32px;
+	background-color: #036564;
+	border: none;
+	width: 100%;
+}
+
+input[type="button"]:hover {
+	color: #CDB380;
+}
