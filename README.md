@@ -15,6 +15,7 @@
 
 
 Software Requirments and How We Satisfied Them: 
+
 1.  The solution shall handle multiple simultaneous GPS tracked packages sending updates.
 - We ran the simulator with up to four packages sending updates at once and the packages were properly displayed on the map.
 2.  The solution shall be easily accessible from a Windows 7 computer. 
