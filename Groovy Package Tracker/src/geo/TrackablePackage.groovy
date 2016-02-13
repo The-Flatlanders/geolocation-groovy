@@ -28,7 +28,7 @@ class TrackablePackage {
 	 * @param uuid The UUID of the new package
 	 * @param destination The destination of the new package, a {@link Coordinate} object
 	 */
-	public TrackablePackage(String uuid, Coordinate destination){
+	protected TrackablePackage(String uuid, Coordinate destination){
 		time=0;
 		this.uuid=uuid;
 		this.destination=destination;
