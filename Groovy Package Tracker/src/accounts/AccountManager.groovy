@@ -1,7 +1,7 @@
 package accounts
 import java.util.HashMap
 import groovy.json.*
-
+import geo.*
 /**
  *Manages {@link UserAccount} objects, saving them in case of a crash and manipulating them in normal usage.
  *See public methods for more information.
@@ -35,6 +35,12 @@ class AccountManager {
 	public static void initAccounts(){
 		accounts=new HashMap<String,UserAccount>()
 		restoreAccountsFromFile()
+		resetUserTrackedPackages()
+	}
+	public static resetUserTrackedPackages(){
+		for(UserAccount user:accounts){
+			user.myTrackedPackages=new HashMap<String, TrackablePackage>()
+		}
 	}
 
 	/**
@@ -59,7 +65,7 @@ class AccountManager {
 			addUserAccount(user.username,user.password,user.admin)
 		}
 	}
-
+	
 	/**
 	 * Makes a new user account by prompting the user in the console
 	 */

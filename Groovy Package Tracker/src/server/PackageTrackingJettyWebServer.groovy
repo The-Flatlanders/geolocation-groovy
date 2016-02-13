@@ -144,9 +144,7 @@ class SimpleGroovyServlet extends HttpServlet {
 	private void removePackage(HttpServletRequest req, HttpServletResponse resp){
 		def uuid = req.getParameter("uuid")
 		def user = req.getCookies()[0].value
-		def packageToRemove = allTrackedPackages.get(uuid)
-		def userPackages = AccountManager.getAccounts().get(user).getTrackedPackages();
-		userPackages.remove(packageToRemove)
+		AccountManager.getAccounts().get(user).removePackage(uuid)
 	}
 	
 	

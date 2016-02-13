@@ -10,7 +10,7 @@ import server.*;
 class UserAccount{
 	protected final String username;
 	protected String password; //Password could conceivably be changed at some point
-	protected HashSet<TrackablePackage> myTrackedPackages;
+	protected HashMap<String,TrackablePackage> myTrackedPackages;
 	protected final boolean isAdmin;
 	
 	/**
@@ -23,17 +23,20 @@ class UserAccount{
 		this.username=username;
 		this.password=password;
 		this.isAdmin=isAdmin;
-		myTrackedPackages=new HashSet<TrackablePackage>();
+		myTrackedPackages=new HashMap<String,TrackablePackage>();
 	}
 	
 	/**
 	 * Makes this package visible to the user
 	 */
 	public void addPackage(TrackablePackage myPackage){
-		myTrackedPackages.add(myPackage);
+		myTrackedPackages.put(myPackage.uuid,myPackage);
 	}
-	
-	
+	public void removePackage(String uuid){
+		if(myTrackedPackages.containsKey(uuid)){
+			myTrackedPackages.remove(uuid);
+		}
+	}
 	public HashSet<TrackablePackage> getTrackedPackages(){
 		return myTrackedPackages;
 	}
