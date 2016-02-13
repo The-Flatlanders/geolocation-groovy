@@ -27,9 +27,10 @@ class SimpleGroovyServlet extends HttpServlet {
 	private HashMap<String, TrackablePackage> allTrackedPackages=new HashMap()
 	/**
 	 * Handles server doGet requests<br>
-	 * Accepts path info types: /tracknewpackage , /logout, /help
+	 * Accepts path info types: /tracknewpackage , /logout, /help, /removePackage
 	 */
 	void doGet(HttpServletRequest req, HttpServletResponse resp){
+		println("doGet")
 		if(req.getPathInfo().equals("/tracknewpackage")) {
 			trackNewPackage(req, resp)
 		}
@@ -46,6 +47,9 @@ class SimpleGroovyServlet extends HttpServlet {
 	 * Accepts path info types: /login, /packages, /addPackage/.*, /packagetrackupdate/.*, /updateNotes/.*
 	 */
 	void doPost(HttpServletRequest req, HttpServletResponse resp) {
+		if(req.getPathInfo().equals("/removePackage")){
+			removePackage(req, resp)
+		}
 		if(req.getPathInfo().equals("/login")){
 			userLogin(req,resp)
 		}
@@ -69,6 +73,7 @@ class SimpleGroovyServlet extends HttpServlet {
 		}
 	}
 
+	
 	/**
 	 * Records a new package and adds it to the package hashmap, using the packages UUID
 	 * as a key and the object as the value	
@@ -112,7 +117,21 @@ class SimpleGroovyServlet extends HttpServlet {
 		resp.setContentType("text/plain")
 		writer.print(helpText)
 	}
-
+	
+	/**
+	 * Return the help document to display
+	 * @param req The server request, contains UUID of package to delete and user to remove from
+	 * @param resp The server response
+	 */
+	private void removePackage(HttpServletRequest req, HttpServletResponse resp){
+		def uuid = req.getParameter("uuid")
+		def user = req.getCookies()[0].value
+		def packageToRemove = allTrackedPackages.get(uuid)
+		def userPackages = AccountManager.getAccounts().get(user).getTrackedPackages();
+		userPackages.remove(packageToRemove)
+	}
+	
+	
 	/**
 	 * Authorizes the user, and, if confirmed, adds a cookie of the user's username
 	 * <br>Prints out to resp an error message in different cases:

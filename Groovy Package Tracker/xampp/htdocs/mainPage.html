@@ -47,6 +47,9 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 							cols="26" rows="5"></textarea>
 						<input type="button" value="Submit Notes" onclick="addNotes()" />
 						<br>
+						<input type="button" value="deletePackage" onclick="removeCurrentPackage()">
+						<div id="deletePackage"></div>
+						<br>
 					</div>
 				</div>
 			</div>
@@ -122,6 +125,13 @@ Most functions referenced in this class are actually in the JavaScript foulder. 
 					function(responseText) {
 						alert(responseText);
 					});
+		}
+		function removeCurrentPackage() {
+			var pack = getActivePackage();
+			var params = "uuid=" + pack.uuid;
+			execHttpRequest("POST", "http://localhost:8000/removePackage", false, params, function(){});
+			resetActivePackage();
+			showMyPackages();
 		}
 	</script>
 </body>
