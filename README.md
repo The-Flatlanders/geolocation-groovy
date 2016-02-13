@@ -1,3 +1,48 @@
+#Product Documentation
+
+##Login page:
+If you already have an account, you can simply login and access all of your packages. Note that you must have cookies enabled at all times. If you do not have an account, simply press the Create Account button and enter all information asked of you. You can then go on to the main page, discussed in detail below.
+
+##Adding a package to the map:
+Navigate to the UUID tab by clicking on the tab labeled UUID on the upper left. It is also the default tab when you first access the map page. Then, enter into the text box labeled "Add UUID" the UUID associated with your package. This is just a long string of letters and numbers unique to every package. After you press submit your package will be easily viewed on the map to the right.
+Clicking on "Refresh Map" will refresh all of your packages. This will update their positions on the map and their details in the details tab, described more later. 
+
+##Details Tab:
+When you first navigate to the details tab, you may be dismayed because it is empty. The key is that the tab remains blank until you click on a package. After you click on a package, henceforth referred to as the active package, you can see all of its information in the details tab. This includes aspects of the active package like its location, destination, and Estimated Time of Arrival (ETA). You will also see a notes section. This is a place that you can add notes to remind yourself about the package. Notes you add will be visible by anyone else who has access to the UUID, usually just you and the package administrator. This therefore serves as a great and easy way to communicate with IDT. Clicking on the delete button removes a package from your account, unless you are an admin in which case you will always have access to all of the packages. Be careful with this option, as if you delete a package you will have to reenter its UUID to view it again.
+
+##Map Help:
+Clicking on a package places focus on it, turning it into the current active package. The map automatically zooms in to focus on the package, its destination point, and its start point, conveniently marked with pins. A green pin signifies the end while a blue pin signifies the beginning. You will also notice that an active package has a line leading back from it to its starting point. This shows the path the package took with as much accuracy as possible. 
+
+#Software Documentation
+
+##geolocation-groovy
+IDT is starting a valuable package delivery service and has already developed half of the software/hardware solution needed to track all of the valuable packages. IDT has built custom GPS units for each package that will transmit positional data to our network. IDT has also aggregated all of the data for all of the packages in one place since all of the packages report to the same RESTful web service. This program is intended to be the other side: the interface with the user.
+
+##Basic Explanation of How Our Solution Works
+The front end html and javascript display the website. These files are located in the Web folder. The javascript calls doPost() and doGet() methods in PackageTrackingJettyWebServer to retrieve and update information about the packages. PackageTrackingJettyWebServer stores package information and receives updates from packages. Event Simulator simulates package track updates and is run by the batch files.
+
+##Setting up Eclipse
+First you need to download the latest version of eclipse. Then you must install a few plugins to enable the compiling of our code. To install plugins in eclipse, you will need to go to help>install new software. In the box labeled work with, you will paste links to download sites where the  plugins we need are available. The first site you will need to paste in this area is 
+http://dist.springsource.org/snapshot/GRECLIPSE/e4.5/
+This is the download site for the groovy plugin for eclipse.
+Second, you will need the git plugin for eclipse. This is available at 
+http://download.eclipse.org/egit/updates 
+Once you have both of these plugins installed, you are ready to proceed. 
+
+##Importing the repository into Eclipse
+Once you have Egit and groovy installed, you will want to be able to see the repository view in the Eclipse editor. To do this, go to Window>Show View>Other>Git>Git Repositories. This should cause a small window to appear below the package explorer with three options inside. Choose the second option, clone a Git repository.
+A dialog should appear. In the URI box, paste this link: https://github.com/The-Flatlanders/geolocation-groovy
+all of the other boxes should fill themselves. The only other things you have to fill out in this dialog are the Username and Password. These should be the information from your github account. Once you have completed this information, click next, next, then finish. In the Git Repositories window, you should see a new repository named geolocation-groovy [master]. Right click on this repository, and click on import projects. A new dialog should appear. Click next, then finish. Now, you should see the groovy project (called Groovy Package Tracker) in the package explorer. 
+
+##Creating accounts
+In addition to making user accounts in the html’s user interface, as the runner of the server you can also make admin accounts. To make a new admin account, simply run AccountManager in the accounts package in src. Run this as a Groovy Script and follow the instructions to create a new account in the console. At the end of the process you will be prompted to make it into an admin account. After you make the account, you can run the server as described below and login easily.
+ 
+##Running the Server
+Open up PackageTrackingJettyWebServer in the server package in src. Run this as a Groovy Script to run the server. By default, it runs on port 8000. Open mainPage.html in any web browser. Due to security issues, our solution will not run in Google Chrome. From this point on you can just follow the instructions in the product documentation. The functionality is the same for admin except that you will always see all packages.
+
+##Event Simulator Files
+The folder Event Simulator has 3 different batch files to simulate package updates. Exec.bat runs a single package with the default 10 second intervals between updates. Exec2Files.bat runs 2 packages with 10 second intervals between updates. ExecFast simulates a single package with all updates occurring in less than a second.
+
 #Software Requirements and How We Satisfied Them: 
 
 -The solution shall handle multiple simultaneous GPS tracked packages sending updates.
@@ -52,41 +97,5 @@ We ran our program that calculates the distance between any two points, of which
 -The solution shall calculate and display estimated arrival time. 
 
 We calculated estimated time and then the actual time the package took and made sure that the numbers were relatively close to each other.
-
-
-#Product Documentation
-
-##Login page:
-If you already have an account, you can simply login and access all of your packages. Note that you must have cookies enabled at all times. If you do not have an account, simply press the Create Account button and enter all information asked of you. You can then go on to the main page, discussed in detail below.
-
-##Adding a package to the map:
-Navigate to the UUID tab by clicking on the tab labeled UUID on the upper left. It is also the default tab when you first access the map page. Then, enter into the text box labeled "Add UUID" the UUID associated with your package. This is just a long string of letters and numbers unique to every package. After you press submit your package will be easily viewed on the map to the right.
-Clicking on "Refresh Map" will refresh all of your packages. This will update their positions on the map and their details in the details tab, described more later. Clicking on "Help" brings up this menu.
-
-##Details Tab:
-When you first navigate to the details tab, you may be dismayed because it is empty. The key is that the tab remains blank until you click on a package. After you click on a package, henceforth referred to as the active package, you can see all of its information in the details tab. This includes aspects of the active package like its location, destination, and Estimated Time of Arrival (ETA). You will also see a notes section. This is a place that you can add notes to remind yourself about the package. Notes you add will be visible by anyone else who has access to the UUID, usually just you and the package administrator. This therefore serves as a great and easy way to communicate with IDT. 
-
-##Map Help:
-Clicking on a package places focus on it, turning it into the current active package. The map automatically zooms in to focus on the package, its destination point, and its start point, conveniently marked with pins. A green pin signifies the end while a blue pin signifies the beginning. You will also notice that an active package has a line leading back from it to its starting point. This shows the path the package took with as much accuracy as possible. 
-
-
-#Software Documentation
-
-##geolocation-groovy
-IDT is starting a valuable package delivery service and has already developed half of the software/hardware solution needed to track all of the valuable packages. IDT has built custom GPS units for each package that will transmit positional data to our network. IDT has also aggregated all of the data for all of the packages in one place since all of the packages report to the same RESTful web service. This program is intended to be the other side: the interface with the user.
-
-##Setting up Eclipse
-To install plugins in eclipse, you will need to go to help>install new software.
-In the box labeled work with, you will paste links to download sites where the plugins we need are available. The first site you will need to paste in this area is 
-http://dist.springsource.org/snapshot/GRECLIPSE/e4.5/
-This is the download site for the groovy plugin for eclipse.
-Second, you will need the git plugin for eclipse. This is available at 
-http://download.eclipse.org/egit/updates 
-Once you have both of these plugins installed, you are ready to proceed. 
-
-##Importing the repository into Eclipse
-Once you have Egit and groovy installed, you will want to be able to see the repository view in the Eclipse editor. To do this, go to Window>Show View>Other>Git>Git Repositories. This should cause a small window to appear below the package explorer with three options inside. Choose the second option, clone a Git repository.
-A dialog should appear. In the URI box, paste this link: https://github.com/The-Flatlanders/geolocation-groovy
-all of the other boxes should fill themselves. The only other things you have to fill out in this dialog are the Username and Password. These should be the information from your github account. Once you have completed this information, click next, next, then finish. In the Git Repositories window, you should see a new repository named geolocation-groovy [master]. Right click on this repository, and click on import projects. A new dialog should appear. Click next, then finish. Now, you should see the groovy project (called Groovy Package Tracker) in the package explorer. 
 
 
