@@ -19,7 +19,7 @@ Clicking on a package places focus on it, turning it into the current active pac
 IDT is starting a valuable package delivery service and has already developed half of the software/hardware solution needed to track all of the valuable packages. IDT has built custom GPS units for each package that will transmit positional data to our network. IDT has also aggregated all of the data for all of the packages in one place since all of the packages report to the same RESTful web service. This program is intended to be the other side: the interface with the user.
 
 ##Basic Explanation of How Our Solution Works
-The front end html and javascript display the website. These files are located in the Web folder. The javascript calls doPost() and doGet() methods in PackageTrackingJettyWebServer to retrieve and update information about the packages. PackageTrackingJettyWebServer stores package information and receives updates from packages. Event Simulator simulates package track updates and is run by the batch files.
+The front end html and javascript display the website. These files are located in the Web folder. ****EDIT: in the recent commits, the web folder was renamed to htdocs. The javascript calls doPost() and doGet() methods in PackageTrackingJettyWebServer to retrieve and update information about the packages. PackageTrackingJettyWebServer stores package information and receives updates from packages. Event Simulator simulates package track updates and is run by the batch files.
 
 ##Setting up Eclipse
 First you need to download the latest version of eclipse. Then you must install a few plugins to enable the compiling of our code. To install plugins in eclipse, you will need to go to help>install new software. In the box labeled work with, you will paste links to download sites where the  plugins we need are available. The first site you will need to paste in this area is 
@@ -69,7 +69,7 @@ We made user accounts and successfully showed only those the user had access to.
 We entered many UUIDs for a user and those UUUID's markers were displayed on the map.
 
 
--The solution shall accept name, destination, and GPS unit UUID information as HTTP query parameters on a HTTP GET of the URL path "/tracknewpackage". An example follows: GET http://127.0.0.1:8080/tracknewpackage?name=Some+Name+Here&destinationLat=42.4877185&destinationLon=-71.8249125&uuid=b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 
+-The solution shall accept name, destination, and GPS unit UUID information as HTTP query parameters on a HTTP GET of the URL path "/tracknewpackage". An example follows: GET http://127.0.0.1:8080/tracknewpackage?name=Some+Name+Here&destinationLat=42.4877185&destinationLon=-71.8249125&uuid=b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 ****EDIT: we used the port 8000 instead of 8080, but the request works when the port is changed. in order for our project to function, ensure that the port in the event simulator is 8000.
 
 We ran the event simulator which called the doGet() method with this type of query successfully.
 
@@ -79,12 +79,12 @@ We ran the event simulator which called the doGet() method with this type of que
 We printed out the response of the get request and confirmed that it was indeed correct.
 
 
--The solution shall accept a JSON encoded body which includes location, elevation, and time on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 POST Body: {"lat":"42.4879714","lon":"-71.8250924","ele":"195.9","time":"2015-12-08T08:42:33.188-05:00"}
+-The solution shall accept a JSON encoded body which includes location, elevation, and time on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93 POST Body: {"lat":"42.4879714","lon":"-71.8250924","ele":"195.9","time":"2015-12-08T08:42:33.188-05:00"} ****EDIT: used port 8000, see previous edit
 
 We ran the event simulator which called the doPost() method with this type of query successfully.
 
 
--The solution shall accept a JSON encoded body which includes a delivered flag on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93  POST Body: {"delivered":"true"} 
+-The solution shall accept a JSON encoded body which includes a delivered flag on a HTTP POST to the URL path "/packagetrackupdate/". An example follows: POST http://127.0.0.1:8080/packagetrackupdate/b0f9bb21-160f-4089-ad1c-56ae8b2d5c93  POST Body: {"delivered":"true"} ****EDIT: used port 8000, see previous edit
 
 We ran a simulated package that finished in under a second to ensure that end behavior of a package functioned as predicted.
 
